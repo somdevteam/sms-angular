@@ -43,6 +43,10 @@ const routes: Routes = [
       // Extra components
       {
         path: 'extra-pages',
+        canActivate: [AuthGuard],
+        data: {
+          role: Role.Admin,
+        },
         loadChildren: () =>
           import('./extra-pages/extra-pages.module').then(
             (m) => m.ExtraPagesModule

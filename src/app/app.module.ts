@@ -28,6 +28,8 @@ import {
 
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import {ErrorComponent} from "./extra-pages/error/error.component";
+import {SuccessComponent} from "./extra-pages/success/success.component";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -42,6 +44,8 @@ export function createTranslateLoader(http: HttpClient) {
     RightSidebarComponent,
     AuthLayoutComponent,
     MainLayoutComponent,
+    ErrorComponent,
+    SuccessComponent
   ],
   imports: [
     BrowserModule,
