@@ -44,7 +44,7 @@ export class SigninComponent
     return this.authForm.controls;
   }
   adminSet() {
-    this.authForm.get('username')?.setValue('warka');
+    this.authForm.get('username')?.setValue('marla');
     this.authForm.get('password')?.setValue('qwer1234');
   }
   teacherSet() {
@@ -67,24 +67,21 @@ export class SigninComponent
         .login(this.f['username'].value, this.f['password'].value)
         .then((apiResp: ApiResult) => {
           if (apiResp) {
-            if(apiResp.data.role == 'Admin' ){
+            if( apiResp.data ){
               this.router.navigate(['/admin/dashboard/main']);
             }
-            else if (!apiResp.data){
-              this.submitted = false;
-              this.loading = false;
-              this.dialog.open(ErrorComponent, {
-                data: {
-                  message: apiResp.message.toString(),
-                },
-              });
+            else if (apiResp.message == "User not found"){
+                this.loading = false;
+                this.dialog.open(ErrorComponent, {
+                  data: {
+                    message: apiResp.message.toString(),
+                  },
+                });
             }
-            this.submitted = false;
-            this.loading = false;
-            this.router.navigate(['/customers/dashboard']);
           }
         })
         .catch((err: ApiError) => {
+          alert(err.message);
           this.submitted = false;
           this.loading = false;
           this.dialog.open(ErrorComponent, {
