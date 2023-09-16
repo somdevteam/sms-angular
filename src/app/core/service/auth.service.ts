@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { User } from '../models/user';
 import { environment } from 'environments/environment';
 import { ApiResult } from 'app/model/apiresponse';
+import { ApiService } from '@shared/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private apiService: ApiService) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem('currentUser') || '{}')
     );
@@ -25,12 +26,10 @@ export class AuthService {
   }
   
 
+  
   login(username: string, password: string) {
-    return this.http
-      .post<any>(`http://0.0.0.0:3000/auth/login`, {
-        username,
-        password,
-      })
+    const payload = { username: username, password: password };
+   return this.apiService.sendHttpPostRequest('/auth/login',payload)
       .pipe(
         map((user:ApiResult) => {
           
