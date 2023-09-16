@@ -67,6 +67,7 @@ export class MainComponent implements OnInit {
     this.chart3();
     this.chart4();
   }
+
   private chart1() {
     this.areaChartOptions = {
       series: [
