@@ -36,6 +36,7 @@ export class HeaderComponent
 {
   public config!: InConfiguration;
   userImg?: string;
+  userName?: string;
   homePage?: string;
   isNavbarCollapsed = true;
   flagvalue: string | string[] | undefined;
@@ -118,6 +119,7 @@ export class HeaderComponent
     this.config = this.configService.configData;
 
     const userRole = this.authService.currentUserValue.role;
+    this.userName = this.authService.currentUserValue.username;
     this.userImg = this.authService.currentUserValue.img;
     this.docElement = document.documentElement;
 

@@ -28,6 +28,7 @@ import {
 
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { PageLoaderModule } from './layout/page-loader/page-loader.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -37,11 +38,10 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     HeaderComponent,
-    PageLoaderComponent,
     SidebarComponent,
     RightSidebarComponent,
     AuthLayoutComponent,
-    MainLayoutComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +49,7 @@ export function createTranslateLoader(http: HttpClient) {
     AppRoutingModule,
     HttpClientModule,
     NgScrollbarModule,
+    PageLoaderModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
-import { environment } from 'environments/environment';
-import { ApiResult } from 'app/model/apiresponse';
 import { ApiService } from '@shared/api.service';
 
 @Injectable({
@@ -31,13 +29,10 @@ export class AuthService {
     const payload = { username: username, password: password };
    return this.apiService.sendHttpPostRequest('/auth/login',payload)
       .pipe(
-        map((user:ApiResult) => {
+        map((user) => {
           
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          let data = user.data;
-          console.log(data)
           localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user.data);
+          this.currentUserSubject.next(user);
           return user;
         })
       );
