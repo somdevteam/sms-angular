@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
+import {UsersComponent} from "./users/users/users.component";
 const routes: Routes = [
   {
     path: '',
@@ -46,6 +47,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('./extra-pages/extra-pages.module').then(
             (m) => m.ExtraPagesModule
+          ),
+      },
+      {
+        path: 'users',
+        component: UsersComponent,
+        loadChildren: () =>
+          import('./users/users.module').then(
+            (m) => m.UsersModule
           ),
       },
       {
