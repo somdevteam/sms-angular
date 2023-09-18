@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
 import {UsersComponent} from "./users/users/users.component";
+import { ClassComponent } from './academic/class/class.component';
 const routes: Routes = [
   {
     path: '',
@@ -55,6 +56,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('./users/users.module').then(
             (m) => m.UsersModule
+          ),
+      },
+      {
+        path: 'academic',
+        component: ClassComponent,
+        loadChildren: () =>
+          import('./academic/academic.module').then(
+            (m) => m.AcademicModule
           ),
       },
       {

@@ -41,7 +41,8 @@ export function createTranslateLoader(http: HttpClient) {
     SidebarComponent,
     RightSidebarComponent,
     AuthLayoutComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    
   ],
   imports: [
     BrowserModule,
