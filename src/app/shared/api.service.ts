@@ -27,8 +27,16 @@ export class ApiService {
   }
 
   private handleError = (error: HttpErrorResponse) => {
-    const errorMessage = error.error.message
-    return throwError(errorMessage)
+      //handle 400, 403, 500
+      if (error.status === 401) {
+        if (error.url?.includes('auth/login')) {
+          return throwError(new Error('Invalid username or password.'));
+        }
+  
+        window.location.href = '/login';
+      }
+      
+      return throwError(new Error(error.error?.message || 'Something went wrong; please try again.', { cause: error }));
   };
 
   sendHttpGetRequest(endpoint: string) {
