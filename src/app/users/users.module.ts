@@ -6,11 +6,14 @@ import { UsersComponent } from './users/users.component';
 import {ComponentsModule} from "@shared/components/components.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "@shared";
+import { FormDialogComponent } from './users/form-dialog/form-dialog.component';
+
 
 
 @NgModule({
   declarations: [
-    UsersComponent
+    UsersComponent,
+    FormDialogComponent
   ],
   imports: [
     CommonModule,

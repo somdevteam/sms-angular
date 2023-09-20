@@ -35,8 +35,12 @@ export class ApiService {
   
         window.location.href = '/login';
       }
+
+      let errorMessage = error.error?.message;
+
+      let message = Array.isArray(errorMessage) ? errorMessage[0] : errorMessage;
       
-      return throwError(new Error(error.error?.message || 'Something went wrong; please try again.', { cause: error }));
+      return throwError(message || 'Something went wrong; please try again.');
   };
 
   sendHttpGetRequest(endpoint: string) {
