@@ -11,7 +11,6 @@ import { UserService } from 'app/users/user.service';
 })
 export class FormDialogComponent implements OnInit {
   hide = true;
-  inputData:any
   closedMessage = 'closed function using deactive'
   register: UntypedFormGroup;
   constructor(
@@ -27,13 +26,13 @@ export class FormDialogComponent implements OnInit {
         lastName: ['', [Validators.required]],
         username: ['', [Validators.required]],
         mobile: ['', [Validators.required]],
-        password: ['', [Validators.required,Validators.minLength(8)]],
+        password:  ['',  !data ? [Validators.required,Validators.minLength(8)] : null] ,
         email: ['', [Validators.required,Validators.email]],
       });
   }
 
   ngOnInit(): void {
-    this.inputData = this.data;
+    this.register.patchValue(this.data)
   }
 
   closeDialog() {
@@ -41,16 +40,30 @@ export class FormDialogComponent implements OnInit {
   }
 
 
-  mySave() {
-   return this.userService.saveUsers(this.register.value).subscribe({
-      next: (res) => {
-        alert("success");
-      },
-      error: (error) => {
-       this.snacBar.dangerNotification(error)
-      }
-    })
-    //console.log(this.register.value)
+  submit() {
+    if (this.data) {
+      return this.userService.updateUsers(this.data.userId,this.register.value).subscribe({
+        next: (res) => {
+          
+          this.closeDialog()
+        },
+        error: (error) => {
+         this.snacBar.dangerNotification(error)
+        }
+      })
+    }else  {
+      return this.userService.saveUsers(this.register.value).subscribe({
+        next: (res) => {
+          alert("added success");
+          this.closeDialog()
+        },
+        error: (error) => {
+         this.snacBar.dangerNotification(error)
+        }
+      })
+    }
+   
+  //   //console.log(this.register.value)
   }
 
 }

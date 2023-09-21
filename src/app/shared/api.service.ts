@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment.development";
 import { catchError, map, throwError } from 'rxjs';
+import { SnackbarService } from './snackbar.service';
 
 
 
@@ -10,7 +11,7 @@ import { catchError, map, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private snackBar:SnackbarService) { }
 
   sendHttpPostRequest(endpoint: string, payload: any) {
     const url = environment.apiUrl+endpoint;
@@ -19,7 +20,8 @@ export class ApiService {
       .pipe(
         catchError(this.handleError),
         map((resp) => {
-          const { data } = resp;
+          const { message,data } = resp;
+          this.snackBar.successNotification(message)
           return data;
         }
         )
@@ -50,7 +52,38 @@ export class ApiService {
       .pipe(
         catchError( this.handleError),
         map((resp) => {
-          const { data } = resp;
+          const { message,data } = resp;
+          // this.snackBar.successNotification(message)
+          return data;
+        }
+        )
+      );
+  }
+
+  sendHttpDeleteRequest(endpoint: string,id:number) {
+    const url = `${environment.apiUrl+endpoint}/${id}`;
+    return this.http
+      .delete<any>(url)
+      .pipe(
+        catchError( this.handleError),
+        map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successNotification(message)
+          return data;
+        }
+        )
+      );
+  }
+
+  sendHttpUpdateRequest(endpoint: string,id:number, payload: any) {
+    const url = `${environment.apiUrl+endpoint}/${id}`;
+    return this.http
+      .patch<any>(url, payload)
+      .pipe(
+        catchError(this.handleError),
+        map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successNotification(message)
           return data;
         }
         )

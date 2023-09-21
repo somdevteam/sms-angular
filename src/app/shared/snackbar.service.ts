@@ -26,7 +26,7 @@ export class SnackbarService {
   }
 
   dangerNotification(text: string,) {
-    this.snackBar.open(text, '', {
+    this.snackBar.open(text, 'Ok', {
       duration: 2000,
       verticalPosition: 'top',
       horizontalPosition: 'right',

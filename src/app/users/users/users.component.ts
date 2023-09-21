@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService } from '@core/service/auth.service';
 import { SnackbarService } from '@shared/snackbar.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { UserDto } from './data/user-dto.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FormDialogComponent } from './form-dialog/form-dialog.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-users',
@@ -12,6 +16,7 @@ import { FormDialogComponent } from './form-dialog/form-dialog.component';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent {
+[x: string]: any;
   breadscrums = [
     {
       title: 'Users',
@@ -20,8 +25,19 @@ export class UsersComponent {
     },
   ];
 
+  displayedColumns: string[] = [
+    'userId',
+    'username',
+    'email',
+    'action',
+  ];
+  dataSource!: MatTableDataSource<any>;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
   error = '';
-  users: UserDto[] = [];
+
   constructor(private authService: AuthService,private pageLoaderService:PageLoaderService,
     private snackbar: SnackbarService,
     private dialog: MatDialog
@@ -30,11 +46,17 @@ export class UsersComponent {
   }
 
   ngOnInit() {
+    this.loadData()
+  }
+
+  loadData() {
     this.pageLoaderService.showLoader();
     this.authService.getUsers().subscribe({
       next: (res) => {
         if (res) {
-          this.users = res;
+          this.dataSource = new MatTableDataSource(res);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
           this.pageLoaderService.hideLoader();
         }else {
           this.error = 'Invalid Login';
@@ -50,19 +72,36 @@ export class UsersComponent {
   }
 
   addNew() {
-   var _popup = this.dialog.open(FormDialogComponent,{
-      'width': '50%',
-      // enterAnimationDuration: '1000ms',
-      // exitAnimationDuration: '1000ms',
-      'data': {
-        'title': 'Edit User'
-      }
-      });
+   var _popup = this.dialog.open(FormDialogComponent);
     _popup.afterClosed().subscribe(item => {
       console.log(item)
-      alert(item)
+     this.loadData()
 
     });
+  }
+
+
+  openEditForm(data: any) {
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.loadData();
+        }
+      },
+    });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
 }

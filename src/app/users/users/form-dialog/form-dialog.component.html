@@ -1,6 +1,6 @@
-<h1 mat-dialog-title>{{inputData.title}}</h1>
+<h1 mat-dialog-title>User Form</h1>
 <div mat-dialog-content>
-    <form [formGroup]="register" class="register-form m-4" (ngSubmit)="mySave()">
+    <form [formGroup]="register" class="register-form m-4" (ngSubmit)="submit()">
         <div class="row">
             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3" appearance="outline">
@@ -65,7 +65,7 @@
                 </mat-form-field>
             </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="!data">
             <div class="col-12">
                 <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Enter your password</mat-label>
@@ -87,7 +87,7 @@
 </div>
 
 <div mat-dialog-actions>
-    <button mat-raised-button [disabled]="!register.valid" (click)="mySave()" color="primary">Save</button>
+    <button mat-raised-button [disabled]="!register.valid" (click)="submit()" color="primary">{{data ? 'Update': 'Save'}}</button>
     <button mat-raised-button (click)="closeDialog()" color="warn">Close</button>
     <!-- <button mat-raised-button [mat-dialog-close]="closedMessage" color="accent">Cancel</button> -->
 </div>

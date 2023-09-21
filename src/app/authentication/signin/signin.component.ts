@@ -26,7 +26,8 @@ export class SigninComponent
     private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBar: SnackbarService
   ) {
     super();
   }
@@ -84,7 +85,9 @@ export class SigninComponent
             }
           },
           error: (error) => {
+            this.snackBar.dangerNotification(error)
             this.error = error;
+            this.loading
             this.submitted = false;
             this.loading = false;
           },
