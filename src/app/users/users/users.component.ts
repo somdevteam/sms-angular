@@ -1,13 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { AuthService } from '@core/service/auth.service';
 import { SnackbarService } from '@shared/snackbar.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
-import { UserDto } from './data/user-dto.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FormDialogComponent } from './form-dialog/form-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserService } from '../user.service';
+import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
@@ -25,6 +25,10 @@ export class UsersComponent {
     },
   ];
 
+  branches: any[] = [];
+  selectedBranch: any;
+  selectedStatus: '0' | '1' = '1';
+
   displayedColumns: string[] = [
     'userId',
     'username',
@@ -37,21 +41,31 @@ export class UsersComponent {
   @ViewChild(MatSort) sort!: MatSort;
 
   error = '';
+  searchForm: FormGroup;
 
-  constructor(private authService: AuthService,private pageLoaderService:PageLoaderService,
+  constructor(
+    private userService: UserService,
+    private pageLoaderService:PageLoaderService,
     private snackbar: SnackbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private fb: UntypedFormBuilder,
     ) {
-    // constructor
+      this.searchForm = this.fb.group({
+        branch: ['', [Validators.required]],
+        status: ['']
+      });
   }
 
   ngOnInit() {
-    this.loadData()
+
+    
+    this.loadUsers()
+    this.loadBranches()
   }
 
-  loadData() {
+  loadUsers() {
     this.pageLoaderService.showLoader();
-    this.authService.getUsers().subscribe({
+    this.userService.getUsers().subscribe({
       next: (res) => {
         if (res) {
           this.dataSource = new MatTableDataSource(res);
@@ -75,9 +89,14 @@ export class UsersComponent {
    var _popup = this.dialog.open(FormDialogComponent);
     _popup.afterClosed().subscribe(item => {
       console.log(item)
-     this.loadData()
+     this.loadUsers()
 
     });
+  }
+
+  searchUsers() {
+    alert(this.selectedStatus)
+    console.log(this.searchForm.value)
   }
 
 
@@ -89,7 +108,7 @@ export class UsersComponent {
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
-          this.loadData();
+          this.loadUsers();
         }
       },
     });
@@ -102,6 +121,22 @@ export class UsersComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  loadBranches() {
+    this.userService.getBranches().subscribe({
+      next: (res => {
+        this.branches = res;
+      }),
+      error: (error => {
+        this.snackbar.dangerNotification(error)
+      })
+    })
+  }
+
+  searchUsersByBranch() {
+    alert(this.selectedStatus)
+    console.log(this.selectedBranch);
   }
 
 }
