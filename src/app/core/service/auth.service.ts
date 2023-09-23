@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
 import { ApiService } from '@shared/api.service';
+import { SnackbarService } from '@shared/snackbar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient,private apiService: ApiService) {
+  constructor(private http: HttpClient,private apiService: ApiService,private snackBar:SnackbarService) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem('currentUser') || '{}')
     );
@@ -29,11 +30,12 @@ export class AuthService {
     const payload = { username: username, password: password };
    return this.apiService.sendHttpPostRequest('/auth/login',payload)
       .pipe(
-        map((user) => {
-          
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-          return user;
+        map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successNotification(message)
+          localStorage.setItem('currentUser', JSON.stringify(data));
+          this.currentUserSubject.next(data);
+          return data;
         })
       );
   }

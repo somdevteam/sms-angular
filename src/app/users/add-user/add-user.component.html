@@ -1,0 +1,122 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Add User</h2>
+                    </div>
+                    <div class="body">
+                        <form class="m-4" [formGroup]="usersForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>First name</mat-label>
+                                        <input matInput formControlName="firstName" required>
+                                        <mat-error *ngIf="usersForm.get('firstName')?.hasError('required')">
+                                            First name is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Middle name</mat-label>
+                                        <input matInput formControlName="middleName">
+                                        <mat-error *ngIf="usersForm.get('middleName')?.hasError('required')">
+                                            Middle name is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Last name</mat-label>
+                                        <input matInput formControlName="lastName">
+                                        <mat-error *ngIf="usersForm.get('lastName')?.hasError('required')">
+                                            Last name is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>User Name</mat-label>
+                                        <input matInput formControlName="username" required>
+                                        <mat-error *ngIf="usersForm.get('username')?.hasError('required')">
+                                            Please enter user name
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Mobile</mat-label>
+                                        <input matInput formControlName="mobile" type="number" required>
+                                        <mat-error *ngIf="usersForm.get('mobile')?.hasError('required')">
+                                            Please enter mobile number
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Email</mat-label>
+                                        <input matInput formControlName="email" required>
+                                        <mat-error *ngIf="usersForm.get('email')?.hasError('required')">
+                                            email is required
+                                        </mat-error>
+                                        <mat-error *ngIf="usersForm.get('email')?.hasError('email')">
+                                            Please enter a valid email address
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Enter your password</mat-label>
+                                        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+                                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                            [attr.aria-pressed]="hide">
+                                            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                        </button>
+                                        <mat-error *ngIf="usersForm.get('password')?.hasError('required')">
+                                            Password is required
+                                        </mat-error>
+                                        <mat-error *ngIf="usersForm.get('password')?.hasError('minlength')">
+                                            Password must be at least 8 characters long.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                      <mat-label>Sex</mat-label>
+                                      <mat-select  formControlName="branchId">
+                                        <mat-option *ngFor="let branch of branchesList" [value]="branch.branchid">
+                                          {{ branch.branchname }}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-error *ngIf="usersForm.get('sex')?.hasError('required')">
+                                        Sex is required
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <button class="btn-space" [disabled]="!usersForm.valid " mat-raised-button color="primary">Submit</button>
+                                    <button type="button" mat-raised-button color="warn">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

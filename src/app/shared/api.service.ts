@@ -19,12 +19,6 @@ export class ApiService {
       .post<any>(url, payload)
       .pipe(
         catchError(this.handleError),
-        map((resp) => {
-          const { message,data } = resp;
-          this.snackBar.successNotification(message)
-          return data;
-        }
-        )
       );
   }
 
@@ -51,12 +45,6 @@ export class ApiService {
       .get<any>(url)
       .pipe(
         catchError( this.handleError),
-        map((resp) => {
-          const { message,data } = resp;
-          // this.snackBar.successNotification(message)
-          return data;
-        }
-        )
       );
   }
 
@@ -66,12 +54,6 @@ export class ApiService {
       .delete<any>(url)
       .pipe(
         catchError( this.handleError),
-        map((resp) => {
-          const { message,data } = resp;
-          this.snackBar.successNotification(message)
-          return data;
-        }
-        )
       );
   }
 
@@ -81,12 +63,6 @@ export class ApiService {
       .patch<any>(url, payload)
       .pipe(
         catchError(this.handleError),
-        map((resp) => {
-          const { message,data } = resp;
-          this.snackBar.successNotification(message)
-          return data;
-        }
-        )
       );
   }
 }

@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
-import {UsersComponent} from "./users/users/users.component";
 import { ClassComponent } from './academic/class/class.component';
 const routes: Routes = [
   {
@@ -52,7 +51,6 @@ const routes: Routes = [
       },
       {
         path: 'users',
-        component: UsersComponent,
         loadChildren: () =>
           import('./users/users.module').then(
             (m) => m.UsersModule

@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { UsersRoutingModule } from './users-routing.module';
-import { UsersComponent } from './users/users.component';
 import {ComponentsModule} from "@shared/components/components.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "@shared";
-import { FormDialogComponent } from './users/form-dialog/form-dialog.component';
+import { AddUserComponent } from './add-user/add-user.component';
+import { ListUsersComponent } from './list-users/list-users.component';
 
 
 
 @NgModule({
   declarations: [
-    UsersComponent,
-    FormDialogComponent
+    AddUserComponent,
+    ListUsersComponent
   ],
   imports: [
     CommonModule,

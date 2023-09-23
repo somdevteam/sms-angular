@@ -271,7 +271,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
-    title: 'User',
+    title: 'User Management',
     iconType: 'material-icons-two-tone',
     icon: 'description',
     class: 'menu-toggle',
@@ -281,8 +281,8 @@ export const ROUTES: RouteInfo[] = [
     role: ['Admin'],
     submenu: [
       {
-        path: '/users/createusers',
-        title: 'Users Page',
+        path: '/users/userlist',
+        title: 'Users',
         iconType: '',
         icon: '',
         class: 'ml-menu',
@@ -292,6 +292,19 @@ export const ROUTES: RouteInfo[] = [
         role: [''],
         submenu: [],
       },
+      {
+        path: '/users/adduser',
+        title: 'Add User',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+      
     ],
   },
   {
