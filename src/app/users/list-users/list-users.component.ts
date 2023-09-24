@@ -10,6 +10,8 @@ import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @Component({
   selector: 'app-list-users',
@@ -48,7 +50,8 @@ export class ListUsersComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private userService: UserService,
     private snackBar: SnackbarService,
-    private pageLoader: PageLoaderService
+    private pageLoader: PageLoaderService,
+    private dialog: MatDialog,
   ) {
     this.searchUsersForm = this.searchUsersForm = this.fb.group({
       branchId: ['', [Validators.required]],
@@ -85,6 +88,12 @@ export class ListUsersComponent implements OnInit {
         this.pageLoader.hideLoader()
         this.snackBar.dangerNotification(error)
       })
+    })
+  }
+
+  resetPassword(data:any) {
+    this.dialog.open(ResetPasswordComponent,{
+      data
     })
   }
 }

@@ -65,4 +65,15 @@ export class UserService {
          })
        );
    }
+
+   resetPassword(id:number,payload:any): Observable<any> {
+    return this.apiService.sendHttpUpdateRequest('/user/resetpassword',id,payload).pipe(
+      map((resp) => {
+        const { message,data } = resp;
+        this.snackBar.successNotification(message)
+        return data;
+      }
+      )
+      );
+   }
 }
