@@ -12,6 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-list-users',
@@ -40,7 +41,8 @@ export class ListUsersComponent implements OnInit {
       "email",
       "mobile",
       "action",
-  ]
+  ];
+  isEdit: boolean = false;
 
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
@@ -52,6 +54,8 @@ export class ListUsersComponent implements OnInit {
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private dialog: MatDialog,
+    private router: Router
+
   ) {
     this.searchUsersForm = this.searchUsersForm = this.fb.group({
       branchId: ['', [Validators.required]],
@@ -96,4 +100,9 @@ export class ListUsersComponent implements OnInit {
       data
     })
   }
+
+  // editUsers(user){
+  //   this.userService.setUserOperation(user);
+  //   this.router.navigateByUrl('users/edit?edit=true')
+  // }
 }

@@ -20,6 +20,7 @@ export class AddUserComponent implements OnInit {
   hide = true;
   branchesList:any = []
   selectedBranch: any;
+  isEdit: boolean = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -43,6 +44,16 @@ export class AddUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // if (this.isEdit) {
+    //
+    //   const data = this.userService.getUserOperation();
+    //   console.log(data);
+    //   this.usersForm.patchValue({
+    //     ...this.userService.getUserOperation(),
+    //   });
+    //
+    // }
+
    this.loadBranches()
   }
   onSubmit() {
