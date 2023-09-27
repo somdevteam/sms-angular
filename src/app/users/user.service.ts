@@ -3,20 +3,23 @@ import { ApiService } from '@shared/api.service';
 import { SnackbarService } from '@shared/snackbar.service';
 import { map, Observable } from 'rxjs';
 import {UserOperation} from "./UserOperation";
-//import {AppDataService} from "@shared/app-data.service";
+import {AppDataService} from "@shared/app-data.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
+  userOperation: UserOperation;
   constructor(
     private apiService:ApiService,
     private snackBar:SnackbarService,
-   // private appDataService: AppDataService
+    private appDataService: AppDataService,
+
   )
-  { }
-  //userOperation: UserOperation;
+  {
+    this.userOperation = this.appDataService.support_data['userOperation'] || null;
+  }
+
 
   getUsers() {
     return this.apiService.sendHttpGetRequest('/user')
@@ -80,13 +83,13 @@ export class UserService {
       )
       );
    }
-  // setUserOperation(userOperation: UserOperation) {
-  //   this.userOperation = userOperation;
-  //   this.appDataService.set_support_data('userOperation', this.userOperation);
-  // }
-  //
-  // getUserOperation(): UserOperation {
-  //   return this.userOperation;
-  // }
+  setUserOperation(userOperation: UserOperation) {
+    this.userOperation = userOperation;
+    this.appDataService.set_support_data('userOperation', this.userOperation);
+  }
+
+  getUserOperation(): UserOperation {
+    return this.userOperation;
+  }
 
 }

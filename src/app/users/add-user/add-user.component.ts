@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import { UserService } from '../user.service';
 import { SnackbarService } from '@shared/snackbar.service';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-user',
@@ -9,7 +10,7 @@ import { SnackbarService } from '@shared/snackbar.service';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
-  usersForm: UntypedFormGroup;
+  usersForm!: FormGroup;
   breadscrums = [
     {
       title: 'Add User',
@@ -23,11 +24,19 @@ export class AddUserComponent implements OnInit {
   isEdit: boolean = false;
 
   constructor(
-    private fb: UntypedFormBuilder,
     private userService:UserService,
-    private snackBar:SnackbarService
+    private snackBar:SnackbarService,
+    private route: ActivatedRoute,
+    private fb :FormBuilder,
+    private router: Router
     ) {
-    this.usersForm = this.fb.group({
+    this.route.queryParams.subscribe(params => {
+      this.isEdit = params['edit'];
+    });
+  }
+
+  ngOnInit(): void {
+    let formFields = {
       firstName: ['', [Validators.required, Validators.pattern('[a-zA-Z]+')]],
       middleName: [''],
       lastName: ['', [Validators.required, Validators.pattern('[a-zA-Z]+')]],
@@ -39,34 +48,47 @@ export class AddUserComponent implements OnInit {
       ],
       password: ['', [Validators.required]],
       branchId: ['']
+    }
+    this.usersForm = this.fb.group(formFields );
 
-    });
-  }
 
-  ngOnInit(): void {
-    // if (this.isEdit) {
-    //
-    //   const data = this.userService.getUserOperation();
-    //   console.log(data);
-    //   this.usersForm.patchValue({
-    //     ...this.userService.getUserOperation(),
-    //   });
-    //
-    // }
+    if (this.isEdit) {
+      const data = this.userService.getUserOperation();
+      console.log(data);
+      this.usersForm.patchValue({
+        ...this.userService.getUserOperation(),
+      });
+
+    }
 
    this.loadBranches()
   }
   onSubmit() {
     console.log('Form Value', this.usersForm.value);
-    const payload = this.usersForm.value;
-    this.userService.saveUsers(payload).subscribe({
-      next: (res => {
-        // this.snackBar
-      }),
-      error: (error => {
-        this.snackBar.dangerNotification(error)
-      })
-    })
+    if(this.usersForm.valid){
+      const payload = this.usersForm.value;
+      if (this.isEdit){
+        const userId  = this.userService.getUserOperation().userId;
+        this.userService.updateUsers(userId, payload).subscribe({
+          next: (res => {
+            // this.snackBar
+          }),
+          error: (error => {
+            this.snackBar.dangerNotification(error)
+          })
+        })
+      } else {
+        this.userService.saveUsers(payload).subscribe({
+          next: (res => {
+            this.router.navigateByUrl('users/userlist')
+          }),
+          error: (error => {
+            this.snackBar.dangerNotification(error)
+          })
+        })
+      }
+    }
+
   }
 
   loadBranches() {

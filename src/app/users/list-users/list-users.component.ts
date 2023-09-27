@@ -101,8 +101,9 @@ export class ListUsersComponent implements OnInit {
     })
   }
 
-  // editUsers(user){
-  //   this.userService.setUserOperation(user);
-  //   this.router.navigateByUrl('users/edit?edit=true')
-  // }
+  editUsers(user : any){
+    this.userService.setUserOperation(user);
+    console.log(user);
+    this.router.navigateByUrl('users/edit?edit=true')
+  }
 }
