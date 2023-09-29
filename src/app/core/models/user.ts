@@ -8,5 +8,6 @@ export class User {
   firstName!: string;
   lastName!: string;
   role!: Role;
+  branch!: string;
   token!: string;
 }

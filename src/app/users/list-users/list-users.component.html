@@ -6,7 +6,7 @@
             </app-breadcrumb>
         </div>
         <div class="row clearfix">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" *ngIf="!isBranch">
                 <div class="card">
                     <div class="header">
                         <h2>Search User</h2>
@@ -22,7 +22,7 @@
                                       {{ branch.branchname }}
                                     </mat-option>
                                   </mat-select>
-                                  <mat-error *ngIf="searchUsersForm.get('branch')?.hasError('required')">
+                                  <mat-error *ngIf="searchUsersForm.get('branchId')?.hasError('required')">
                                     Branch is required
                                 </mat-error>
                                 </mat-form-field>

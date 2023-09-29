@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+  FormGroup,
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
@@ -13,6 +14,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import {Router} from "@angular/router";
+import { AuthService, User } from '@core';
 
 @Component({
   selector: 'app-list-users',
@@ -20,7 +22,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./list-users.component.scss'],
 })
 export class ListUsersComponent implements OnInit {
-  searchUsersForm: UntypedFormGroup;
+  searchUsersForm!: FormGroup;
   breadscrums = [
     {
       title: 'Search User',
@@ -43,6 +45,8 @@ export class ListUsersComponent implements OnInit {
       "action",
   ];
   isEdit: boolean = false;
+  isBranch:boolean = false
+  userInfo!:User;
 
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
@@ -54,16 +58,45 @@ export class ListUsersComponent implements OnInit {
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private authService:AuthService
 
   ) {
-    this.searchUsersForm = this.searchUsersForm = this.fb.group({
-      branchId: ['', [Validators.required]],
-      isActive: ['1'],
-    });
+    this.userInfo = this.authService.currentUserValue;
+    this.isBranch = this.userInfo.branch ? true : false;
+    
   }
   ngOnInit(): void {
-    this.loadBranches();
+    let formFields = {
+      branchId: ['', [Validators.required]],
+      isActive: ['1'],
+    };
+    this.searchUsersForm = this.fb.group(formFields)
+
+    if (this.isBranch) {
+      this.loadUsersBranch()
+    }else {
+      this.loadBranches();
+    }
+    
+  }
+
+  loadUsersBranch() {
+    const payload = {branchId: this.userInfo.branch,isActive:1};
+    this.pageLoader.showLoader();
+    this.userService.getUsersFilter(payload).subscribe({
+      next: (res => {
+        this.dataSource = new MatTableDataSource(res);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.pageLoader.hideLoader()
+      }),
+      error: (error => {
+        this.pageLoader.hideLoader()
+        this.snackBar.dangerNotification(error)
+      })
+    })
+
   }
 
   loadBranches() {

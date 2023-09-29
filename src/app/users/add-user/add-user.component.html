@@ -9,7 +9,7 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="header">
-                        <h2>Add User</h2>
+                        <h2>{{isEdit ? 'Update User' : 'Add User'}}</h2>
                     </div>
                     <div class="body">
                         <form class="m-4" [formGroup]="usersForm" (ngSubmit)="onSubmit()">
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isEdit">
                                     <mat-form-field class="example-full-width" appearance="outline">
                                         <mat-label>Enter your password</mat-label>
                                         <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
@@ -93,7 +93,7 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isBranch">
                                     <mat-form-field class="example-full-width mb-3" appearance="outline">
                                       <mat-label>Branch</mat-label>
                                       <mat-select  formControlName="branchId">
