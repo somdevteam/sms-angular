@@ -63,8 +63,8 @@ export class UserService {
       );
    }
 
-   getBranches() {
-    return this.apiService.sendHttpGetRequest('/branch')
+   getBranches(param:string='') {
+    return this.apiService.sendHttpGetRequest(`/branch/${param}`)
        .pipe(
          map((resp) => {
           const { message,data } = resp;

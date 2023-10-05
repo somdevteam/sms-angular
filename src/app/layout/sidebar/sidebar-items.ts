@@ -319,8 +319,8 @@ export const ROUTES: RouteInfo[] = [
     role: ['Admin'],
     submenu: [
       {
-        path: '/academic/class',
-        title: 'Class',
+        path: '/academic/academic-year',
+        title: 'Academic Year',
         iconType: '',
         icon: '',
         class: 'ml-menu',

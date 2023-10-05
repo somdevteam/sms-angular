@@ -100,7 +100,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   loadBranches() {
-    this.userService.getBranches().subscribe({
+    this.userService.getBranches('all').subscribe({
       next: (res) => {
         this.branchesList = res;
       },

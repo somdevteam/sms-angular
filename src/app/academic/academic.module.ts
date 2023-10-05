@@ -2,15 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AcademicRoutingModule } from './academic-routing.module';
-import { ClassComponent } from './class/class.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared';
 import { ComponentsModule } from '@shared/components/components.module';
+import { AcademicYearComponent } from './academic-year/academic-year.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
   declarations: [
-    ClassComponent
+    AcademicYearComponent
   ],
   imports: [
     CommonModule,
@@ -19,6 +20,7 @@ import { ComponentsModule } from '@shared/components/components.module';
     ReactiveFormsModule,
     ComponentsModule,
     SharedModule,
+    MatFormFieldModule
   ]
 })
 export class AcademicModule { }

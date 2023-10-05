@@ -97,8 +97,8 @@
                                     <mat-form-field class="example-full-width mb-3" appearance="outline">
                                       <mat-label>Branch</mat-label>
                                       <mat-select  formControlName="branchId">
-                                        <mat-option *ngFor="let branch of branchesList" [value]="branch.branchid">
-                                          {{ branch.branchname }}
+                                        <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+                                          {{ branch.branchName }}
                                         </mat-option>
                                       </mat-select>
                                       <mat-error *ngIf="usersForm.get('sex')?.hasError('required')">

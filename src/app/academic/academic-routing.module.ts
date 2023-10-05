@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ClassComponent } from './class/class.component';
+import { AcademicYearComponent } from './academic-year/academic-year.component';
 
 const routes: Routes = [
   {
-    path: 'class',
-    component: ClassComponent,
+    path: 'academic-year',
+    component: AcademicYearComponent,
   }
 ];
 

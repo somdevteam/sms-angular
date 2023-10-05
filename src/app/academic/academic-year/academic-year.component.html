@@ -1,0 +1,67 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Academic Year</h2>
+                    </div>
+                    <div class="body">
+                        <form class="register-form m-4" [formGroup]="register!" (ngSubmit)="onRegister()">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width"  appearance="outline">
+                                        <mat-label>Branch</mat-label>
+                                        <mat-select formControlName="branch">
+                                          <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+                                            {{ branch.branchName }}
+                                          </mat-option>
+                                        </mat-select>
+                                        <div class="loading-container">
+                                            <mat-spinner *ngIf="isBranchLoading" class="spinner" diameter="20"></mat-spinner>
+                                          </div>
+                                        <mat-error *ngIf="register?.get('branch')?.hasError('required')">
+                                          Branch is required
+                                        </mat-error>
+                                       </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Academic Year</mat-label>
+                                        <input matInput formControlName="year">
+                                        <mat-error *ngIf="register?.get('year')?.hasError('required')">
+                                            Academic Year is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    
+                                    <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Description</mat-label>
+                                        <textarea matInput formControlName="description"></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <button class="btn-space" [disabled]="!register?.valid" mat-raised-button
+                                        color="primary">Submit</button>
+                                    <button type="button" mat-raised-button color="warn">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
