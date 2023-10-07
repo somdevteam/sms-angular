@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>{{ getDialogTitle() }}</h1>
+<div mat-dialog-content>
+
+  <!-- Edit and Add Mode Forms -->
+  <form class="register-form mt-4" *ngIf="mode === dialogModeEnum.Edit || mode === dialogModeEnum.Add" [formGroup]="form!">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Academic Year</mat-label>
+                <input matInput formControlName="academicYear">
+                <mat-error *ngIf="form?.get('academicYear')?.hasError('required')">
+                    Academic Year is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-radio-group formControlName="isActive" aria-label="Select an option">
+                <mat-radio-button [value]="true" >Active</mat-radio-button>
+                <mat-radio-button [value]="false">Inactive</mat-radio-button>
+              </mat-radio-group>
+        </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!form!.valid" (click)="onSaveClick()" type="submit" color="primary">{{ getSaveButtonLabel() }}</button>
+    <button mat-raised-button type="button" (click)="closeDialog()" color="warn">Close</button> 
+</div>

@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AcademicService } from '../academic.service';
 import { SnackbarService } from '@shared/snackbar.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { AuthService, User } from '@core';
+import { MatDialog } from '@angular/material/dialog';
+import { AcademicDialogComponent, DialogMode } from './academic-dialog/academic-dialog.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-academic-year',
@@ -25,15 +30,20 @@ export class AcademicYearComponent implements OnInit {
   isBranch:boolean = false
   userInfo!:User;
 
-  academicData:any;
+  // academicData:any;
   isEdit:boolean = false;
+
+  academicData!: MatTableDataSource<any>;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private fb: FormBuilder,
     private academicService:AcademicService,
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
     ) {
       this.userInfo = this.authService.currentUserValue;
       this.isBranch = this.userInfo.branch ? true : false;
@@ -69,7 +79,9 @@ export class AcademicYearComponent implements OnInit {
   loadAcademicYears() {
     this.academicService.getAcademicYear().subscribe({
       next: (res) => {
-        this.academicData = res;
+        this.academicData = new MatTableDataSource(res);
+        this.academicData.sort = this.sort;
+        this.academicData.paginator = this.paginator;
         console.log(res);
         
       },
@@ -98,15 +110,38 @@ export class AcademicYearComponent implements OnInit {
     
   }
 
+  addAcademic() {
+    const dialogRef = this.dialog.open(AcademicDialogComponent, {
+      width: '400px',
+      data: { mode: DialogMode.Add },
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  editAcademic(row: any):void {
+    // this.isEdit = true
+    // this.register?.patchValue(row);
+    const dialogRef = this.dialog.open(AcademicDialogComponent, {
+      width: '400px',
+      data: { mode: DialogMode.Edit, academic: row },
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
   viewAcademic(row: any) {
-   
-  }
-  editAcademic(row: any) {
-    this.isEdit = true
-    this.register?.patchValue(row);
-  }
-  deleteAcademic(row: any) {
-   
+    const dialogRef = this.dialog.open(AcademicDialogComponent, {
+      width: '400px',
+      data: { mode: DialogMode.View },
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

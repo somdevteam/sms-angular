@@ -49,4 +49,17 @@ export class AcademicService {
          })
        );
    }
+
+   updateAcademicYear(id:number,payload:any) {
+    return this.apiService.sendHttpUpdateRequest('/academic',id,payload)
+       .pipe(
+         map((resp) => {
+          const { message,data } = resp;
+          console.log(resp)
+          // this.snackBar.successNotification(message);
+          this.snackBar.successDialog('',message)
+          return data;
+         })
+       );
+   }
 }

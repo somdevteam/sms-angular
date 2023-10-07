@@ -7,11 +7,13 @@ import { SharedModule } from '@shared';
 import { ComponentsModule } from '@shared/components/components.module';
 import { AcademicYearComponent } from './academic-year/academic-year.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AcademicDialogComponent } from './academic-year/academic-dialog/academic-dialog.component';
 
 
 @NgModule({
   declarations: [
-    AcademicYearComponent
+    AcademicYearComponent,
+    AcademicDialogComponent
   ],
   imports: [
     CommonModule,
