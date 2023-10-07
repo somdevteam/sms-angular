@@ -41,6 +41,7 @@ export class ApiService {
 
   sendHttpGetRequest(endpoint: string) {
     const url = environment.apiUrl+endpoint;
+    
     return this.http
       .get<any>(url)
       .pipe(

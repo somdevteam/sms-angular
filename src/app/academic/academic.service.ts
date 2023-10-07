@@ -27,6 +27,16 @@ export class AcademicService {
        );
    }
 
+   getAcademicYear() {
+    return this.apiService.sendHttpGetRequest('/academic')
+       .pipe(
+         map((resp) => {
+          const { data } = resp;
+          return data;
+         })
+       );
+   }
+
    saveAcademicYear(payload:any) {
     return this.apiService.sendHttpPostRequest('/academic',payload)
        .pipe(
