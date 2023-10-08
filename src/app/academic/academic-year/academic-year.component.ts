@@ -77,8 +77,10 @@ export class AcademicYearComponent implements OnInit {
   // }
 
   loadAcademicYears() {
+    this.pageLoader.showLoader()
     this.academicService.getAcademicYear().subscribe({
       next: (res) => {
+        this.pageLoader.hideLoader()
         this.academicData = new MatTableDataSource(res);
         this.academicData.sort = this.sort;
         this.academicData.paginator = this.paginator;
@@ -86,6 +88,7 @@ export class AcademicYearComponent implements OnInit {
         
       },
       error: (error) => {
+        this.pageLoader.hideLoader()
         this.snackBar.errorDialog('',error);
       },
     });
@@ -133,15 +136,17 @@ export class AcademicYearComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
-  viewAcademic(row: any) {
+
+  assingBranch(row: any):void {
     const dialogRef = this.dialog.open(AcademicDialogComponent, {
       width: '400px',
-      data: { mode: DialogMode.View },
+      data: { mode: DialogMode.AddBranch, academic: row },
     });
   
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
   }
+
 
 }

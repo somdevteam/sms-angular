@@ -6,9 +6,10 @@ import { AcademicService } from 'app/academic/academic.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 
 export enum DialogMode {
-  View = 'view',
+ 
   Edit = 'edit',
-  Add = 'add'
+  Add = 'add',
+  AddBranch = 'addbranch'
 }
 
 @Component({
@@ -18,7 +19,7 @@ export enum DialogMode {
 })
 export class AcademicDialogComponent implements OnInit {
 
-  mode: DialogMode = DialogMode.View;
+  mode?: DialogMode;
   academicData: any;
   form?: FormGroup;
   // Expose the enum for use in the template
@@ -94,16 +95,17 @@ export class AcademicDialogComponent implements OnInit {
 
   private initializeForm(): void {
 
-    if (this.mode === DialogMode.View) {
-
-      this.form = this.formBuilder.group({});
+    if ( this.mode === DialogMode.Add|| this.mode === DialogMode.Edit) {
       
-    }  else if ( this.mode === DialogMode.Add|| this.mode === DialogMode.Edit) {
-      
-
       this.form = this.formBuilder.group({
         academicYear: ['', Validators.required],
         isActive: [true],
+      });
+
+    } else if ( this.mode === DialogMode.AddBranch) {
+      
+      this.form = this.formBuilder.group({
+       
       });
 
     }
@@ -113,19 +115,28 @@ export class AcademicDialogComponent implements OnInit {
 
   getDialogTitle(): string {
     switch (this.mode) {
-      case DialogMode.View:
-        return 'View Academic';
       case DialogMode.Edit:
         return 'Edit Academic';
       case DialogMode.Add:
         return 'Add Academic';
+      case DialogMode.AddBranch:
+        return 'Assing Branch';
       default:
-        return 'Academic';
+        return 'unknown';
     }
   }
   
   getSaveButtonLabel(): string {
-    return this.mode === DialogMode.Add ? 'Add' : 'Save';
+    switch (this.mode) {
+      case DialogMode.Edit:
+        return 'Edit';
+      case DialogMode.Add:
+        return 'Add';
+      case DialogMode.AddBranch:
+        return 'Assing';
+      default:
+        return 'unknown';
+    }
   }
   
 

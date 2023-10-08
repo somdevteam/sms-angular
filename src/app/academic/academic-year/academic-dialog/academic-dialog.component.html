@@ -21,6 +21,9 @@
         </div>
     </div>
   </form>
+
+  <form class="register-form mt-4" *ngIf="mode === dialogModeEnum.AddBranch" [formGroup]="form!">
+  </form>
 </div>
 <div mat-dialog-actions>
     <button mat-raised-button [disabled]="!form!.valid" (click)="onSaveClick()" type="submit" color="primary">{{ getSaveButtonLabel() }}</button>
