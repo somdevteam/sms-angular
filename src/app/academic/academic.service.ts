@@ -62,4 +62,36 @@ export class AcademicService {
          })
        );
    }
+
+   findBranchesByAcademic(id:number) {
+    return this.apiService.sendHttpGetRequest(`/branch/${id}/branches`)
+       .pipe(
+         map((resp) => {
+          const { data } = resp;
+          return data;
+         })
+       );
+   }
+
+   saveAcademicBranch(payload:any) {
+    return this.apiService.sendHttpPostRequest('/branch-academic',payload)
+       .pipe(
+         map((resp) => {
+          const { message,data } = resp;
+          console.log(resp)
+          // this.snackBar.successNotification(message);
+          this.snackBar.successDialog('',message)
+          return data;
+         })
+       );
+   }
+   getBranchesWithAcademicByAcademicId(id:number) {
+    return this.apiService.sendHttpGetRequest(`/branch-academic/academic/${id}`)
+       .pipe(
+         map((resp) => {
+          const { data } = resp;
+          return data;
+         })
+       );
+   }
 }

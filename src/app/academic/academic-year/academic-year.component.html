@@ -108,9 +108,13 @@
                                     <button mat-menu-item (click)="editAcademic(element)">
                                       <span>Edit</span>
                                     </button>
-                                    <button mat-menu-item (click)="assingBranch(element)">
-                                      <span>Add & View Branch</span>
+                                    <button mat-menu-item [matMenuTriggerFor]="branches">
+                                      <span>Branches</span>
                                     </button>
+                                  </mat-menu>
+                                  <mat-menu #branches="matMenu">
+                                    <button mat-menu-item (click)="assingBranch(element)">Add Branch</button>
+                                    <button mat-menu-item (click)="ViewBranch(element)">View Branch</button>
                                   </mat-menu>
                                   
                               </td>

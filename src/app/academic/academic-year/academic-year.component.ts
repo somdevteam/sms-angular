@@ -138,13 +138,53 @@ export class AcademicYearComponent implements OnInit {
   }
 
   assingBranch(row: any):void {
-    const dialogRef = this.dialog.open(AcademicDialogComponent, {
-      width: '400px',
-      data: { mode: DialogMode.AddBranch, academic: row },
+
+    const academicId = row.academicId;
+    this.pageLoader.showLoader()
+    this.academicService.findBranchesByAcademic(academicId).subscribe({
+      next: (res) => {
+
+        this.pageLoader.hideLoader()
+        const dialogRef = this.dialog.open(AcademicDialogComponent, {
+          width: '400px',
+          data: { mode: DialogMode.AddBranch, academic: {academic:row,branches: res} },
+        });
+      
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('The dialog was closed');
+        });
+        
+      },
+      error: (error) => {
+        this.pageLoader.hideLoader()
+        this.snackBar.dangerNotification(error);
+      },
     });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+
+  }
+
+  ViewBranch(row: any):void {
+
+    const academicId = row.academicId;
+    this.pageLoader.showLoader()
+    this.academicService.getBranchesWithAcademicByAcademicId(academicId).subscribe({
+      next: (res) => {
+
+        this.pageLoader.hideLoader()
+        const dialogRef = this.dialog.open(AcademicDialogComponent, {
+          width: '50%',
+          data: { mode: DialogMode.ViewBranch, academic: res },
+        });
+      
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('The dialog was closed');
+        });
+        
+      },
+      error: (error) => {
+        this.pageLoader.hideLoader()
+        this.snackBar.dangerNotification(error);
+      },
     });
   }
 

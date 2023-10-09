@@ -9,7 +9,8 @@ export enum DialogMode {
  
   Edit = 'edit',
   Add = 'add',
-  AddBranch = 'addbranch'
+  AddBranch = 'addbranch',
+  ViewBranch = 'viewbranch'
 }
 
 @Component({
@@ -24,6 +25,10 @@ export class AcademicDialogComponent implements OnInit {
   form?: FormGroup;
   // Expose the enum for use in the template
   dialogModeEnum = DialogMode;
+
+  branchList:any;
+  dataSource :any;
+  displayedColumns: string[] = ['branchId', 'branchName', 'branchLocation'];
 
   constructor(
     public dialogRef: MatDialogRef<AcademicDialogComponent>,
@@ -42,8 +47,10 @@ export class AcademicDialogComponent implements OnInit {
     this.initializeForm()
     if (this.mode === DialogMode.Edit) {
       this.form?.patchValue(this.academicData)
-      console.log(this.academicData);
-      
+    } else if (this.mode === DialogMode.AddBranch) {
+      this.branchList = this.academicData.branches;
+    } else if (this.mode === DialogMode.ViewBranch) {
+      this.dataSource = this.academicData
     }
   }
 
@@ -56,8 +63,9 @@ export class AcademicDialogComponent implements OnInit {
     if (this.mode === DialogMode.Add) {
       this.newAcademic()
     } else if (this.mode === DialogMode.Edit) {
-      this.updateAcademic()
-      
+      this.updateAcademic()  
+    }else if (this.mode === DialogMode.AddBranch) {
+      this.saveBranchAcdemic();
     }
   }
 
@@ -92,6 +100,24 @@ export class AcademicDialogComponent implements OnInit {
     });
   }
 
+  saveBranchAcdemic() {
+    const payload = {academicId: this.academicData.academic.academicId,branches: this.form?.value['branches']}
+    console.log(payload);
+    
+    this.pageLoader.showLoader()
+    this.academicService.saveAcademicBranch(payload).subscribe({
+      next: (res => {
+        this.pageLoader.hideLoader()
+        this.closeDialog()
+      }),
+      error: (error => {
+        this.pageLoader.hideLoader()
+        this.snackBar.errorDialog('',error);
+      })
+    })
+    
+  }
+
 
   private initializeForm(): void {
 
@@ -105,7 +131,14 @@ export class AcademicDialogComponent implements OnInit {
     } else if ( this.mode === DialogMode.AddBranch) {
       
       this.form = this.formBuilder.group({
-       
+       branches: ['',Validators.required]
+      });
+
+    }
+    else if ( this.mode === DialogMode.ViewBranch) {
+      
+      this.form = this.formBuilder.group({
+      
       });
 
     }
@@ -121,6 +154,8 @@ export class AcademicDialogComponent implements OnInit {
         return 'Add Academic';
       case DialogMode.AddBranch:
         return 'Assing Branch';
+        case DialogMode.ViewBranch:
+          return 'View Branch';
       default:
         return 'unknown';
     }
@@ -134,6 +169,8 @@ export class AcademicDialogComponent implements OnInit {
         return 'Add';
       case DialogMode.AddBranch:
         return 'Assing';
+        case DialogMode.ViewBranch:
+          return 'View';
       default:
         return 'unknown';
     }
