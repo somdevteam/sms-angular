@@ -13,6 +13,10 @@ import {
 import { ROUTES } from './sidebar-items';
 import { AuthService, Role } from '@core';
 import { RouteInfo } from './sidebar.metadata';
+import {MatTableDataSource} from "@angular/material/table";
+import {MenuService} from "@core/service/menu.service";
+import {SnackbarService} from "@shared/snackbar.service";
+import {PageLoaderService} from "../page-loader/page-loader.service";
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -35,7 +39,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     public elementRef: ElementRef,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private menuService:MenuService,
+    private snackBar: SnackbarService,
+    private pageLoader: PageLoaderService,
   ) {
     this.elementRef.nativeElement.closest('body');
     this.routerObj = this.router.events.subscribe((event) => {
@@ -76,19 +83,36 @@ export class SidebarComponent implements OnInit, OnDestroy {
         ' ' +
         this.authService.currentUserValue.lastName;
       this.userImg = this.authService.currentUserValue.img;
+      const payload  ={ userId: this.authService.currentUserValue.id};
+      this.menuService.getMenusByUserId(payload).subscribe({
+        next: (res => {
+          console.log("test"+res[0].submenu.length);
+          this.sidebarItems = [res[0]];
+          console.log("data before  filtered"+this.sidebarItems);
+          //this.sidebarItems.filter((x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1)
+         console.log(this.sidebarItems);
 
-      this.sidebarItems = ROUTES.filter(
-        (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
-      );
-      if (userRole === Role.Admin) {
-        this.userType = Role.Admin;
-      } else if (userRole === Role.Teacher) {
-        this.userType = Role.Teacher;
-      } else if (userRole === Role.Student) {
-        this.userType = Role.Student;
-      } else {
-        this.userType = Role.Admin;
-      }
+        }),
+        error: (error => {
+          this.pageLoader.hideLoader()
+          this.snackBar.dangerNotification(error)
+        })
+      })
+
+      // console.log(ROUTES);
+      // this.sidebarItems = ROUTES.filter(
+      //   (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
+      // );
+      // console.log(this.sidebarItems);
+      // if (userRole === Role.Admin) {
+      //   this.userType = Role.Admin;
+      // } else if (userRole === Role.Teacher) {
+      //   this.userType = Role.Teacher;
+      // } else if (userRole === Role.Student) {
+      //   this.userType = Role.Student;
+      // } else {
+      //   this.userType = Role.Admin;
+      // }
     }
 
     this.initLeftSidebar();
