@@ -12,7 +12,7 @@ export class MenuService {
   constructor(private http: HttpClient,private apiService: ApiService,private snackBar:SnackbarService) { }
 
   getMenusByUserId(payload:any) {
-    const url = `/menus`;
+    const url = `/menus/${payload.userId}`;
     return this.apiService.sendHttpGetRequest(url)
       .pipe(
         map((resp) => {
