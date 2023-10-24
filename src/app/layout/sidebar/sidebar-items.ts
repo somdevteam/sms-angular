@@ -330,6 +330,18 @@ export const ROUTES: RouteInfo[] = [
         role: [''],
         submenu: [],
       },
+      {
+        path: '/academic/levels',
+        title: 'Levels',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
     ],
   },
 ];

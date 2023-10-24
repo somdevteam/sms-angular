@@ -94,4 +94,37 @@ export class AcademicService {
          })
        );
    }
+
+   // levels
+
+   findAllLevels() {
+    return this.apiService.sendHttpGetRequest(`/level`)
+       .pipe(
+         map((resp) => {
+          const { data } = resp;
+          return data;
+         })
+       );
+   }
+
+   findClassNotInLevelWithBranch(branchId: number) {
+    return this.apiService.sendHttpGetRequest(`/class/classesNotInLevel/${branchId}`)
+       .pipe(
+         map((resp) => {
+          const { data } = resp;
+          return data;
+         })
+       );
+   }
+
+   assingLevelClasses(payload: any) {
+    return this.apiService.sendHttpPostRequest(`/levelclass/add`,payload)
+       .pipe(
+         map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successDialog('',message)
+          return data;
+         })
+       );
+   }
 }

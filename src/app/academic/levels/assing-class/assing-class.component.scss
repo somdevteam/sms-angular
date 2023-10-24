@@ -1,0 +1,8 @@
+/* Add this CSS to place the spinner at the end */
+.loading-container {
+    position: absolute;
+    right: 16px; /* Adjust the spacing as needed */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
