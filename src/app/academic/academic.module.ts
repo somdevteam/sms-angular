@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AcademicDialogComponent } from './academic-year/academic-dialog/academic-dialog.component';
 import { LevelsComponent } from './levels/levels.component';
 import { AssingClassComponent } from './levels/assing-class/assing-class.component';
+import { ViewClassComponent } from './levels/view-class/view-class.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { AssingClassComponent } from './levels/assing-class/assing-class.compone
     AcademicYearComponent,
     AcademicDialogComponent,
     LevelsComponent,
-    AssingClassComponent
+    AssingClassComponent,
+    ViewClassComponent
   ],
   imports: [
     CommonModule,

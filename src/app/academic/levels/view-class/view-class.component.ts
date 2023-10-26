@@ -1,27 +1,27 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
-import { User } from '@core';
-import { AuthService } from '@core/service/auth.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AuthService } from '@core';
+import { User } from '@core/models/user';
 import { SnackbarService } from '@shared/snackbar.service';
 import { AcademicService } from 'app/academic/academic.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
+import { AssingClassComponent } from '../assing-class/assing-class.component';
 
 @Component({
-  selector: 'app-assing-class',
-  templateUrl: './assing-class.component.html',
-  styleUrls: ['./assing-class.component.scss']
+  selector: 'app-view-class',
+  templateUrl: './view-class.component.html',
+  styleUrls: ['./view-class.component.scss']
 })
-export class AssingClassComponent implements OnInit {
-
-  assignForm?:FormGroup
+export class ViewClassComponent implements OnInit {
+  viewClassForm?:FormGroup
   userInfo:User
   isBranch:boolean = false
   branchesList:any = []
-  classesList: any = []
   isBranchLoading:boolean = false
-  isClassLoading:boolean = false
+
+  classList:any 
+  displayedColumns: string[] = ['classid', 'classname','actions'];
 
   constructor(
     public dialogRef: MatDialogRef<AssingClassComponent>,
@@ -31,17 +31,14 @@ export class AssingClassComponent implements OnInit {
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private authService:AuthService
-
-    ) {
-      this.userInfo = this.authService.currentUserValue;
-      this.isBranch = this.userInfo.branch ? true : false;
-    }
+  ) {
+    this.userInfo = this.authService.currentUserValue;
+    this.isBranch = this.userInfo.branch ? true : false;
+  }
 
   ngOnInit() {
-    this.assignForm = this.formBuilder.group({
+    this.viewClassForm = this.formBuilder.group({
       branch: ['',this.isBranch ? Validators.nullValidator :Validators.required],
-      class: ['',Validators.required],
-      level: [this.data.levelname]
      });
 
     this.isBranch ?  this.onSelectionChange(this.userInfo.branch) : this.loadBranches()
@@ -50,22 +47,6 @@ export class AssingClassComponent implements OnInit {
   closeDialog(){
     this.dialogRef.close();
   }
-
-  onSelectionChange(selectedBranchId: any): void {
-    this.isClassLoading = true
-    this.academicService.findClassNotInLevelWithBranch(selectedBranchId).subscribe({
-      next:(res => {
-        this.classesList = res
-        this.isClassLoading = false
-      }),
-      error: (error => {
-        this.isClassLoading = false
-        this.snackBar.dangerNotification(error)
-      })
-    })
-    
-  }
-
   loadBranches() {
     this.isBranchLoading = true
     this.academicService.getBranches().subscribe({
@@ -80,24 +61,39 @@ export class AssingClassComponent implements OnInit {
     })
   }
 
-  onSubmit() {
+  onSelectionChange(selectedBranchId:any) {
     const payload = {
-      "levelid": this.data.levelid,
-      "branchid": this.isBranch ? this.userInfo.branch : this.assignForm?.controls['branch'].value,
-      "classid": this.assignForm?.controls['class'].value,
-    };
+      branchId: selectedBranchId,
+      levelId: this.data.levelid
+    }
+
     this.pageLoader.showLoader()
-    this.academicService.assingLevelClasses(payload).subscribe({
+    this.academicService.findClassesByBranchIdAndLevel(payload).subscribe({
       next:(res => {
-        this.classesList = res
+        this.classList = res;
+        
         this.pageLoader.hideLoader()
-        this.closeDialog()
       }),
       error: (error => {
         this.pageLoader.hideLoader()
         this.snackBar.dangerNotification(error)
       })
-    })
+    }) 
   }
+  removeClass(row:any) {
+    const levelClassId = row.levelclassid
+    this.pageLoader.showLoader()
+    this.academicService.deleteLevelClassById(levelClassId).subscribe({
+      next:(res => {
+        this.closeDialog()
+        this.pageLoader.hideLoader()
+      }),
+      error: (error => {
+        this.pageLoader.hideLoader()
+        this.snackBar.dangerNotification(error)
+      })
+    }) 
+  }
+
 
 }

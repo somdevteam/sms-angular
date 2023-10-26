@@ -6,6 +6,7 @@ import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { AcademicService } from '../academic.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AssingClassComponent } from './assing-class/assing-class.component';
+import { ViewClassComponent } from './view-class/view-class.component';
 
 @Component({
   selector: 'app-levels',
@@ -38,6 +39,13 @@ export class LevelsComponent implements OnInit {
   assingClass(row:any) {
     const dialogRef = this.dialog.open(AssingClassComponent, {
       width: '50%',
+      data: row,
+    });
+  }
+
+  viewClass(row:any) {
+    const dialogRef = this.dialog.open(ViewClassComponent, {
+      width: '80%',
       data: row,
     });
   }

@@ -127,4 +127,25 @@ export class AcademicService {
          })
        );
    }
+
+   findClassesByBranchIdAndLevel(payload: any) {
+    return this.apiService.sendHttpPostRequest(`/levelclass/classByBranchAndLevel`,payload)
+       .pipe(
+         map((resp) => {
+          const { data } = resp;
+          return data;
+         })
+       );
+   }
+
+   deleteLevelClassById(id:number) {
+    return this.apiService.sendHttpDeleteRequest(`/levelclass`,id)
+       .pipe(
+         map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successDialog('',message)
+          return data;
+         })
+       );
+   }
 }
