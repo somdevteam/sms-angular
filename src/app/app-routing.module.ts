@@ -50,6 +50,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'branch',
+        loadChildren: () =>
+          import('./branch/branch.module').then(
+            (m) => m.BranchModule
+          ),
+      },
+      {
         path: 'users',
         loadChildren: () =>
           import('./users/users.module').then(
