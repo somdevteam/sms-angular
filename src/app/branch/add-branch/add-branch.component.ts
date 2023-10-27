@@ -42,18 +42,18 @@ export class AddBranchComponent {
     this.pageLoader.showLoader();
     const payload = this.branchForm.value;
     console.log(this.selectedFile);
-    
-    // this.BranchService.createBranch(payload).subscribe({
-    //   next :(res => {
-    //     this.pageLoader.hideLoader()
 
-    //   }),
-    //   error: (error => {
-    //     this.pageLoader.hideLoader()
-    //     this.snackBar.errorDialog('',error)
-    //   })
-    // })
+    this.BranchService.createBranch(payload).subscribe({
+      next :(res => {
+        this.pageLoader.hideLoader()
+
+      }),
+      error: (error => {
+        this.pageLoader.hideLoader()
+        this.snackBar.errorDialog('',error)
+      })
+    })
   }
-    
+
 
 }
