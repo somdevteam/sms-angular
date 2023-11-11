@@ -86,9 +86,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       const payload  ={ userId: this.authService.currentUserValue.id};
       this.menuService.getMenusByUserId(payload).subscribe({
         next: (res => {
-          console.log("test"+res[0].submenu.length);
-          this.sidebarItems = [res[0]];
-          console.log("data before  filtered"+this.sidebarItems);
+          this.sidebarItems = res;
           //this.sidebarItems.filter((x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1)
          console.log(this.sidebarItems);
 
