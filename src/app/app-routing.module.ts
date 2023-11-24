@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
-import { ClassComponent } from './academic/class/class.component';
+import { AcademicYearComponent } from './academic/academic-year/academic-year.component';
 const routes: Routes = [
   {
     path: '',
@@ -50,6 +50,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'branch',
+        loadChildren: () =>
+          import('./branch/branch.module').then(
+            (m) => m.BranchModule
+          ),
+      },
+      {
         path: 'users',
         loadChildren: () =>
           import('./users/users.module').then(
@@ -58,7 +65,6 @@ const routes: Routes = [
       },
       {
         path: 'academic',
-        component: ClassComponent,
         loadChildren: () =>
           import('./academic/academic.module').then(
             (m) => m.AcademicModule

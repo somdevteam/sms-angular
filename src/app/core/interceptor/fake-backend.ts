@@ -12,7 +12,7 @@ import { mergeMap } from 'rxjs/operators';
 import { User } from '../models/user';
 import { Role } from '../models/role';
 
-const users: User[] = [
+const users: any[] = [
   {
     id: 1,
     img: 'assets/images/user/admin.jpg',

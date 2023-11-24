@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators
 import { UserService } from '../user.service';
 import { SnackbarService } from '@shared/snackbar.service';
 import {ActivatedRoute, Router} from "@angular/router";
+import { AuthService, User } from '@core';
 
 @Component({
   selector: 'app-add-user',
@@ -22,17 +23,22 @@ export class AddUserComponent implements OnInit {
   branchesList:any = []
   selectedBranch: any;
   isEdit: boolean = false;
+  isBranch:boolean = false
+  userInfo!:User;
 
   constructor(
     private userService:UserService,
     private snackBar:SnackbarService,
     private route: ActivatedRoute,
     private fb :FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
     ) {
     this.route.queryParams.subscribe(params => {
       this.isEdit = params['edit'];
     });
+    this.userInfo = this.authService.currentUserValue;
+    this.isBranch = this.userInfo.branch ? true : false;
   }
 
   ngOnInit(): void {
@@ -46,7 +52,7 @@ export class AddUserComponent implements OnInit {
         '',
         [Validators.required, Validators.email, Validators.minLength(5)],
       ],
-      password: ['', [Validators.required]],
+      password: ['', [ this.isEdit ? Validators.nullValidator :Validators.required]],
       branchId: ['']
     }
     this.usersForm = this.fb.group(formFields );
@@ -71,7 +77,7 @@ export class AddUserComponent implements OnInit {
         const userId  = this.userService.getUserOperation().userId;
         this.userService.updateUsers(userId, payload).subscribe({
           next: (res => {
-            // this.snackBar
+            this.router.navigateByUrl('users/userlist')
           }),
           error: (error => {
             this.snackBar.dangerNotification(error)

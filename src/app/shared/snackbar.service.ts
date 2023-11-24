@@ -1,6 +1,7 @@
 // snackbar.service.ts
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,34 @@ export class SnackbarService {
       horizontalPosition: 'right',
       panelClass: 'black',
     });
+  }
+
+
+  successDialo1(title:string = '',message:string) {
+    Swal.fire({
+      // position: 'top-end',
+      icon: 'success',
+      title: title,
+      text: message,
+      showConfirmButton: false,
+      timer: 3000,
+    });
+  }
+
+  successDialog(title:string,message:string) {
+    Swal.fire(
+      title,
+      message,
+      'success'
+    );
+  }
+
+  errorDialog(title:string,message:string) {
+    Swal.fire(
+      title,
+      message,
+      'error'
+    );
   }
 
 }
