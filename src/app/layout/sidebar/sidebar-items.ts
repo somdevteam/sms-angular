@@ -304,12 +304,12 @@ export const ROUTES: RouteInfo[] = [
         role: [''],
         submenu: [],
       },
-      
+
     ],
   },
   {
     path: '',
-    title: 'Branch',
+    title: 'Branch Management',
     iconType: 'material-icons-two-tone',
     icon: 'description',
     class: 'menu-toggle',
