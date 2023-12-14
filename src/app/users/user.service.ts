@@ -92,4 +92,15 @@ export class UserService {
     return this.userOperation;
   }
 
+  getUserLoginHistory(param:number) {
+    return this.apiService.sendHttpGetRequest(`/user/userloginhistory/${param}`)
+      .pipe(
+        map((resp) => {
+          const { message,data } = resp;
+          // alert(JSON.stringify(data))
+          return data;
+        })
+      );
+  }
+
 }

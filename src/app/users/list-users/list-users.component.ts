@@ -13,6 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { LoginHistoriesComponent } from './login-histories/login-histories.component';
 import {Router} from "@angular/router";
 import { AuthService, User } from '@core';
 
@@ -64,7 +65,7 @@ export class ListUsersComponent implements OnInit {
   ) {
     this.userInfo = this.authService.currentUserValue;
     this.isBranch = this.userInfo.branch ? true : false;
-    
+
   }
   ngOnInit(): void {
     let formFields = {
@@ -78,7 +79,7 @@ export class ListUsersComponent implements OnInit {
     }else {
       this.loadBranches();
     }
-    
+
   }
 
   loadUsersBranch() {
@@ -138,5 +139,11 @@ export class ListUsersComponent implements OnInit {
     this.userService.setUserOperation(user);
     console.log(user);
     this.router.navigateByUrl('users/edit?edit=true')
+  }
+
+  loginHistories(data:any) {
+    this.dialog.open(LoginHistoriesComponent,{
+      data
+    })
   }
 }
