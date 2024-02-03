@@ -83,8 +83,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         ' ' +
         this.authService.currentUserValue.lastName;
       this.userImg = this.authService.currentUserValue.img;
-      const payload  ={ userId: this.authService.currentUserValue.id};
-      this.menuService.getMenusByUserId(payload).subscribe({
+      const payload  ={ roleId: this.authService.currentUserValue.roleId};
+      this.menuService.getMenusByRoleId(payload).subscribe({
         next: (res => {
           this.sidebarItems = res;
           //this.sidebarItems.filter((x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1)

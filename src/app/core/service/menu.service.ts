@@ -11,8 +11,8 @@ export class MenuService {
 
   constructor(private http: HttpClient,private apiService: ApiService,private snackBar:SnackbarService) { }
 
-  getMenusByUserId(payload:any) {
-    const url = `/menus/${payload.userId}`;
+  getMenusByRoleId(payload:any) {
+    const url = `/menus/${payload.roleId}`;
     return this.apiService.sendHttpGetRequest(url)
       .pipe(
         map((resp) => {

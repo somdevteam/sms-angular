@@ -7,7 +7,8 @@ export class UserOperation {
     public lastName: string,
     public middlename: string,
     public mobile: number,
-    public branchId :number
+    public branchId :number,
+    public permissions : string []
 
   ) {
   }

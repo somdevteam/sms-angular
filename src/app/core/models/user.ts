@@ -7,7 +7,8 @@ export class User {
   password!: string;
   firstName!: string;
   lastName!: string;
-  role!: Role;
+  role!: string;
+  roleId!: number;
   branch!: string;
   token!: string;
 }
