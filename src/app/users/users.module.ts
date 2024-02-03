@@ -8,6 +8,7 @@ import {SharedModule} from "@shared";
 import { AddUserComponent } from './add-user/add-user.component';
 import { ListUsersComponent } from './list-users/list-users.component';
 import { ResetPasswordComponent } from './list-users/reset-password/reset-password.component';
+import { LoginHistoriesComponent } from './list-users/login-histories/login-histories.component';
 
 
 
@@ -15,7 +16,8 @@ import { ResetPasswordComponent } from './list-users/reset-password/reset-passwo
   declarations: [
     AddUserComponent,
     ListUsersComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    LoginHistoriesComponent
   ],
   imports: [
     CommonModule,
