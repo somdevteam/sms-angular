@@ -23,9 +23,9 @@ export class AuthService {
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
   }
-  
 
-  
+
+
   login(username: string, password: string) {
     const payload = { username: username, password: password };
    return this.apiService.sendHttpPostRequest('/auth/login',payload)
@@ -38,6 +38,22 @@ export class AuthService {
           return data;
         })
       );
+  }
+
+  isUserAuthorized(requiredPermission: string | string[]): boolean {
+    if (!requiredPermission || !requiredPermission.length) {
+      return true;
+    }
+
+    const userPermissions = this.currentUserValue?.permissions;
+    if (!userPermissions || !userPermissions.length) {
+      return false;
+    }
+
+    const permissions = Array.isArray(requiredPermission)
+      ? requiredPermission
+      : [requiredPermission];
+    return permissions.some((p) => userPermissions.includes(p));
   }
 
   logout() {

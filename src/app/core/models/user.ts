@@ -11,4 +11,5 @@ export class User {
   roleId!: number;
   branch!: string;
   token!: string;
+  permissions! : string [];
 }

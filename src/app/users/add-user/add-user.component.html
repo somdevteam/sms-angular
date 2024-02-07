@@ -109,7 +109,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                                    <button class="btn-space" [disabled]="!usersForm.valid " type="submit" mat-raised-button color="primary">{{isEdit ? 'Update' : 'Create'}} User</button>
+                                    <button class="btn-space" *ngIf="authService.isUserAuthorized([permissions.CREATE_USER, permissions.UPDATE_USER ])
+        "
+                                            [disabled]="!usersForm.valid " type="submit" mat-raised-button color="primary">{{isEdit ? 'Update' : 'Create'}} User</button>
                                     <button type="button" mat-raised-button color="warn">Cancel</button>
                                 </div>
                             </div>

@@ -4,6 +4,7 @@ import { UserService } from '../user.service';
 import { SnackbarService } from '@shared/snackbar.service';
 import {ActivatedRoute, Router} from "@angular/router";
 import { AuthService, User } from '@core';
+import {Permissions} from "@shared/enums/permissions.enums";
 
 @Component({
   selector: 'app-add-user',
@@ -25,6 +26,7 @@ export class AddUserComponent implements OnInit {
   isEdit: boolean = false;
   isBranch:boolean = false
   userInfo!:User;
+  permissions = Permissions.userManagement.users;
 
   constructor(
     private userService:UserService,
@@ -32,7 +34,7 @@ export class AddUserComponent implements OnInit {
     private route: ActivatedRoute,
     private fb :FormBuilder,
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
     ) {
     this.route.queryParams.subscribe(params => {
       this.isEdit = params['edit'];
