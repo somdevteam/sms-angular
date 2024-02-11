@@ -73,6 +73,16 @@ export class UserService {
        );
    }
 
+   getRoles(param:string='') {
+    return this.apiService.sendHttpGetRequest(`/roles/${param}`)
+       .pipe(
+         map((resp) => {
+          const { message,data } = resp;
+          return data;
+         })
+       );
+   }
+
    resetPassword(id:number,payload:any): Observable<any> {
     return this.apiService.sendHttpUpdateRequest('/user/resetpassword',id,payload).pipe(
       map((resp) => {

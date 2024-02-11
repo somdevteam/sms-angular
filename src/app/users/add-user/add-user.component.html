@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                                     <mat-form-field class="example-full-width mb-3" appearance="outline">
                                         <mat-label>Email</mat-label>
                                         <input matInput formControlName="email" required>
@@ -75,8 +75,6 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isEdit">
                                     <mat-form-field class="example-full-width" appearance="outline">
                                         <mat-label>Enter your password</mat-label>
@@ -93,6 +91,21 @@
                                         </mat-error>
                                     </mat-form-field>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                      <mat-label>Role</mat-label>
+                                      <mat-select  formControlName="roleId">
+                                        <mat-option *ngFor="let role of rolesList" [value]="role.roleId">
+                                          {{ role.roleName }}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-error *ngIf="usersForm.get('roleId')?.hasError('required')">
+                                        Role is required
+                                      </mat-error>
+                                    </mat-form-field>
+                                </div>
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isBranch">
                                     <mat-form-field class="example-full-width mb-3" appearance="outline">
                                       <mat-label>Branch</mat-label>
@@ -105,7 +118,7 @@
                                         Branch is required
                                       </mat-error>
                                     </mat-form-field>
-                                  </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">

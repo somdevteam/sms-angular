@@ -22,6 +22,7 @@ export class AddUserComponent implements OnInit {
   ];
   hide = true;
   branchesList:any = []
+  rolesList:any = []
   selectedBranch: any;
   isEdit: boolean = false;
   isBranch:boolean = false
@@ -55,7 +56,8 @@ export class AddUserComponent implements OnInit {
         [Validators.required, Validators.email, Validators.minLength(5)],
       ],
       password: ['', [ this.isEdit ? Validators.nullValidator :Validators.required]],
-      branchId: ['']
+      branchId: [''],
+      roleId: ['', Validators.required]
     }
     this.usersForm = this.fb.group(formFields );
 
@@ -69,7 +71,12 @@ export class AddUserComponent implements OnInit {
 
     }
 
+  this.loadRoles()
    this.loadBranches()
+  }
+
+  get f() {
+    return this.usersForm.controls;
   }
   onSubmit() {
     console.log('Form Value', this.usersForm.value);
@@ -103,6 +110,17 @@ export class AddUserComponent implements OnInit {
     this.userService.getBranches().subscribe({
       next:(res => {
         this.branchesList = res
+      }),
+      error: (error => {
+        this.snackBar.dangerNotification(error)
+      })
+    })
+  }
+
+  loadRoles() {
+    this.userService.getRoles().subscribe({
+      next:(res => {
+        this.rolesList = res
       }),
       error: (error => {
         this.snackBar.dangerNotification(error)
