@@ -16,6 +16,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { LoginHistoriesComponent } from './login-histories/login-histories.component';
 import {Router} from "@angular/router";
 import { AuthService, User } from '@core';
+import { EditUserComponent } from '../edit-user/edit-user.component';
 
 @Component({
   selector: 'app-list-users',
@@ -136,9 +137,15 @@ export class ListUsersComponent implements OnInit {
   }
 
   editUsers(user : any){
-    this.userService.setUserOperation(user);
-    console.log(user);
-    this.router.navigateByUrl('users/edit?edit=true')
+    // this.userService.setUserOperation(user);
+    // console.log(user);
+    // this.router.navigateByUrl('users/edit?edit=true')
+
+    this.dialog.open(EditUserComponent, {
+      data: user,
+      position: {top: '10%'},
+      width: '70%',
+    })
   }
 
   loginHistories(data:any) {
