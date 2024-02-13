@@ -143,7 +143,7 @@ export class ListUsersComponent implements OnInit {
 
     this.dialog.open(EditUserComponent, {
       data: user,
-      position: {top: '10%'},
+      // position: {top: '10%'},
       width: '70%',
     })
   }

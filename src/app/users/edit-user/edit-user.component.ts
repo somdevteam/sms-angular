@@ -27,6 +27,7 @@ export class EditUserComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     this.updateUserForm = this.fb.group({
       firstName: [this.userData.firstName, Validators.required],
       middleName: [this.userData.middleName, Validators.required],
@@ -34,12 +35,9 @@ export class EditUserComponent implements OnInit {
       username: [this.userData.username, Validators.required],
       mobile: [this.userData.mobile, Validators.required],
       email: [this.userData.email, Validators.required],
-      branchId: [this.userData.branchId, Validators.required],
+      branchId: [this.userData.branchId],
       roleId: [this.userData.roleId, Validators.required],
-    });
-
-    console.log(this.userData);
-    
+    });    
 
     this.loadBranches()
     this.loadRoles()
@@ -50,7 +48,18 @@ export class EditUserComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.userData);
+    if (this.updateUserForm?.valid) {
+      const userId = this.userData.userId;
+      const payload = this.updateUserForm.value;
+      this.userService.updateUsers(userId, payload).subscribe({
+        next: (res => {
+         this.snackBar.successDialog('5', 'success')
+        }),
+        error: (error => {
+          this.snackBar.dangerNotification(error)
+        })
+      })
+    }
   }
 
   loadBranches() {
