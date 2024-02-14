@@ -43,8 +43,8 @@ export class EditUserComponent implements OnInit {
     this.loadRoles()
   }
 
-  closeDialog() {
-    this.ref.close();
+  closeDialog(result:any = 'close') {
+    this.ref.close(result);
   }
 
   onSubmit() {
@@ -53,7 +53,7 @@ export class EditUserComponent implements OnInit {
       const payload = this.updateUserForm.value;
       this.userService.updateUsers(userId, payload).subscribe({
         next: (res => {
-         this.snackBar.successDialog('5', 'success')
+          this.closeDialog('edited')
         }),
         error: (error => {
           this.snackBar.dangerNotification(error)

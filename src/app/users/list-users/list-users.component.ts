@@ -84,7 +84,14 @@ export class ListUsersComponent implements OnInit {
   }
 
   loadUsersBranch() {
-    const payload = {branchId: this.userInfo.branch,isActive:1};
+
+    var payload;
+    if (this.isBranch) {
+      payload = { branchId: this.userInfo.branch, isActive: 1 };
+    } else {
+      payload = this.searchUsersForm.value;
+    }
+
     this.pageLoader.showLoader();
     this.userService.getUsersFilter(payload).subscribe({
       next: (res => {
@@ -113,21 +120,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   onSubmit() {
-    const payload = this.searchUsersForm.value;
-
-    this.pageLoader.showLoader();
-    this.userService.getUsersFilter(payload).subscribe({
-      next: (res => {
-        this.dataSource = new MatTableDataSource(res);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.pageLoader.hideLoader()
-      }),
-      error: (error => {
-        this.pageLoader.hideLoader()
-        this.snackBar.dangerNotification(error)
-      })
-    })
+    this.loadUsersBranch()
   }
 
   resetPassword(data:any) {
@@ -141,11 +134,15 @@ export class ListUsersComponent implements OnInit {
     // console.log(user);
     // this.router.navigateByUrl('users/edit?edit=true')
 
-    this.dialog.open(EditUserComponent, {
+   const dialogRef =  this.dialog.open(EditUserComponent, {
       data: user,
       // position: {top: '10%'},
       width: '70%',
-    })
+    }).afterClosed().subscribe((result) => {
+      if (result == 'edited') {
+        this.loadUsersBranch()
+      }
+    });
   }
 
   loginHistories(data:any) {
