@@ -5,5 +5,60 @@
             <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
             </app-breadcrumb>
         </div>
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+              <div class="card">
+                <div class="header">
+                  <h2>Search User</h2>
+                </div>
+                <div class="body">
+                  <form [formGroup]="classForm!" class="search-form m-4" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Branch</mat-label>
+                          <mat-select formControlName="branchId">
+                            <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+                              {{ branch.branchName }}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="classForm?.get('branchId')?.hasError('required')">
+                            Branch is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-4">
+                        <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Branch</mat-label>
+                          <mat-select formControlName="branchId">
+                            <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+                              {{ branch.branchName }}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="classForm?.get('branchId')?.hasError('required')">
+                            Branch is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-3">
+                        <mat-radio-group formControlName="isActive">
+                          <mat-radio-button value="1">Active</mat-radio-button>
+                          <mat-radio-button value="0">Inactive</mat-radio-button>
+                        </mat-radio-group>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="float-end">
+                          <button mat-raised-button [disabled]="!classForm!.valid" color="primary" class="mt-2">Search</button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+  
+  
+            </div>
+        </div>
     </div>
-</section>
+  </section>
+  

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormGroup,
   UntypedFormBuilder,
-  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { SnackbarService } from '@shared/snackbar.service';
@@ -46,8 +45,6 @@ export class ListUsersComponent implements OnInit {
       "mobile",
       "action",
   ];
-  isEdit: boolean = false;
-  isBranch:boolean = false
   userInfo!:User;
 
   dataSource!: MatTableDataSource<any>;
@@ -60,12 +57,10 @@ export class ListUsersComponent implements OnInit {
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private dialog: MatDialog,
-    private router: Router,
     private authService:AuthService
 
   ) {
     this.userInfo = this.authService.currentUserValue;
-    this.isBranch = this.userInfo.branch ? true : false;
 
   }
   ngOnInit(): void {
@@ -75,23 +70,12 @@ export class ListUsersComponent implements OnInit {
     };
     this.searchUsersForm = this.fb.group(formFields)
 
-    if (this.isBranch) {
-      this.loadUsersBranch()
-    }else {
-      this.loadBranches();
-    }
+    this.loadBranches();
 
   }
 
   loadUsersBranch() {
-
-    var payload;
-    if (this.isBranch) {
-      payload = { branchId: this.userInfo.branch, isActive: 1 };
-    } else {
-      payload = this.searchUsersForm.value;
-    }
-
+    var payload = this.searchUsersForm.value;
     this.pageLoader.showLoader();
     this.userService.getUsersFilter(payload).subscribe({
       next: (res => {
@@ -111,7 +95,10 @@ export class ListUsersComponent implements OnInit {
   loadBranches() {
     this.userService.getBranches('all').subscribe({
       next: (res) => {
-        this.branchesList = res;
+        if (res.length > 0) {
+          this.searchUsersForm.patchValue({ branchId: res[0].branchId });
+          this.branchesList = res;
+        }
       },
       error: (error) => {
         this.snackBar.dangerNotification(error);
