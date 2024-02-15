@@ -24,7 +24,6 @@ export class AddUserComponent implements OnInit {
   branchesList:any = []
   rolesList:any = []
   selectedBranch: any;
-  isEdit: boolean = false;
   isBranch:boolean = false
   userInfo!:User;
   permissions = Permissions.userManagement.users;
@@ -37,9 +36,6 @@ export class AddUserComponent implements OnInit {
     private router: Router,
     public authService: AuthService
     ) {
-    this.route.queryParams.subscribe(params => {
-      this.isEdit = params['edit'];
-    });
     this.userInfo = this.authService.currentUserValue;
     this.isBranch = this.userInfo.branch ? true : false;
   }
@@ -55,21 +51,11 @@ export class AddUserComponent implements OnInit {
         '',
         [Validators.required, Validators.email, Validators.minLength(5)],
       ],
-      password: ['', [ this.isEdit ? Validators.nullValidator :Validators.required]],
+      password: ['', [Validators.required]],
       branchId: [''],
       roleId: ['', Validators.required]
     }
     this.usersForm = this.fb.group(formFields );
-
-
-    if (this.isEdit) {
-      const data = this.userService.getUserOperation();
-      console.log(data);
-      this.usersForm.patchValue({
-        ...this.userService.getUserOperation(),
-      });
-
-    }
 
   this.loadRoles()
    this.loadBranches()
@@ -82,17 +68,7 @@ export class AddUserComponent implements OnInit {
     console.log('Form Value', this.usersForm.value);
     if(this.usersForm.valid){
       const payload = this.usersForm.value;
-      if (this.isEdit){
-        const userId  = this.userService.getUserOperation().userId;
-        this.userService.updateUsers(userId, payload).subscribe({
-          next: (res => {
-            this.router.navigateByUrl('users/userlist')
-          }),
-          error: (error => {
-            this.snackBar.dangerNotification(error)
-          })
-        })
-      } else {
+
         this.userService.saveUsers(payload).subscribe({
           next: (res => {
             this.router.navigateByUrl('users/userlist')
@@ -102,7 +78,6 @@ export class AddUserComponent implements OnInit {
           })
         })
       }
-    }
 
   }
 
