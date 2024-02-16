@@ -6,6 +6,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
 import { AcademicYearComponent } from './academic/academic-year/academic-year.component';
+import {Permissions} from "@shared/enums/permissions.enums";
+const {
+  userManagement: {users},
+} = Permissions;
 const routes: Routes = [
   {
     path: '',
@@ -58,6 +62,7 @@ const routes: Routes = [
       },
       {
         path: 'users',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('./users/users.module').then(
             (m) => m.UsersModule

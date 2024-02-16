@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { User } from '../models/user';
-import { ApiService } from '@shared/api.service';
-import { SnackbarService } from '@shared/snackbar.service';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {User} from '../models/user';
+import {ApiService} from '@shared/api.service';
+import {SnackbarService} from '@shared/snackbar.service';
 
 @Injectable({
   providedIn: 'root',

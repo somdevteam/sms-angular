@@ -8,7 +8,7 @@ export const Permissions = Object.freeze({
     users: {
       CREATE_USER: 'createUser',
       UPDATE_USER: 'updateUser',
-      VIEW_USER: 'viewUser',
+      VIEW_USER: 'viewUsers',
       VIEW_USER_PROFILE: 'viewUserProfile',
       RESET_PASSWORD: 'resetPassword',
     },
