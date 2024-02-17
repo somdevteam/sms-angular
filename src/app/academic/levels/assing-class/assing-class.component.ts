@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
 import { User } from '@core';
 import { AuthService } from '@core/service/auth.service';
 import { SnackbarService } from '@shared/snackbar.service';
@@ -17,7 +16,6 @@ export class AssingClassComponent implements OnInit {
 
   assignForm?:FormGroup
   userInfo:User
-  isBranch:boolean = false
   branchesList:any = []
   classesList: any = []
   isBranchLoading:boolean = false
@@ -34,17 +32,16 @@ export class AssingClassComponent implements OnInit {
 
     ) {
       this.userInfo = this.authService.currentUserValue;
-      this.isBranch = this.userInfo.branch ? true : false;
     }
 
   ngOnInit() {
     this.assignForm = this.formBuilder.group({
-      branch: ['',this.isBranch ? Validators.nullValidator :Validators.required],
+      branch: ['', Validators.required],
       class: ['',Validators.required],
       level: [this.data.levelname]
      });
 
-    this.isBranch ?  this.onSelectionChange(this.userInfo.branch) : this.loadBranches()
+     this.loadBranches()
   }
 
   closeDialog(){
@@ -83,7 +80,7 @@ export class AssingClassComponent implements OnInit {
   onSubmit() {
     const payload = {
       "levelid": this.data.levelid,
-      "branchid": this.isBranch ? this.userInfo.branch : this.assignForm?.controls['branch'].value,
+      "branchid":  this.assignForm?.controls['branch'].value,
       "classid": this.assignForm?.controls['class'].value,
     };
     this.pageLoader.showLoader()

@@ -9,6 +9,7 @@ import { AcademicService } from '../academic.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { AssignSectionComponent } from './assign-section/assign-section.component';
 
 @Component({
   selector: 'app-class',
@@ -40,7 +41,7 @@ export class ClassComponent implements OnInit {
   levelList: any;
   classForm?: FormGroup;
   selectedStatus: '0' | '1' = '1';
-  displayedColumns: string[] = ['classId', 'className', 'dateCreated', 'isActive'];
+  displayedColumns: string[] = ['classId', 'className', 'dateCreated', 'isActive','actions'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -95,5 +96,11 @@ export class ClassComponent implements OnInit {
         this.snackBar.dangerNotification(error);
      }
     })
+  }
+
+  assignClassSection(row:any) {
+    console.log(row);
+    
+    this.dialog.open(AssignSectionComponent)
   }
 }
