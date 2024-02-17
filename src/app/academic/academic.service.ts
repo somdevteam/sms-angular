@@ -170,4 +170,17 @@ export class AcademicService {
     );
 
    }
+
+   findSections() {
+    return this.apiService.sendHttpGetRequest(`/`)
+    .pipe(
+      map((resp) => {
+       const { data } = resp;
+       return data;
+      })
+    );
+
+   }
+
+
 }

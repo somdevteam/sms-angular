@@ -8,34 +8,33 @@ import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 @Component({
   selector: 'app-assign-section',
   templateUrl: './assign-section.component.html',
-  styleUrls: ['./assign-section.component.scss']
+  styleUrls: ['./assign-section.component.scss'],
 })
 export class AssignSectionComponent implements OnInit {
-
-  sectionForm?:FormGroup
+  sectionForm?: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<AssignSectionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
-    private academicService:AcademicService,
+    private academicService: AcademicService,
     private snackBar: SnackbarService,
-    private pageLoader: PageLoaderService,
-  ) {
-
-  }
-
+    private pageLoader: PageLoaderService
+  ) {}
 
   ngOnInit(): void {
-    
+    this.sectionForm = this.formBuilder.group({
+      class: [this.data.className],
+    });
   }
 
   closeDialog() {
+    this.dialogRef.close();
+  }
+
+  loadSection() {
     
   }
 
-  onSubmit() {
-
-  }
-
+  onSubmit() {}
 }

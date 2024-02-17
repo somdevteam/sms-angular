@@ -99,8 +99,8 @@ export class ClassComponent implements OnInit {
   }
 
   assignClassSection(row:any) {
-    console.log(row);
-    
-    this.dialog.open(AssignSectionComponent)
+    this.dialog.open(AssignSectionComponent,{
+      data: row
+    })
   }
 }
