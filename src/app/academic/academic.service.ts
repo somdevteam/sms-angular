@@ -172,7 +172,7 @@ export class AcademicService {
    }
 
    findSections() {
-    return this.apiService.sendHttpGetRequest(`/`)
+    return this.apiService.sendHttpGetRequest(`/section/all`)
     .pipe(
       map((resp) => {
        const { data } = resp;

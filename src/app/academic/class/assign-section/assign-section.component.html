@@ -8,6 +8,11 @@
                 <input matInput formControlName="class" readonly="">
             </mat-form-field>
         </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div *ngFor="let item of sections">
+            <mat-checkbox [formControlName]="item.sectionid.toString()">{{ item.sectionname }}</mat-checkbox>
+          </div>
+      </div>
     </div>
 </div>
 <div mat-dialog-actions>
