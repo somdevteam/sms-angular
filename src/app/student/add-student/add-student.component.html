@@ -1,0 +1,123 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Add Student</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>First name</mat-label>
+                    <input matInput formControlName="firstName" required>
+                    <mat-error *ngIf="studentForm.get('firstName')?.hasError('required')">
+                      First name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Middle name</mat-label>
+                    <input matInput formControlName="middleName">
+                    <mat-error *ngIf="studentForm.get('middleName')?.hasError('required')">
+                      Middle name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Last name</mat-label>
+                    <input matInput formControlName="lastName">
+                    <mat-error *ngIf="studentForm.get('lastName')?.hasError('required')">
+                      Last name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-8 col-sm-8 mb-2">
+                  <mat-form-field>
+                    <mat-label>Date of Birth</mat-label>
+                    <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth">
+                    <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #dobPicker></mat-datepicker>
+                  </mat-form-field>
+
+                  <mat-error *ngIf="isDateOfBirthInvalid()">Please select a valid date of birth</mat-error>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Place Of Birth</mat-label>
+                    <input matInput formControlName="pob" required>
+                    <mat-error *ngIf="studentForm.get('pob')?.hasError('required')">
+                      Please enter user name
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                  <mat-radio-group formControlName="gender">
+                    <mat-radio-button value="M">Male</mat-radio-button>
+                    <mat-radio-button value="F">Female</mat-radio-button>
+                  </mat-radio-group>
+                  <mat-error *ngIf="isGenderInvalid()">Please select a gender</mat-error>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Responsible name</mat-label>
+                    <input matInput formControlName="responsibleName" required>
+                    <mat-error *ngIf="studentForm.get('responsibleName')?.hasError('required')">
+                      First name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Responsible Phone</mat-label>
+                    <input matInput formControlName="responsiblePhone">
+                    <mat-error *ngIf="studentForm.get('responsiblePhone')?.hasError('required')">
+                      Middle name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isBranch">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Branch</mat-label>
+                    <mat-select  formControlName="branchId">
+                      <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+                        {{ branch.branchName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="studentForm.get('sex')?.hasError('required')">
+                      Branch is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <button class="btn-space" *ngIf="authService.isUserAuthorized([permissions.CREATE_USER, permissions.UPDATE_USER ])
+        "
+                          [disabled]="!studentForm.valid " type="submit" mat-raised-button color="primary">Create Studnet</button>
+                  <button type="button" mat-raised-button color="warn">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
