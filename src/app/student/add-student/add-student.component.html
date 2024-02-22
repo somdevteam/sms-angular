@@ -73,6 +73,18 @@
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Roll Number</mat-label>
+                    <input matInput formControlName="rollNumber" required pattern="[0-9]*">
+                    <mat-error *ngIf="studentForm.get('rollNumber')?.hasError('required')">
+                      First name is required
+                    </mat-error>
+                    <mat-error *ngIf="studentForm.get('rollNumber')?.hasError('pattern')">
+                      Roll number must contain only numbers
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Responsible name</mat-label>
                     <input matInput formControlName="responsibleName" required>
                     <mat-error *ngIf="studentForm.get('responsibleName')?.hasError('required')">
@@ -92,16 +104,44 @@
 
               </div>
               <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isBranch">
+                <div class="col-md-4">
+<!--                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isBranch">-->
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Branch</mat-label>
-                    <mat-select  formControlName="branchId">
+                    <mat-select  formControlName="branchId" (selectionChange)="onBranchChange($event.value)">
                       <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
                         {{ branch.branchName }}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="studentForm.get('sex')?.hasError('required')">
                       Branch is required
+                    </mat-error>
+                  </mat-form-field>
+
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Level</mat-label>
+                    <mat-select formControlName="levelId" (selectionChange)="onLevelChange()">
+                      <mat-option *ngFor="let level of levelList" [value]="level.levelId">
+                        {{ level.levelName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="studentForm?.get('levelId')?.hasError('required')">
+                      Level is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Class</mat-label>
+                    <mat-select formControlName="classId">
+                      <mat-option *ngFor="let level of classList" [value]="level.classId">
+                        {{ level.className }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="studentForm?.get('classId')?.hasError('required')">
+                      Class is required
                     </mat-error>
                   </mat-form-field>
                 </div>

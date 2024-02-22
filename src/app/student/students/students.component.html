@@ -86,16 +86,40 @@
                 <td mat-cell *matCellDef="let element"> {{ element.studentid }} </td>
               </ng-container>
 
+              <!-- Class ID Column -->
+              <ng-container matColumnDef="rollNumber">
+                <th mat-header-cell *matHeaderCellDef> Roll Number</th>
+                <td mat-cell *matCellDef="let element"> {{ element.rollNumber }} </td>
+              </ng-container>
+
               <!-- Class Name Column -->
-              <ng-container matColumnDef="firstname">
+              <ng-container matColumnDef="firstName">
                 <th mat-header-cell *matHeaderCellDef> First Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.firstname }} </td>
+                <td mat-cell *matCellDef="let element"> {{ element.firstName }} </td>
+              </ng-container>
+
+              <!-- Class Name Column -->
+              <ng-container matColumnDef="middleName">
+                <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.middleName }} </td>
               </ng-container>
 
               <!-- Date Created Column -->
-              <ng-container matColumnDef="lastname">
+              <ng-container matColumnDef="lastName">
                 <th mat-header-cell *matHeaderCellDef> last Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.lastname}} </td>
+                <td mat-cell *matCellDef="let element"> {{ element.lastName}} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="responsibleName">
+                <th mat-header-cell *matHeaderCellDef> Responsible Phone</th>
+                <td mat-cell *matCellDef="let element"> {{ element.responsibleName}} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="responsiblePhone">
+                <th mat-header-cell *matHeaderCellDef> Responsible Phone </th>
+                <td mat-cell *matCellDef="let element"> {{ element.responsiblePhone}} </td>
               </ng-container>
 
               <!-- Is Active Column -->
@@ -109,19 +133,12 @@
                 <td mat-cell *matCellDef="let element"> {{ element.academicYear }} </td>
               </ng-container>
 
-<!--              <ng-container matColumnDef="actions">-->
-<!--                <th mat-header-cell *matHeaderCellDef> Actions </th>-->
-<!--                <td mat-cell *matCellDef="let element">-->
-<!--                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">-->
-<!--                    <mat-icon>more_vert</mat-icon>-->
-<!--                  </button>-->
-<!--                  <mat-menu #menu="matMenu" >-->
-<!--                    <button mat-menu-item (click) = "assignClassSection(element)">-->
-<!--                      <span>Assign Section</span>-->
-<!--                    </button>-->
-<!--                  </mat-menu>-->
-<!--                </td>-->
-<!--              </ng-container>-->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-raised-button class="m-2" (click)="editUsers(element)"color="primary">Edit</button>
+                </td>
+              </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>

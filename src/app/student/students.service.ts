@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {map} from "rxjs";
+import {map, Observable} from "rxjs";
 import {ApiService} from "@shared/api.service";
 import {SnackbarService} from "@shared/snackbar.service";
 import {AppDataService} from "@shared/app-data.service";
@@ -179,5 +179,27 @@ export class StudentsService {
             })
         );
 
+  }
+
+  addStudent(payload:any): Observable<any> {
+    return this.apiService.sendHttpPostRequest('/student/add',payload).pipe(
+      map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successNotification(message)
+          return data;
+        }
+      )
+    );
+  }
+
+  updateStudents(id:number,payload:any): Observable<any> {
+    return this.apiService.sendHttpUpdateRequest('/student',id,payload).pipe(
+      map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successNotification(message)
+          return data;
+        }
+      )
+    );
   }
 }

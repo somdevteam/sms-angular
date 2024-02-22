@@ -10,6 +10,8 @@ import { StudentsService } from '../students.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {AssignSectionComponent} from "../../academic/class/assign-section/assign-section.component";
+import {EditUserComponent} from "../../users/edit-user/edit-user.component";
+import {EditStudentComponent} from "../edit-student/edit-student.component";
 
 
 @Component({
@@ -43,7 +45,7 @@ export class StudentsComponent {
     classList: any;
     classForm?: FormGroup;
     selectedStatus: '0' | '1' = '1';
-    displayedColumns: string[] = ['studentid', 'firstname', 'lastname', 'pob','academicYear'];
+    displayedColumns: string[] = ['studentid','rollNumber', 'firstName', 'middleName','lastName','responsibleName','responsiblePhone', 'pob','academicYear','actions'];
     dataSource!: MatTableDataSource<any>;
     @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -54,6 +56,7 @@ export class StudentsComponent {
             levelId:  ['', [Validators.required]],
             classId:  ['', Validators.required],
             isActive: ['1'],
+            sectionId: [1]
         };
         this.classForm = this.fb.group(formFields)
 
@@ -102,7 +105,6 @@ export class StudentsComponent {
     onSubmit() {
         const payload = this.classForm?.value;
         this.pageLoader.showLoader()
-      console.log(payload)
         this.studentService.findClassByBranchAndLevel(payload).subscribe({
             next:(res) => {
                 console.log(res);
@@ -118,9 +120,17 @@ export class StudentsComponent {
         })
     }
 
-    assignClassSection(row:any) {
-        console.log(row);
+  editUsers(user : any){
+    console.log(user);
+    const dialogRef =  this.dialog.open(EditStudentComponent, {
+      data: user,
+      // position: {top: '10%'},
+      width: '70%',
+    }).afterClosed().subscribe((result) => {
+      if (result == 'edited') {
+        // this.loadUsersBranch()
+      }
+    });
+  }
 
-        this.dialog.open(AssignSectionComponent)
-    }
 }
