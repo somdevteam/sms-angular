@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormGroup,
   UntypedFormBuilder,
-  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { SnackbarService } from '@shared/snackbar.service';
@@ -16,6 +15,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { LoginHistoriesComponent } from './login-histories/login-histories.component';
 import {Router} from "@angular/router";
 import { AuthService, User } from '@core';
+import { EditUserComponent } from '../edit-user/edit-user.component';
 
 @Component({
   selector: 'app-list-users',
@@ -45,8 +45,6 @@ export class ListUsersComponent implements OnInit {
       "mobile",
       "action",
   ];
-  isEdit: boolean = false;
-  isBranch:boolean = false
   userInfo!:User;
 
   dataSource!: MatTableDataSource<any>;
@@ -59,12 +57,10 @@ export class ListUsersComponent implements OnInit {
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private dialog: MatDialog,
-    private router: Router,
     private authService:AuthService
 
   ) {
     this.userInfo = this.authService.currentUserValue;
-    this.isBranch = this.userInfo.branch ? true : false;
 
   }
   ngOnInit(): void {
@@ -74,16 +70,12 @@ export class ListUsersComponent implements OnInit {
     };
     this.searchUsersForm = this.fb.group(formFields)
 
-    if (this.isBranch) {
-      this.loadUsersBranch()
-    }else {
-      this.loadBranches();
-    }
+    this.loadBranches();
 
   }
 
   loadUsersBranch() {
-    const payload = {branchId: this.userInfo.branch,isActive:1};
+    var payload = this.searchUsersForm.value;
     this.pageLoader.showLoader();
     this.userService.getUsersFilter(payload).subscribe({
       next: (res => {
@@ -103,7 +95,10 @@ export class ListUsersComponent implements OnInit {
   loadBranches() {
     this.userService.getBranches('all').subscribe({
       next: (res) => {
-        this.branchesList = res;
+        if (res.length > 0) {
+          this.searchUsersForm.patchValue({ branchId: res[0].branchId });
+          this.branchesList = res;
+        }
       },
       error: (error) => {
         this.snackBar.dangerNotification(error);
@@ -112,21 +107,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   onSubmit() {
-    const payload = this.searchUsersForm.value;
-
-    this.pageLoader.showLoader();
-    this.userService.getUsersFilter(payload).subscribe({
-      next: (res => {
-        this.dataSource = new MatTableDataSource(res);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.pageLoader.hideLoader()
-      }),
-      error: (error => {
-        this.pageLoader.hideLoader()
-        this.snackBar.dangerNotification(error)
-      })
-    })
+    this.loadUsersBranch()
   }
 
   resetPassword(data:any) {
@@ -136,9 +117,19 @@ export class ListUsersComponent implements OnInit {
   }
 
   editUsers(user : any){
-    this.userService.setUserOperation(user);
-    console.log(user);
-    this.router.navigateByUrl('users/edit?edit=true')
+    // this.userService.setUserOperation(user);
+    // console.log(user);
+    // this.router.navigateByUrl('users/edit?edit=true')
+
+   const dialogRef =  this.dialog.open(EditUserComponent, {
+      data: user,
+      // position: {top: '10%'},
+      width: '70%',
+    }).afterClosed().subscribe((result) => {
+      if (result == 'edited') {
+        this.loadUsersBranch()
+      }
+    });
   }
 
   loginHistories(data:any) {

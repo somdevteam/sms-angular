@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Assign Section</h1>
+<form [formGroup]="sectionForm!" (ngSubmit)="onSubmit()">
+<div mat-dialog-content>
+    <div class="row mt-4 mb-4">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+                <mat-label>Class</mat-label>
+                <input matInput formControlName="class" readonly="">
+            </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div *ngFor="let item of sections">
+            <mat-checkbox [formControlName]="item.sectionid.toString()">{{ item.sectionname }}</mat-checkbox>
+          </div>
+      </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!sectionForm?.valid" type="submit" color="primary">Assign</button>
+    <button mat-raised-button type="button" (click)="closeDialog()" color="warn">Close</button>
+</div>
+</form>

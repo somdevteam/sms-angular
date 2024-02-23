@@ -22,8 +22,8 @@ export class AddUserComponent implements OnInit {
   ];
   hide = true;
   branchesList:any = []
+  rolesList:any = []
   selectedBranch: any;
-  isEdit: boolean = false;
   isBranch:boolean = false
   userInfo!:User;
   permissions = Permissions.userManagement.users;
@@ -36,9 +36,6 @@ export class AddUserComponent implements OnInit {
     private router: Router,
     public authService: AuthService
     ) {
-    this.route.queryParams.subscribe(params => {
-      this.isEdit = params['edit'];
-    });
     this.userInfo = this.authService.currentUserValue;
     this.isBranch = this.userInfo.branch ? true : false;
   }
@@ -54,38 +51,24 @@ export class AddUserComponent implements OnInit {
         '',
         [Validators.required, Validators.email, Validators.minLength(5)],
       ],
-      password: ['', [ this.isEdit ? Validators.nullValidator :Validators.required]],
-      branchId: ['']
+      password: ['', [Validators.required]],
+      branchId: [''],
+      roleId: ['', Validators.required]
     }
     this.usersForm = this.fb.group(formFields );
 
-
-    if (this.isEdit) {
-      const data = this.userService.getUserOperation();
-      console.log(data);
-      this.usersForm.patchValue({
-        ...this.userService.getUserOperation(),
-      });
-
-    }
-
+  this.loadRoles()
    this.loadBranches()
+  }
+
+  get f() {
+    return this.usersForm.controls;
   }
   onSubmit() {
     console.log('Form Value', this.usersForm.value);
     if(this.usersForm.valid){
       const payload = this.usersForm.value;
-      if (this.isEdit){
-        const userId  = this.userService.getUserOperation().userId;
-        this.userService.updateUsers(userId, payload).subscribe({
-          next: (res => {
-            this.router.navigateByUrl('users/userlist')
-          }),
-          error: (error => {
-            this.snackBar.dangerNotification(error)
-          })
-        })
-      } else {
+
         this.userService.saveUsers(payload).subscribe({
           next: (res => {
             this.router.navigateByUrl('users/userlist')
@@ -95,7 +78,6 @@ export class AddUserComponent implements OnInit {
           })
         })
       }
-    }
 
   }
 
@@ -103,6 +85,17 @@ export class AddUserComponent implements OnInit {
     this.userService.getBranches().subscribe({
       next:(res => {
         this.branchesList = res
+      }),
+      error: (error => {
+        this.snackBar.dangerNotification(error)
+      })
+    })
+  }
+
+  loadRoles() {
+    this.userService.getRoles().subscribe({
+      next:(res => {
+        this.rolesList = res
       }),
       error: (error => {
         this.snackBar.dangerNotification(error)

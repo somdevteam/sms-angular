@@ -11,7 +11,8 @@ import { AcademicDialogComponent } from './academic-year/academic-dialog/academi
 import { LevelsComponent } from './levels/levels.component';
 import { AssingClassComponent } from './levels/assing-class/assing-class.component';
 import { ViewClassComponent } from './levels/view-class/view-class.component';
-
+import { ClassComponent } from './class/class.component';
+import { AssignSectionComponent } from './class/assign-section/assign-section.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { ViewClassComponent } from './levels/view-class/view-class.component';
     AcademicDialogComponent,
     LevelsComponent,
     AssingClassComponent,
-    ViewClassComponent
+    ViewClassComponent,
+    ClassComponent,
+    AssignSectionComponent,
   ],
   imports: [
     CommonModule,

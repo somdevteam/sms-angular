@@ -9,6 +9,7 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { ListUsersComponent } from './list-users/list-users.component';
 import { ResetPasswordComponent } from './list-users/reset-password/reset-password.component';
 import { LoginHistoriesComponent } from './list-users/login-histories/login-histories.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 
 
@@ -17,7 +18,8 @@ import { LoginHistoriesComponent } from './list-users/login-histories/login-hist
     AddUserComponent,
     ListUsersComponent,
     ResetPasswordComponent,
-    LoginHistoriesComponent
+    LoginHistoriesComponent,
+    EditUserComponent
   ],
   imports: [
     CommonModule,

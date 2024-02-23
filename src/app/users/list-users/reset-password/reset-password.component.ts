@@ -29,34 +29,34 @@ export function confirmPasswordValidator(controlName: string, matchingControlNam
 })
 
 export class ResetPasswordComponent {
-  resetForm:UntypedFormGroup;
+  resetForm: UntypedFormGroup;
   constructor(
     private fb: UntypedFormBuilder,
-    private userService:UserService,
-    private snackBar:SnackbarService,
-    private ref:MatDialogRef<ResetPasswordComponent>,
+    private userService: UserService,
+    private snackBar: SnackbarService,
+    private ref: MatDialogRef<ResetPasswordComponent>,
     private pageLoader: PageLoaderService,
-    @Inject(MAT_DIALOG_DATA) public data:any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.resetForm = this.fb.group({
-      password: ['', [Validators.required,Validators.minLength(8),Validators.maxLength(20)]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
       confirmPassword: ['', [Validators.required]],
     }, {
       validator: confirmPasswordValidator('password', 'confirmPassword')
     })
   }
-  
+
 
   closeDialog() {
     this.ref.close()
   }
 
-  onSubmit() { 
-   const password =  this.resetForm.controls['password'].value;
-   const confirm = this.resetForm.controls['confirmPassword'].value;
-    const payload = {password: password,confirmPassword:confirm }
+  onSubmit() {
+    const password = this.resetForm.controls['password'].value;
+    const confirm = this.resetForm.controls['confirmPassword'].value;
+    const payload = { password: password, confirmPassword: confirm }
     this.pageLoader.showLoader();
-    this.userService.resetPassword(this.data.userId,payload).subscribe({
+    this.userService.resetPassword(this.data.userId, payload).subscribe({
       next: (res => {
         this.pageLoader.hideLoader()
         this.closeDialog()
@@ -66,6 +66,6 @@ export class ResetPasswordComponent {
         this.snackBar.dangerNotification(error)
       })
     })
-    
+
   }
 }

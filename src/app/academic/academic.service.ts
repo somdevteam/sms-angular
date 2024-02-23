@@ -148,4 +148,39 @@ export class AcademicService {
          })
        );
    }
+
+   findLevelByBranchId(branchId:any) {
+    return this.apiService.sendHttpGetRequest(`/levelclass/levelbybranch/${branchId}`)
+    .pipe(
+      map((resp) => {
+       const { data } = resp;
+       return data;
+      })
+    );
+
+   }
+
+   findClassByBranchAndLevel(payload:any) {
+    return this.apiService.sendHttpPostRequest('/levelclass/classbybranchandlevel',payload)
+    .pipe(
+      map((resp) => {
+       const { data } = resp;
+       return data;
+      })
+    );
+
+   }
+
+   findSections() {
+    return this.apiService.sendHttpGetRequest(`/section/all`)
+    .pipe(
+      map((resp) => {
+       const { data } = resp;
+       return data;
+      })
+    );
+
+   }
+
+
 }
