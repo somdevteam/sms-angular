@@ -1,1 +1,49 @@
-<p>assigned-academic works!</p>
+<div class="addContainer">
+    <div class="modalHeader">
+      <div class="editRowModal">
+        <div class="modalHeader clearfix">
+          <!-- <img [src]='students.img' alt="avatar"> -->
+          <div class="modal-about">
+            Academics
+          </div>
+        </div>
+      </div>
+      <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div mat-dialog-content class="overflow-auto">
+        <div class="responsive_table">
+            <table mat-table [dataSource]="dataSource" class="mat-cell advance-table">
+
+              <ng-container matColumnDef="academicBranchId">
+                <mat-header-cell *matHeaderCellDef>ID
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.academicBranchId}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="academicYear">
+                <mat-header-cell *matHeaderCellDef>Academic Year
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.academic.academicYear}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="dateCreated">
+                <mat-header-cell *matHeaderCellDef>Date Created
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.academic.dateCreated | date}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="isActive">
+                <mat-header-cell *matHeaderCellDef>isActive
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-slide-toggle [(ngModel)]="row.isActive" (change)="onSlideToggleChange(row)">
+                        <!-- {{ element.isActive ? 'Yes' : 'No' }} -->
+                      </mat-slide-toggle>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns">
+              </mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </table>
+          </div>
+    </div>
+  </div>

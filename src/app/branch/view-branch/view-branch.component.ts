@@ -65,7 +65,12 @@ export class ViewBranchComponent implements OnInit {
   }
 
   assignedAcademic(row: any) {
-    this.dialog.open(AssignedAcademicComponent)
+    this.dialog.open(AssignedAcademicComponent, {
+      data: {
+        branchId: row.branchId
+      },
+      width: '70%'
+    })
   }
 
 }

@@ -46,5 +46,15 @@ export class BranchService {
          })
        );
    }
+
+   getAssignedAcademicByBranch(branchId:number) {
+    return this.apiService.sendHttpGetRequest('/branch-academic/academicsByBranch/' + branchId)
+       .pipe(
+         map((resp) => {
+          const { data } = resp;          
+          return data;
+         })
+       );
+   }
    
 }
