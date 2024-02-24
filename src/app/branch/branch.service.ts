@@ -35,5 +35,16 @@ export class BranchService {
          })
        );
    }
+
+   activateBranch(branchId:number) {
+    return this.apiService.sendHttpGetRequest('/branch/activate/' + branchId)
+       .pipe(
+         map((resp) => {
+          const { message, data } = resp;
+          this.snackBar.successNotification(message);
+          return data;
+         })
+       );
+   }
    
 }

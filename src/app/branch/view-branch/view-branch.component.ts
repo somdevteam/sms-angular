@@ -3,6 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@shared/snackbar.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { BranchService } from '../branch.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AssignedAcademicComponent } from './assigned-academic/assigned-academic.component';
 
 @Component({
   selector: 'app-view-branch',
@@ -23,9 +25,10 @@ export class ViewBranchComponent implements OnInit {
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private branchService: BranchService,
+    private dialog: MatDialog,
   ) {}
 
-  displayedColumns: string[] = ['branchId', 'branchName', 'branchLocation', 'dateCreated', 'isActive'];
+  displayedColumns: string[] = ['branchId', 'branchName', 'branchLocation', 'dateCreated', 'isActive','action'];
   dataSource = new MatTableDataSource<any>; 
 
   ngOnInit(): void {
@@ -47,6 +50,22 @@ export class ViewBranchComponent implements OnInit {
         this.snackBar.errorDialog('',error)
       })
     })
+  }
+
+  onSlideToggleChange(row: any) {
+    const branchId = row.branchId;
+    this.branchService.activateBranch(branchId).subscribe({
+      next: (res => {
+        this.loadBranches()
+      }),
+      error: (error => {
+        this.snackBar.dangerNotification(error)
+      })
+    }) 
+  }
+
+  assignedAcademic(row: any) {
+    this.dialog.open(AssignedAcademicComponent)
   }
 
 }

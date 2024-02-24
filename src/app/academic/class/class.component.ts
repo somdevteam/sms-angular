@@ -48,8 +48,8 @@ export class ClassComponent implements OnInit {
 
   ngOnInit(): void {
     let formFields = {
-      branchId: ['', [Validators.required]],
-      levelId:  ['', [Validators.required]],
+      branchId: ['', Validators.required],
+      levelId:  ['', Validators.required],
       isActive: ['1'],
     };
     this.classForm = this.fb.group(formFields)
@@ -59,6 +59,7 @@ export class ClassComponent implements OnInit {
   }
 
   onBranchChange(branchId: any) {
+    this.classForm?.controls['levelId'].setValue('');
     this.academicService.findLevelByBranchId(branchId).subscribe({
       next:(res) => {
         this.levelList = res;
@@ -81,11 +82,13 @@ export class ClassComponent implements OnInit {
   }
 
   onSubmit() {
+
     const payload = this.classForm?.value;
+    console.log(payload);
+    
     this.pageLoader.showLoader()
     this.academicService.findClassByBranchAndLevel(payload).subscribe({
       next:(res) => {
-       console.log(res);
        this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

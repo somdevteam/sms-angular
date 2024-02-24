@@ -1,51 +1,61 @@
 <section class="content">
-    <div class="content-block">
-        <div class="block-header" *ngFor="let breadscrum of breadscrums">
-            <!-- breadcrumb -->
-            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-            </app-breadcrumb>
-        </div>
-        <div class="row clearfix">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>Branches List</h2>
-                    </div>
-                    <div class="body">
-                        <!-- branch-table.component.html -->
-<mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="branchId">
-      <mat-header-cell *matHeaderCellDef> Branch ID </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.branchId }} </mat-cell>
-    </ng-container>
-  
-    <ng-container matColumnDef="branchName">
-      <mat-header-cell *matHeaderCellDef> Branch Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.branchName }} </mat-cell>
-    </ng-container>
-  
-    <ng-container matColumnDef="branchLocation">
-      <mat-header-cell *matHeaderCellDef> Branch Location </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.branchLocation }} </mat-cell>
-    </ng-container>
-  
-    <ng-container matColumnDef="dateCreated">
-      <mat-header-cell *matHeaderCellDef> Date Created </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.dateCreated | date: 'medium' }} </mat-cell>
-    </ng-container>
-  
-    <ng-container matColumnDef="isActive">
-      <mat-header-cell *matHeaderCellDef> Is Active </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.isActive ? 'Yes' : 'No' }} </mat-cell>
-    </ng-container>
-  
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-  </mat-table>
-  
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
     </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Branches List</h2>
+          </div>
+          <div class="body table-responsive">
+            <!-- branch-table.component.html -->
+            <mat-table [dataSource]="dataSource">
+              <ng-container matColumnDef="branchId">
+                <mat-header-cell *matHeaderCellDef> Branch ID </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.branchId }} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="branchName">
+                <mat-header-cell *matHeaderCellDef> Branch Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.branchName }} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="branchLocation">
+                <mat-header-cell *matHeaderCellDef> Branch Location </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.branchLocation }} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="dateCreated">
+                <mat-header-cell *matHeaderCellDef> Date Created </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.dateCreated | date: 'medium' }} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="isActive">
+                <mat-header-cell *matHeaderCellDef> Is Active </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <mat-slide-toggle [(ngModel)]="element.isActive" (change)="onSlideToggleChange(element)" matTooltip="activate and deactivate branch">
+                    <!-- {{ element.isActive ? 'Yes' : 'No' }} -->
+                  </mat-slide-toggle> </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <button mat-raised-button color="primary" (click)="assignedAcademic(element)">Assigned Academics</button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </mat-table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
