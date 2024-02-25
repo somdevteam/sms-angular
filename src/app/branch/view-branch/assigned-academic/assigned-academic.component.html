@@ -21,6 +21,11 @@
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row">{{row.academicBranchId}}</mat-cell>
               </ng-container>
+              <ng-container matColumnDef="branchName">
+                <mat-header-cell *matHeaderCellDef>branch Name
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.branch.branchName}}</mat-cell>
+              </ng-container>
               <ng-container matColumnDef="academicYear">
                 <mat-header-cell *matHeaderCellDef>Academic Year
                 </mat-header-cell>

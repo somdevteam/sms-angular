@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class AssignedAcademicComponent implements OnInit {
 
-  displayedColumns: string[] = ['academicBranchId','academicYear','dateCreated','isActive'];
+  displayedColumns: string[] = ['academicBranchId','branchName','academicYear','dateCreated','isActive'];
   dataSource = new MatTableDataSource<any>; 
 
 
@@ -42,18 +42,27 @@ export class AssignedAcademicComponent implements OnInit {
   }
 
   onSlideToggleChange(row: any) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.value) {
-        Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-      }else {
+    const actionType = row.isActive ? 'Activate' : 'Deactivate';
+    const academic = row.academic.academicYear;
+    const text = `Do you want to ${actionType} this ${academic}?`
+    this.snackbar.showConfirmationDialog(text).then((confirmed) => {
+      if (confirmed) {
+        const payload = {
+          academicId : row.academic.academicId,
+          branchId: this.data.branchId
+        };
+        this.pageLoader.showLoader();
+        this.branchService.activeAndDeactivateBranchAcademic(payload).subscribe({
+          next: (res => {
+            this.pageLoader.hideLoader();
+          }),
+          error: (error => {
+            this.pageLoader.hideLoader();
+            this.snackbar.errorDialog('Error',error)
+          })
+        })
+
+      } else {
         row.isActive = !row.isActive;
       }
     });

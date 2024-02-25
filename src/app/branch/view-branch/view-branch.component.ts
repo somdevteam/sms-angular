@@ -54,14 +54,23 @@ export class ViewBranchComponent implements OnInit {
 
   onSlideToggleChange(row: any) {
     const branchId = row.branchId;
-    this.branchService.activateBranch(branchId).subscribe({
-      next: (res => {
-        this.loadBranches()
-      }),
-      error: (error => {
-        this.snackBar.dangerNotification(error)
-      })
-    }) 
+    const actionType = row.isActive ? 'Activate' : 'Deactivate';
+    const branch = row.branchName;
+    const text = `Do you want to ${actionType} this ${branch}?`
+    this.snackBar.showConfirmationDialog(text).then((confirmed) => {
+      if (confirmed) {
+        this.branchService.activateBranch(branchId).subscribe({
+          next: (_ => {
+            this.loadBranches()
+          }),
+          error: (error => {
+            this.snackBar.dangerNotification(error)
+          })
+        })
+      } else {
+        row.isActive = !row.isActive;
+      }
+    })
   }
 
   assignedAcademic(row: any) {
