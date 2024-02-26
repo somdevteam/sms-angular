@@ -171,8 +171,8 @@ export class AcademicService {
 
    }
 
-   findSections() {
-    return this.apiService.sendHttpGetRequest(`/section/all`)
+   findSectionsByFilter(payload: any) {
+    return this.apiService.sendHttpPostRequest(`/section/sectionsByFilter`,payload)
     .pipe(
       map((resp) => {
        const { data } = resp;

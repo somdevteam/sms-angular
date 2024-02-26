@@ -82,10 +82,7 @@ export class ClassComponent implements OnInit {
   }
 
   onSubmit() {
-
     const payload = this.classForm?.value;
-    console.log(payload);
-    
     this.pageLoader.showLoader()
     this.academicService.findClassByBranchAndLevel(payload).subscribe({
       next:(res) => {
@@ -103,7 +100,11 @@ export class ClassComponent implements OnInit {
 
   assignClassSection(row:any) {
     this.dialog.open(AssignSectionComponent,{
-      data: row
+      data: {
+        classId: row.class.classid,
+        className: row.class.classname,
+        branchId: row.branch.branchId
+      }
     })
   }
 }

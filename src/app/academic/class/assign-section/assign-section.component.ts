@@ -16,7 +16,8 @@ export class AssignSectionComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AssignSectionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { classId: number; className: string; branchId: number },
     private formBuilder: FormBuilder,
     private academicService: AcademicService,
     private snackBar: SnackbarService,
@@ -26,10 +27,10 @@ export class AssignSectionComponent implements OnInit {
   ngOnInit(): void {
     this.sectionForm = this.formBuilder.group({
       class: [this.data.className],
-      section: ['',Validators.required]
+      section: ['', Validators.required],
     });
 
-    this.loadSection()
+    this.loadSection();
   }
 
   closeDialog() {
@@ -37,19 +38,28 @@ export class AssignSectionComponent implements OnInit {
   }
 
   loadSection() {
-    this.academicService.findSections().subscribe({
-      next:(res) => {
-        this.sectionList = res
-      },
-      error:(error) => {
-        this.snackBar.dangerNotification(error);
-     }
-    })
-  }
+    const payload = {
+      classId: this.data.classId,
+      branchId: this.data.branchId,
+    };
+    console.log(payload);
 
+    this.academicService.findSectionsByFilter(payload).subscribe({
+      next: (res) => {
+        console.log(res);
+        
+        this.sectionList = res;
+      },
+      error: (error) => {
+        this.snackBar.dangerNotification(error);
+      },
+    });
+  }
 
   onSubmit() {
-  console.log(this.sectionForm?.value);
-  
-  }
+    const payload = {
+      classId: this.data.classId,
+      sections: this.sectionForm?.controls['section'].value,
+    }
+  }  
 }
