@@ -59,7 +59,24 @@ export class AssignSectionComponent implements OnInit {
   onSubmit() {
     const payload = {
       classId: this.data.classId,
+      branchId: this.data.branchId,
       sections: this.sectionForm?.controls['section'].value,
     }
+    this.pageLoader.showLoader()
+    this.academicService.assignSectionsToclass(payload).subscribe({
+      next: (resp => {
+        this.pageLoader.hideLoader()
+        const {message,data} = resp;
+
+        this.snackBar.successDialog('Success',message);
+        this.closeDialog()
+        
+      }),
+      error: (error) => {
+        this.pageLoader.hideLoader()
+        this.snackBar.dangerNotification(error);
+      }
+    })
+    
   }  
 }

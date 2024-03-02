@@ -55,8 +55,6 @@ export class AcademicService {
        .pipe(
          map((resp) => {
           const { message,data } = resp;
-          console.log(resp)
-          // this.snackBar.successNotification(message);
           this.snackBar.successDialog('',message)
           return data;
          })
@@ -179,8 +177,10 @@ export class AcademicService {
        return data;
       })
     );
-
    }
 
+   assignSectionsToclass(payload: any) {
+    return this.apiService.sendHttpPostRequest(`/class-section/assingSectionsToClass`,payload);
 
+   }
 }

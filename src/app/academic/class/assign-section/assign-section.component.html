@@ -12,7 +12,7 @@
                 <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Section</mat-label>
                     <mat-select  formControlName="section" multiple>
-                      <mat-option *ngFor="let section of sectionList" [value]="section.sectionid">
+                      <mat-option *ngFor="let section of sectionList" [value]="section">
                         {{ section.sectionname }}
                       </mat-option>
                     </mat-select>

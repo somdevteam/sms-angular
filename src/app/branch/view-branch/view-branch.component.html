@@ -39,7 +39,8 @@
                 <mat-cell *matCellDef="let element">
                   <mat-slide-toggle [(ngModel)]="element.isActive" (change)="onSlideToggleChange(element)" matTooltip="activate and deactivate branch">
                     <!-- {{ element.isActive ? 'Yes' : 'No' }} -->
-                  </mat-slide-toggle> </mat-cell>
+                  </mat-slide-toggle> 
+                </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="action">

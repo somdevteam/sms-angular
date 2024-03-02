@@ -188,5 +188,33 @@ export class AcademicYearComponent implements OnInit {
     });
   }
 
+  onSlideToggleChange(row: any) {
+    const actionType = row.isActive ? 'Activate' : 'Deactivate';
+    const academic = row.academicYear;
+    const text = `Do you want to ${actionType} this ${academic}?`
+    this.snackBar.showConfirmationDialog(text).then((confirmed) => {
+      if (confirmed) {
+        const academicId = row.academicId;
+        const payload = {
+          academicYear: row.academicYear,
+          isActive: row.isActive
+        }
+
+        this.academicService.updateAcademicYear(academicId, payload).subscribe({
+          next: (error => {
+
+          }),
+          error: (error) => {
+            this.snackBar.dangerNotification(error)
+            row.isActive = !row.isActive;
+          }
+        })
+        
+      } else {
+        row.isActive = !row.isActive;
+      }
+    })
+  }
+
 
 }
