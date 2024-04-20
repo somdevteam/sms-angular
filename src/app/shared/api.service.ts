@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment.development";
-import { catchError, map, throwError } from 'rxjs';
+import {catchError, map, Observable, throwError} from 'rxjs';
 import { SnackbarService } from './snackbar.service';
 
 
@@ -28,20 +28,20 @@ export class ApiService {
         if (error.url?.includes('auth/login')) {
           return throwError(new Error('Invalid username or password.'));
         }
-  
+
         window.location.href = '/login';
       }
 
       let errorMessage = error.error?.message;
 
       let message = Array.isArray(errorMessage) ? errorMessage[0] : errorMessage;
-      
+
       return throwError(message || 'Something went wrong; please try again.');
   };
 
   sendHttpGetRequest(endpoint: string) {
     const url = environment.apiUrl+endpoint;
-    
+
     return this.http
       .get<any>(url)
       .pipe(
@@ -66,4 +66,16 @@ export class ApiService {
         catchError(this.handleError),
       );
   }
+
+  createBranchWithUpload(endpoint:string,formData: FormData) {
+    //const endpoint ='/branch/upload'
+    const url = environment.apiUrl+endpoint;
+    return this.http
+      .post<FormData>(url, formData)
+      .pipe(
+        catchError(this.handleError),
+      );
+
+  }
+
 }

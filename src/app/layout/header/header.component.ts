@@ -16,6 +16,10 @@ import {
   Role,
   AuthService,
 } from '@core';
+import {BranchService} from "../../branch/branch.service";
+import {MatTableDataSource} from "@angular/material/table";
+import {SnackbarService} from "@shared/snackbar.service";
+import {PageLoaderService} from "../page-loader/page-loader.service";
 
 interface Notifications {
   message: string;
@@ -37,6 +41,7 @@ export class HeaderComponent
   public config!: InConfiguration;
   userImg?: string;
   userName?: string;
+  logo?: any;
   homePage?: string;
   isNavbarCollapsed = true;
   flagvalue: string | string[] | undefined;
@@ -55,7 +60,10 @@ export class HeaderComponent
     private configService: ConfigService,
     private authService: AuthService,
     private router: Router,
-    public languageService: LanguageService
+    public languageService: LanguageService,
+    public branchService : BranchService,
+    private snackBar: SnackbarService,
+    private pageLoader: PageLoaderService,
   ) {
     super();
   }
@@ -122,6 +130,20 @@ export class HeaderComponent
     this.userName = this.authService.currentUserValue.username;
     this.userImg = this.authService.currentUserValue.img;
     this.docElement = document.documentElement;
+    const logoPath = this.authService.currentUserValue.branchLogo;
+    this.pageLoader.showLoader();
+    this.branchService.getBranchLogo(logoPath).subscribe({
+      next :(res => {
+        console.log(res);
+        this.logo=res;
+        this.pageLoader.hideLoader()
+      }),
+      error: (error => {
+        this.pageLoader.hideLoader()
+        this.snackBar.errorDialog('',error)
+      })
+    })
+    console.log("Logo design path"+this.logo);
 
     if (userRole === Role.Admin || userRole === Role.SuperAdmin) {
       this.homePage = 'admin/dashboard/main';

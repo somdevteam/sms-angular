@@ -10,6 +10,7 @@ export class User {
   role!: string;
   roleId!: number;
   branch!: string;
+  branchLogo!:string;
   token!: string;
   permissions! : string [];
 }

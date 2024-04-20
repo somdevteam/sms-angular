@@ -12,7 +12,7 @@ import { BranchService } from '../branch.service';
 export class AddBranchComponent {
 
   branchForm: FormGroup;
-  selectedFile: File  | undefined;
+  selectedFile!: File ;
   breadscrums = [
     {
       title: 'Branch',
@@ -42,8 +42,11 @@ export class AddBranchComponent {
     this.pageLoader.showLoader();
     const payload = this.branchForm.value;
     console.log(this.selectedFile);
-
-    this.BranchService.createBranch(payload).subscribe({
+    const formData = new FormData();
+    formData.append('file',this.selectedFile);
+    formData.append('branchName',payload.branchName);
+    formData.append('branchLocation',payload.branchLocation);
+    this.BranchService.createBranch(formData).subscribe({
       next :(res => {
         this.pageLoader.hideLoader()
 
