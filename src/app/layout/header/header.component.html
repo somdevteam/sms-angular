@@ -5,7 +5,8 @@
         (click)="isNavbarCollapsed = !isNavbarCollapsed" aria-expanded="false"></a>
       <a href="#" onClick="return false;" class="bars" (click)="mobileMenuSidebarOpen($event,'overlay-open')"></a>
       <a class="navbar-brand" routerLink={{homePage}}>
-        <img src="assets/images/logo.png" alt="" />
+     <!--        <img src="assets/images/logo.png" alt="" />-->
+        <img src="{{origin}}/branch/branchlogo/{{this.branchLogo}}" class="header-image">
         <span class="logo-name">Smart</span>
       </a>
     </div>

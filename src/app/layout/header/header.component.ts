@@ -20,6 +20,8 @@ import {BranchService} from "../../branch/branch.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {SnackbarService} from "@shared/snackbar.service";
 import {PageLoaderService} from "../page-loader/page-loader.service";
+import {environment} from "../../../environments/environment.development";
+
 
 interface Notifications {
   message: string;
@@ -39,6 +41,7 @@ export class HeaderComponent
   implements OnInit
 {
   public config!: InConfiguration;
+  branchLogo?: string;
   userImg?: string;
   userName?: string;
   logo?: any;
@@ -51,7 +54,7 @@ export class HeaderComponent
   isOpenSidebar?: boolean;
   docElement?: HTMLElement;
   isFullScreen = false;
-
+  origin = environment.apiUrl;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
@@ -128,22 +131,21 @@ export class HeaderComponent
 
     const userRole = this.authService.currentUserValue.role;
     this.userName = this.authService.currentUserValue.username;
+    this.branchLogo = this.authService.currentUserValue.branchLogo;
     this.userImg = this.authService.currentUserValue.img;
     this.docElement = document.documentElement;
     const logoPath = this.authService.currentUserValue.branchLogo;
-    this.pageLoader.showLoader();
-    this.branchService.getBranchLogo(logoPath).subscribe({
-      next :(res => {
-        console.log(res);
-        this.logo=res;
-        this.pageLoader.hideLoader()
-      }),
-      error: (error => {
-        this.pageLoader.hideLoader()
-        this.snackBar.errorDialog('',error)
-      })
-    })
-    console.log("Logo design path"+this.logo);
+    // this.branchService.getBranchLogo(logoPath).subscribe({
+    //   next :(res => {
+    //     console.log(res);
+    //     this.logo=res;
+    //     this.pageLoader.hideLoader()
+    //   }),
+    //   error: (error => {
+    //     this.pageLoader.hideLoader()
+    //     this.snackBar.errorDialog('',error)
+    //   })
+    // })
 
     if (userRole === Role.Admin || userRole === Role.SuperAdmin) {
       this.homePage = 'admin/dashboard/main';
@@ -181,6 +183,7 @@ export class HeaderComponent
     this.flagvalue = flag;
     this.langStoreValue = lang;
     this.languageService.setLanguage(lang);
+
   }
   mobileMenuSidebarOpen(event: Event, className: string) {
     const hasClass = (event.target as HTMLInputElement).classList.contains(
