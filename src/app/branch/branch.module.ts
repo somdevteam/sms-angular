@@ -8,12 +8,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SharedModule } from '@shared';
 import { ComponentsModule } from '@shared/components/components.module';
 import { ViewBranchComponent } from './view-branch/view-branch.component';
+import { AssignedAcademicComponent } from './view-branch/assigned-academic/assigned-academic.component';
 
 
 @NgModule({
   declarations: [
     AddBranchComponent,
-    ViewBranchComponent
+    ViewBranchComponent,
+    AssignedAcademicComponent
   ],
   imports: [
     CommonModule,

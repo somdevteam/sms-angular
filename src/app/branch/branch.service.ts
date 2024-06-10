@@ -35,5 +35,37 @@ export class BranchService {
          })
        );
    }
+
+   activateBranch(branchId:number) {
+    return this.apiService.sendHttpGetRequest('/branch/activate/' + branchId)
+       .pipe(
+         map((resp) => {
+          const { message, data } = resp;
+          this.snackBar.successNotification(message);
+          return data;
+         })
+       );
+   }
+
+   getAssignedAcademicByBranch(branchId:number) {
+    return this.apiService.sendHttpGetRequest('/branch-academic/academicsByBranch/' + branchId)
+       .pipe(
+         map((resp) => {
+          const { data } = resp;          
+          return data;
+         })
+       );
+   }
+
+   activeAndDeactivateBranchAcademic(payload: any) {
+    return this.apiService.sendHttpPostRequest('/branch-academic/activate',payload)
+       .pipe(
+         map((resp) => {
+          const { message,data } = resp;  
+          this.snackBar.successNotification(message)        
+          return data;
+         })
+       );
+   }
    
 }

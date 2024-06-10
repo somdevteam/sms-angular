@@ -80,5 +80,17 @@ export class SnackbarService {
       'error'
     );
   }
+  
+  showConfirmationDialog(text: string, title: string = 'Are you sure?'): Promise<boolean> {
+    return Swal.fire({
+      title: title,
+      text: text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, proceed!',
+    }).then((result) => result.value === true);
+  }
 
 }

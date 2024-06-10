@@ -76,6 +76,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'exams',
+        loadChildren: () =>
+          import('./exams/exams.module').then(
+            (m) => m.ExamsModule
+          ),
+      },
+      {
         path: 'multilevel',
         loadChildren: () =>
           import('./multilevel/multilevel.module').then(
@@ -92,6 +99,7 @@ const routes: Routes = [
         (m) => m.AuthenticationModule
       ),
   },
+  { path: 'exams', loadChildren: () => import('./exams/exams.module').then(m => m.ExamsModule) },
   { path: '**', component: Page404Component },
 ];
 @NgModule({
