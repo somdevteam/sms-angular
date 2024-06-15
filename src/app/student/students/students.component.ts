@@ -1,5 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
+import { Component, ViewChild } from '@angular/core';
+import { MatTableDataSource } from "@angular/material/table";
 import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@core';
@@ -9,15 +9,15 @@ import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { StudentsService } from '../students.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import {AssignSectionComponent} from "../../academic/class/assign-section/assign-section.component";
-import {EditUserComponent} from "../../users/edit-user/edit-user.component";
-import {EditStudentComponent} from "../edit-student/edit-student.component";
+import { AssignSectionComponent } from "../../academic/class/assign-section/assign-section.component";
+import { EditUserComponent } from "../../users/edit-user/edit-user.component";
+import { EditStudentComponent } from "../edit-student/edit-student.component";
 
 
 @Component({
-  selector: 'app-students',
-  templateUrl: './students.component.html',
-  styleUrls: ['./students.component.scss']
+    selector: 'app-students',
+    templateUrl: './students.component.html',
+    styleUrls: ['./students.component.scss']
 })
 export class StudentsComponent {
 
@@ -27,7 +27,7 @@ export class StudentsComponent {
         private snackBar: SnackbarService,
         private pageLoader: PageLoaderService,
         private dialog: MatDialog,
-        private studentService:StudentsService
+        private studentService: StudentsService
 
     ) {
 
@@ -45,7 +45,7 @@ export class StudentsComponent {
     classList: any;
     classForm?: FormGroup;
     selectedStatus: '0' | '1' = '1';
-    displayedColumns: string[] = ['studentid','rollNumber', 'firstName', 'middleName','lastName','responsibleName','responsiblePhone', 'pob','academicYear','actions'];
+    displayedColumns: string[] = ['studentid', 'rollNumber', 'firstName', 'middleName', 'lastName', 'responsibleName', 'responsiblePhone', 'pob', 'academicYear', 'actions'];
     dataSource!: MatTableDataSource<any>;
     @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -53,8 +53,8 @@ export class StudentsComponent {
     ngOnInit(): void {
         let formFields = {
             branchId: ['', [Validators.required]],
-            levelId:  ['', [Validators.required]],
-            classId:  ['', Validators.required],
+            levelId: ['', [Validators.required]],
+            classId: ['', Validators.required],
             isActive: ['1'],
             sectionId: [1]
         };
@@ -66,10 +66,10 @@ export class StudentsComponent {
 
     onBranchChange(branchId: any) {
         this.studentService.findLevelByBranchId(branchId).subscribe({
-            next:(res) => {
+            next: (res) => {
                 this.levelList = res;
             },
-            error:(error) => {
+            error: (error) => {
                 this.snackBar.dangerNotification(error);
             }
         })
@@ -82,10 +82,10 @@ export class StudentsComponent {
             isActive: this.classForm?.controls['isActive'].value
         }
         this.studentService.findClassByLevelId(payload).subscribe({
-            next:(res) => {
+            next: (res) => {
                 this.classList = res;
             },
-            error:(error) => {
+            error: (error) => {
                 this.snackBar.dangerNotification(error);
             }
         })
@@ -93,10 +93,10 @@ export class StudentsComponent {
 
     loadBranches() {
         this.branchService.getBranches().subscribe({
-            next:(res) => {
+            next: (res) => {
                 this.branchesList = res;
             },
-            error:(error) => {
+            error: (error) => {
                 this.snackBar.dangerNotification(error);
             }
         })
@@ -106,31 +106,31 @@ export class StudentsComponent {
         const payload = this.classForm?.value;
         this.pageLoader.showLoader()
         this.studentService.findClassByBranchAndLevel(payload).subscribe({
-            next:(res) => {
+            next: (res) => {
                 console.log(res);
                 this.dataSource = new MatTableDataSource(res);
                 this.dataSource.sort = this.sort;
                 this.dataSource.paginator = this.paginator;
                 this.pageLoader.hideLoader()
             },
-            error:(error) => {
+            error: (error) => {
                 this.pageLoader.hideLoader()
                 this.snackBar.dangerNotification(error);
             }
         })
     }
 
-  editUsers(user : any){
-    console.log(user);
-    const dialogRef =  this.dialog.open(EditStudentComponent, {
-      data: user,
-      // position: {top: '10%'},
-      width: '70%',
-    }).afterClosed().subscribe((result) => {
-      if (result == 'edited') {
-        // this.loadUsersBranch()
-      }
-    });
-  }
+    editUsers(user: any) {
+        console.log(user);
+        const dialogRef = this.dialog.open(EditStudentComponent, {
+            data: user,
+            // position: {top: '10%'},
+            width: '70%',
+        }).afterClosed().subscribe((result) => {
+            if (result == 'edited') {
+                // this.loadUsersBranch()
+            }
+        });
+    }
 
 }
