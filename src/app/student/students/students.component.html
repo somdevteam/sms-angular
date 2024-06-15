@@ -1,0 +1,151 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Search Student</h2>
+          </div>
+          <div class="body">
+            <form [formGroup]="classForm!" class="search-form m-4" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Branch</mat-label>
+                    <mat-select formControlName="branchId" (selectionChange)="onBranchChange($event.value)">
+                      <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+                        {{ branch.branchName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="classForm?.get('branchId')?.hasError('required')">
+                      Branch is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Level</mat-label>
+                    <mat-select formControlName="levelId" (selectionChange)="onLevelChange()">
+                      <mat-option *ngFor="let level of levelList" [value]="level.levelId">
+                        {{ level.levelName }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="classForm?.get('levelId')?.hasError('required')">
+                      Level is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Class</mat-label>
+                    <mat-select formControlName="classId">
+                      <mat-option *ngFor="let level of classList" [value]="level.classId">
+                        {{ level.className }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="classForm?.get('classId')?.hasError('required')">
+                      Class is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                  <mat-radio-group formControlName="isActive">
+                    <mat-radio-button value="1">Active</mat-radio-button>
+                    <mat-radio-button value="0">Inactive</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-md-12">
+                  <div class="float-end">
+                    <button mat-raised-button [disabled]="!classForm!.valid" color="primary"
+                            class="mt-2">Search</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="header">
+            <h2> Classes</h2>
+          </div>
+          <div class="body table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+              <!-- Class ID Column -->
+              <ng-container matColumnDef="studentid">
+                <th mat-header-cell *matHeaderCellDef> Student ID </th>
+                <td mat-cell *matCellDef="let element"> {{ element.studentid }} </td>
+              </ng-container>
+
+              <!-- Class ID Column -->
+              <ng-container matColumnDef="rollNumber">
+                <th mat-header-cell *matHeaderCellDef> Roll Number</th>
+                <td mat-cell *matCellDef="let element"> {{ element.rollNumber }} </td>
+              </ng-container>
+
+              <!-- Class Name Column -->
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef> First Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.firstName }} </td>
+              </ng-container>
+
+              <!-- Class Name Column -->
+              <ng-container matColumnDef="middleName">
+                <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.middleName }} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef> last Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.lastName}} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="responsibleName">
+                <th mat-header-cell *matHeaderCellDef> Responsible Phone</th>
+                <td mat-cell *matCellDef="let element"> {{ element.responsibleName}} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="responsiblePhone">
+                <th mat-header-cell *matHeaderCellDef> Responsible Phone </th>
+                <td mat-cell *matCellDef="let element"> {{ element.responsiblePhone}} </td>
+              </ng-container>
+
+              <!-- Is Active Column -->
+              <ng-container matColumnDef="pob">
+                <th mat-header-cell *matHeaderCellDef> Pob </th>
+                <td mat-cell *matCellDef="let element"> {{ element.pob}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="academicYear">
+                <th mat-header-cell *matHeaderCellDef> Academic Year </th>
+                <td mat-cell *matCellDef="let element"> {{ element.academicYear }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-raised-button class="m-2" (click)="editUsers(element)"color="primary">Edit</button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
