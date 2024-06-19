@@ -49,9 +49,10 @@
                     <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth">
                     <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
                     <mat-datepicker #dobPicker></mat-datepicker>
+                    <mat-error *ngIf="studentForm.get('dateOfBirth')?.hasError('required')">
+                      Please select a valid date of birth
+                    </mat-error>
                   </mat-form-field>
-
-                  <mat-error *ngIf="isDateOfBirthInvalid()">Please select a valid date of birth</mat-error>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
@@ -67,7 +68,9 @@
                     <mat-radio-button value="M">Male</mat-radio-button>
                     <mat-radio-button value="F">Female</mat-radio-button>
                   </mat-radio-group>
-                  <mat-error *ngIf="isGenderInvalid()">Please select a gender</mat-error>
+                  <mat-error *ngIf="studentForm?.get('gender')?.hasError('required')">
+                    Sex is required
+                  </mat-error>
                 </div>
               </div>
               <div class="row">
@@ -119,30 +122,28 @@
                   </mat-form-field>
 
                 </div>
-                <div class="col-md-4">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Level</mat-label>
-                    <mat-select formControlName="levelId" (selectionChange)="onLevelChange()">
-                      <mat-option *ngFor="let level of levelList" [value]="level.levelId">
-                        {{ level.levelName }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="studentForm?.get('levelId')?.hasError('required')">
-                      Level is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+             
                 <div class="col-md-4">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Class</mat-label>
-                    <mat-select formControlName="classId">
-                      <mat-option *ngFor="let level of classList" [value]="level.classId">
-                        {{ level.className }}
+                    <mat-select formControlName="classId" (selectionChange)="onClassChange()">
+                      <mat-option *ngFor="let cls of classList" [value]="cls.class.classid">
+                        {{ cls.class.classname }}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="studentForm?.get('classId')?.hasError('required')">
                       Class is required
                     </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Section</mat-label>
+                    <mat-select formControlName="sectionId">
+                      <mat-option *ngFor="let sect of sectionList" [value]="sect.sectionid">
+                        {{ sect.sectionname }}
+                      </mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </div>
               </div>

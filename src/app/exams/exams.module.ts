@@ -7,11 +7,13 @@ import { ComponentsModule } from "../shared/components/components.module";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SharedModule } from '@shared';
+import { ExamListComponent } from './exam-list/exam-list.component';
 
 
 @NgModule({
     declarations: [
-        AddExamComponent
+        AddExamComponent,
+        ExamListComponent,
     ],
     imports: [
         CommonModule,

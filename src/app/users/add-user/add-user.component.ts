@@ -24,20 +24,17 @@ export class AddUserComponent implements OnInit {
   branchesList:any = []
   rolesList:any = []
   selectedBranch: any;
-  isBranch:boolean = false
   userInfo!:User;
   permissions = Permissions.userManagement.users;
 
   constructor(
     private userService:UserService,
     private snackBar:SnackbarService,
-    private route: ActivatedRoute,
     private fb :FormBuilder,
     private router: Router,
     public authService: AuthService
     ) {
     this.userInfo = this.authService.currentUserValue;
-    this.isBranch = this.userInfo.branch ? true : false;
   }
 
   ngOnInit(): void {
@@ -82,7 +79,7 @@ export class AddUserComponent implements OnInit {
   }
 
   loadBranches() {
-    this.userService.getBranches().subscribe({
+    this.userService.getBranches('all').subscribe({
       next:(res => {
         this.branchesList = res
       }),

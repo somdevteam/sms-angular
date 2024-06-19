@@ -34,4 +34,14 @@ export class ExamsService {
             );
     }
 
+    findExamsByBranch(branchId: number) {
+        return this.apiService.sendHttpGetRequest(`/exams/findexamsbybranch?branchId=${branchId}`)
+            .pipe(
+                map((resp) => {
+                    const { data } = resp;
+                    return data;
+                })
+            );
+    }
+
 }

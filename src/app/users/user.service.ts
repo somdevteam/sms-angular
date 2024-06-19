@@ -67,7 +67,7 @@ export class UserService {
     return this.apiService.sendHttpGetRequest(`/branch/${param}`)
        .pipe(
          map((resp) => {
-          const { message,data } = resp;
+          const { data } = resp;
           return data;
          })
        );

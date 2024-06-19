@@ -2,16 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource } from "@angular/material/table";
 import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from '@core';
 import { SnackbarService } from '@shared/snackbar.service';
 import { BranchService } from 'app/branch/branch.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { StudentsService } from '../students.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { AssignSectionComponent } from "../../academic/class/assign-section/assign-section.component";
-import { EditUserComponent } from "../../users/edit-user/edit-user.component";
 import { EditStudentComponent } from "../edit-student/edit-student.component";
+import { setupConditionalValidation } from '@shared/common/utils';
 
 
 @Component({
@@ -21,6 +19,8 @@ import { EditStudentComponent } from "../edit-student/edit-student.component";
 })
 export class StudentsComponent {
 
+    isLoadingClass: boolean = false;
+
     constructor(
         private fb: UntypedFormBuilder,
         private branchService: BranchService,
@@ -29,9 +29,7 @@ export class StudentsComponent {
         private dialog: MatDialog,
         private studentService: StudentsService
 
-    ) {
-
-    }
+    ) {}
 
     breadscrums = [
         {
@@ -41,33 +39,54 @@ export class StudentsComponent {
         },
     ];
     branchesList: any;
-    levelList: any;
     classList: any;
+    sectionList: any = []
     classForm?: FormGroup;
     selectedStatus: '0' | '1' = '1';
-    displayedColumns: string[] = ['studentid', 'rollNumber', 'firstName', 'middleName', 'lastName', 'responsibleName', 'responsiblePhone', 'pob', 'academicYear', 'actions'];
+    displayedColumns: string[] = ['studentId', 'rollNumber', 'firstName', 'middleName', 'lastName','className','sectionName', 'responsibleName', 'responsiblePhone', 'pob', 'academicYear', 'actions'];
     dataSource!: MatTableDataSource<any>;
     @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
     ngOnInit(): void {
         let formFields = {
-            branchId: ['', [Validators.required]],
-            levelId: ['', [Validators.required]],
-            classId: ['', Validators.required],
-            isActive: ['1'],
-            sectionId: [1]
+            branchId: [, [Validators.required]],
+            classId: [, Validators.required],
+            rollNumber: [],
+            sectionId: []
         };
         this.classForm = this.fb.group(formFields)
-
+        setupConditionalValidation(this.classForm, 'rollNumber', ['classId']);
         this.loadBranches()
 
     }
 
-    onBranchChange(branchId: any) {
-        this.studentService.findLevelByBranchId(branchId).subscribe({
+    onBranchChange() {
+        this.isLoadingClass = true;
+        const payload = {
+            branchId: this.classForm?.controls['branchId'].value,
+        }
+        this.classForm?.controls['classId'].setValue('');
+        this.studentService.findClassByBranchId(payload).subscribe({
             next: (res) => {
-                this.levelList = res;
+                this.isLoadingClass = false;
+                this.classList = res;
+            },
+            error: (error) => {
+                this.isLoadingClass = false;
+                this.snackBar.dangerNotification(error);
+            }
+        })
+    }
+
+    onClassChange() {
+        const payload = {
+            classId: this.classForm?.controls['classId'].value,
+            branchId: this.classForm?.controls['branchId'].value,
+        }
+        this.studentService.findSectionsByFilter(payload).subscribe({
+            next: (res) => {
+                this.sectionList = res;
             },
             error: (error) => {
                 this.snackBar.dangerNotification(error);
@@ -75,26 +94,14 @@ export class StudentsComponent {
         })
     }
 
-    onLevelChange() {
-        const payload = {
-            branchId: this.classForm?.controls['branchId'].value,
-            levelId: this.classForm?.controls['levelId'].value,
-            isActive: this.classForm?.controls['isActive'].value
-        }
-        this.studentService.findClassByLevelId(payload).subscribe({
-            next: (res) => {
-                this.classList = res;
-            },
-            error: (error) => {
-                this.snackBar.dangerNotification(error);
-            }
-        })
-    }
 
     loadBranches() {
         this.branchService.getBranches().subscribe({
             next: (res) => {
                 this.branchesList = res;
+                // if (res.length == 1) {
+                //     this.classForm?.controls['branchId'].setValue ( res[0].branchId)
+                // }
             },
             error: (error) => {
                 this.snackBar.dangerNotification(error);
@@ -104,6 +111,8 @@ export class StudentsComponent {
 
     onSubmit() {
         const payload = this.classForm?.value;
+        console.log(payload);
+        
         this.pageLoader.showLoader()
         this.studentService.findClassByBranchAndLevel(payload).subscribe({
             next: (res) => {
