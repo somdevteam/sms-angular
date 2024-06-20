@@ -24,7 +24,7 @@ export class ExamsService {
     }
 
     addExamInfo(payload: any) {
-        return this.apiService.sendHttpPostRequest('/exam-info', payload)
+        return this.apiService.sendHttpPostRequest('/exams/addexaminfo', payload)
             .pipe(
                 map((resp) => {
                     const { message, data } = resp;
@@ -39,6 +39,16 @@ export class ExamsService {
             .pipe(
                 map((resp) => {
                     const { data } = resp;
+                    return data;
+                })
+            );
+    }
+    updateExamInfo(examInfoId: number, payload: any) {
+        return this.apiService.sendHttpUpdateRequest(`/exams/updatexaminfo`, examInfoId, payload)
+            .pipe(
+                map((resp) => {
+                    const { message, data } = resp;
+                    this.snackBar.successNotification(message)
                     return data;
                 })
             );

@@ -19,19 +19,22 @@ export class ExamListComponent implements OnInit {
   breadscrums = [
     { title: 'Exams', items: ['Exam List'], active: 'Exam' }
   ];
-  
+
   examListForm!: FormGroup;
   editForm!: FormGroup;
   branchesList: any[] = [];
-  
+
   displayedColumns: string[] = ['examId', 'examName', 'description', 'startDate', 'endDate', 'dateCreated', 'isActive', 'action'];
   dataSource = new MatTableDataSource<any>([]);
-  
+
   examList: any = []
-  
+  today: Date = new Date();
+  examinfoId: any = null;
+
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
+
 
   constructor(
     private fb: FormBuilder,
@@ -40,17 +43,22 @@ export class ExamListComponent implements OnInit {
     private pageLoader: PageLoaderService,
     private examService: ExamsService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
     this.loadBranches();
   }
 
+  closeDialog() {
+    this.dialog.closeAll()
+  }
+
   private initForm(): void {
     this.examListForm = this.fb.group({
       branchId: [null, Validators.required]
     });
+
 
     //for editing
     this.editForm = this.fb.group({
@@ -83,6 +91,7 @@ export class ExamListComponent implements OnInit {
 
     this.examService.findExamsByBranch(branchId).subscribe({
       next: (res) => {
+        this.examList = res;
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -90,25 +99,55 @@ export class ExamListComponent implements OnInit {
       },
       error: (error) => {
         this.pageLoader.hideLoader();
-        this.snackBar.dangerNotification(error.message);
+        this.snackBar.dangerNotification(error);
       }
     });
   }
 
   editExam(exam: any): void {
-    const  branchId = exam.examsInfo.academicBranch.branch.branchId;
-    alert(branchId)
-    this.editForm.setValue({
-      branch: [branchId, [Validators.required]],
-      exam: [null, [Validators.required]],
-      startDate: [null, Validators.required],
-      endDate: [null, Validators.required],
-      description: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(50)]],
+    this.examinfoId = exam.examsInfo.examInfoId;
+    const examId = exam.examId
+    const branchId = exam.examsInfo.academicBranch.branch.branchId;
+    const startDate = exam.examsInfo.startDate;
+    const endDate = exam.examsInfo.endDate;
+    const description = exam.examsInfo.description;
+    this.editForm.patchValue({
+      branch: branchId,
+      exam: examId,
+      startDate: startDate,
+      endDate: endDate,
+      description: description,
     });
-    
+
     this.dialog.open(this.editDialog, {
-     
+
       data: exam
     });
+  }
+
+  onUpdate() {
+    if (this.editForm.invalid) {
+      return;
+    }
+    const payload = {
+      branchId: this.editForm.get('branch')?.value,
+      examId: this.editForm.get('exam')?.value,
+      startDate: this.editForm.get('startDate')?.value,
+      endDate: this.editForm.get('endDate')?.value,
+      description: this.editForm.get('description')?.value
+    }
+    this.pageLoader.showLoader();
+    this.examService.updateExamInfo(this.examinfoId, payload).subscribe({
+      next: (res => {
+        this.pageLoader.hideLoader();
+        this.dialog.closeAll()
+      }),
+      error: (error => {
+        this.pageLoader.hideLoader();
+        this.snackBar.dangerNotification(error);
+      })
+    })
+
+
   }
 }
