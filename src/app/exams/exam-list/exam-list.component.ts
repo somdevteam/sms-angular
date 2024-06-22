@@ -22,6 +22,7 @@ export class ExamListComponent implements OnInit {
 
   examListForm!: FormGroup;
   editForm!: FormGroup;
+  assignForm!: FormGroup;
   branchesList: any[] = [];
 
   displayedColumns: string[] = ['examId', 'examName', 'description', 'startDate', 'endDate', 'dateCreated', 'isActive', 'action'];
@@ -30,10 +31,14 @@ export class ExamListComponent implements OnInit {
   examList: any = []
   today: Date = new Date();
   examinfoId: any = null;
+  selectedExam: any = null;
+  classList:any = []
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
+  @ViewChild('assignExamToClassDialog') assignExamToClassDialog!: TemplateRef<any>;
+  
 
 
   constructor(
@@ -60,13 +65,18 @@ export class ExamListComponent implements OnInit {
     });
 
 
-    //for editing
+    //for editing dialog
     this.editForm = this.fb.group({
       branch: [null, [Validators.required]],
       exam: [null, [Validators.required]],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
       description: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(50)]],
+    });
+
+    // assign exam to class dialog
+    this.assignForm = this.fb.group({
+      exam: [null, Validators.required]
     });
   }
 
@@ -149,5 +159,31 @@ export class ExamListComponent implements OnInit {
     })
 
 
+  }
+
+
+  assignClass(row: any) {
+    this.selectedExam = row;
+    this.assignForm.patchValue({
+      exam: row.examsInfo.examInfoId
+    })
+    let payload = {
+      examInfoId : row.examsInfo.examInfoId,
+      branchId:    row.examsInfo.academicBranch.branch.branchId
+    }
+    
+    this.examService.findExamClasses(payload).subscribe({
+      next: (res => {
+        this.classList = res;
+        this.dialog.open(this.assignExamToClassDialog, {
+          'width': '30%'
+        })
+      }),
+      error: (error => {
+        this.snackBar.dangerNotification(error);
+        
+      })
+    })
+    
   }
 }

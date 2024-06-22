@@ -93,6 +93,7 @@
                 <th mat-header-cell *matHeaderCellDef> Action </th>
                 <td mat-cell *matCellDef="let element">
                   <button mat-raised-button class="m-2" (click)="editExam(element)" color="primary">Edit</button>
+                  <button mat-raised-button class="m-2" (click)="assignClass(element)" color="primary">Assign Class</button>
                 </td>
               </ng-container>
 
@@ -185,70 +186,34 @@
 </ng-template>
 
 <!-- assign exam to class Dialog Template -->
-<ng-template #assignExamToClassDialog let-data>
-  <h1 mat-dialog-title>Edit Exam</h1>
+<ng-template #assignExamToClassDialog>
+  <h1 mat-dialog-title>Assign Class</h1>
   <div mat-dialog-content>
-    <form class="m-4" [formGroup]="editForm">
+    <form class="m-2" [formGroup]="assignForm">
       <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Branch</mat-label>
-            <mat-select formControlName="branch">
-              <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
-                {{ branch.branchName }}
+            <mat-label>Exam</mat-label>
+            <mat-select formControlName="exam">
+              <mat-option  [value]="selectedExam.examsInfo.examInfoId">
+                {{ selectedExam.examName }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="editForm.get('branch')?.hasError('required')">
+            <mat-error *ngIf="assignForm.get('exam')?.hasError('required')">
               Branch is required
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Exam</mat-label>
-            <mat-select formControlName="exam">
-              <mat-option *ngFor="let exam of examList" [value]="exam.examId">
-                {{ exam.examName }}
+            <mat-label>Class</mat-label>
+            <mat-select formControlName="class" multiple>
+              <mat-option *ngFor="let class of classList" [value]="class.classid">
+                {{ class.classname }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="editForm.get('exam')?.hasError('required')">
+            <mat-error *ngIf="editForm.get('class')?.hasError('required')">
               Exam is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" [min]="today">
-            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #startDatePicker></mat-datepicker>
-            <mat-error *ngIf="editForm.get('startDate')?.hasError('required')">
-              Start date is required
-            </mat-error>
-          </mat-form-field>
-
-        </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" [min]="today">
-            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #endDatePicker></mat-datepicker>
-            <mat-error *ngIf="editForm.get('endDate')?.hasError('required')">
-              End date is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description"></textarea>
-            <mat-error *ngIf="editForm.get('description')?.hasError('required')">
-              description is required
             </mat-error>
           </mat-form-field>
         </div>
@@ -257,6 +222,6 @@
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="closeDialog()">Cancel</button>
-    <button mat-button (click)="onUpdate()">Edit</button>
+    <button mat-button>Edit</button>
   </div>
 </ng-template>
