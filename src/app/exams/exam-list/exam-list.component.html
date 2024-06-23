@@ -93,7 +93,8 @@
                 <th mat-header-cell *matHeaderCellDef> Action </th>
                 <td mat-cell *matCellDef="let element">
                   <button mat-raised-button class="m-2" (click)="editExam(element)" color="primary">Edit</button>
-                  <button mat-raised-button class="m-2" (click)="assignClass(element)" color="primary">Assign Class</button>
+                  <button mat-raised-button class="m-2" (click)="assignClass(element)" color="primary">Assign
+                    Class</button>
                 </td>
               </ng-container>
 
@@ -195,7 +196,7 @@
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Exam</mat-label>
             <mat-select formControlName="exam">
-              <mat-option  [value]="selectedExam.examsInfo.examInfoId">
+              <mat-option [value]="selectedExam.examsInfo.examInfoId">
                 {{ selectedExam.examName }}
               </mat-option>
             </mat-select>
@@ -222,6 +223,6 @@
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="closeDialog()">Cancel</button>
-    <button mat-button>Edit</button>
+    <button mat-button (click)="assignExamClass()" [disabled]="!assignForm.valid">Add</button>
   </div>
 </ng-template>

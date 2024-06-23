@@ -16,6 +16,7 @@ import { ExamsService } from '../exams.service';
   styleUrls: ['./exam-list.component.scss']
 })
 export class ExamListComponent implements OnInit {
+
   breadscrums = [
     { title: 'Exams', items: ['Exam List'], active: 'Exam' }
   ];
@@ -32,13 +33,13 @@ export class ExamListComponent implements OnInit {
   today: Date = new Date();
   examinfoId: any = null;
   selectedExam: any = null;
-  classList:any = []
+  classList: any = []
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
   @ViewChild('assignExamToClassDialog') assignExamToClassDialog!: TemplateRef<any>;
-  
+
 
 
   constructor(
@@ -76,7 +77,8 @@ export class ExamListComponent implements OnInit {
 
     // assign exam to class dialog
     this.assignForm = this.fb.group({
-      exam: [null, Validators.required]
+      exam: [null, Validators.required],
+      class: [null, Validators.required]
     });
   }
 
@@ -168,22 +170,41 @@ export class ExamListComponent implements OnInit {
       exam: row.examsInfo.examInfoId
     })
     let payload = {
-      examInfoId : row.examsInfo.examInfoId,
-      branchId:    row.examsInfo.academicBranch.branch.branchId
+      examInfoId: row.examsInfo.examInfoId,
+      branchId: row.examsInfo.academicBranch.branch.branchId
     }
-    
+
     this.examService.findExamClasses(payload).subscribe({
       next: (res => {
         this.classList = res;
         this.dialog.open(this.assignExamToClassDialog, {
-          'width': '30%'
+          'width': '40%'
         })
       }),
       error: (error => {
         this.snackBar.dangerNotification(error);
-        
+
       })
     })
-    
+
+  }
+
+  assignExamClass() {
+    const payload = {
+      examInfoId: this.assignForm.get('exam')?.value,
+      classIds: this.assignForm.get('class')?.value
+    }
+    this.pageLoader.showLoader()
+    this.examService.addExamToClass(payload).subscribe({
+      next: (res => {
+        this.dialog.closeAll()
+        this.pageLoader.hideLoader()
+      }),
+      error: (error => {
+        this.pageLoader.hideLoader();
+        this.snackBar.dangerNotification(error);
+      })
+
+    });
   }
 }

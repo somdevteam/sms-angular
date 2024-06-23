@@ -54,12 +54,22 @@ export class ExamsService {
             );
     }
 
-    findExamClasses(payload:any) {
-        const {examInfoId,branchId} = payload;
+    findExamClasses(payload: any) {
+        const { examInfoId, branchId } = payload;
         return this.apiService.sendHttpGetRequest(`/class/examclass?examInfoId=${examInfoId}&branchId=${branchId}`)
             .pipe(
                 map((resp) => {
-                    const {  data } = resp;
+                    const { data } = resp;
+                    return data;
+                })
+            );
+    }
+
+    addExamToClass(payload: any) {
+        return this.apiService.sendHttpPostRequest('/class-exam', payload)
+            .pipe(
+                map((resp) => {
+                    const { data } = resp;
                     return data;
                 })
             );
