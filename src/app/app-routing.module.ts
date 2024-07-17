@@ -69,6 +69,15 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'fees',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('./fees/fees.module').then(
+            (m) => m.FeesModule
+          ),
+      },
+
+      {
         path: 'academic',
         loadChildren: () =>
           import('./academic/academic.module').then(

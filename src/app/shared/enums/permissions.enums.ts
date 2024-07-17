@@ -23,4 +23,10 @@ export const Permissions = Object.freeze({
       VIEW_BRANCH: 'viewBranch',
     },
   },
+  feesManagement: {
+    fees: {
+      ADD_FEES: 'addFees',
+      VIEW_FEES: 'viewFees',
+    },
+  },
 });
