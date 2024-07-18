@@ -1,0 +1,97 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header" *ngFor="let breadscrum of breadscrums">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+            </app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2> Exam Info</h2>
+                    </div>
+                    <div class="body">
+                        <form class="m-4" [formGroup]="examForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-label>Branch</mat-label>
+                                        <mat-select formControlName="branch">
+                                            <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+                                                {{ branch.branchName }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="examForm.get('branch')?.hasError('required')">
+                                            Branch is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Exam</mat-label>
+                                        <mat-select formControlName="exam">
+                                            <mat-option *ngFor="let exam of examList" [value]="exam.examId">
+                                                {{ exam.examName }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="examForm.get('exam')?.hasError('required')">
+                                            Exam is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Start Date</mat-label>
+                                        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate"
+                                            [min]="today">
+                                        <mat-datepicker-toggle matSuffix
+                                            [for]="startDatePicker"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi #startDatePicker></mat-datepicker>
+                                        <mat-error *ngIf="examForm.get('startDate')?.hasError('required')">
+                                            Start date is required
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>End Date</mat-label>
+                                        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate"
+                                            [min]="today">
+                                        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi #endDatePicker></mat-datepicker>
+                                        <mat-error *ngIf="examForm.get('endDate')?.hasError('required')">
+                                            End date is required
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                        <mat-label>Description</mat-label>
+                                        <textarea matInput formControlName="description"></textarea>
+                                        <mat-error *ngIf="examForm.get('description')?.hasError('required')">
+                                            description is required
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                                    <button class="btn-space" [disabled]="!examForm.valid " mat-raised-button
+                                        color="primary">Submit</button>
+                                    <button type="button" mat-raised-button color="warn">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

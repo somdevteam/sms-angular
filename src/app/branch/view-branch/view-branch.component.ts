@@ -3,6 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@shared/snackbar.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { BranchService } from '../branch.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AssignedAcademicComponent } from './assigned-academic/assigned-academic.component';
 
 @Component({
   selector: 'app-view-branch',
@@ -23,9 +25,10 @@ export class ViewBranchComponent implements OnInit {
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private branchService: BranchService,
+    private dialog: MatDialog,
   ) {}
 
-  displayedColumns: string[] = ['branchId', 'branchName', 'branchLocation', 'dateCreated', 'isActive'];
+  displayedColumns: string[] = ['branchId', 'branchName', 'branchLocation', 'dateCreated', 'isActive','action'];
   dataSource = new MatTableDataSource<any>; 
 
   ngOnInit(): void {
@@ -46,6 +49,36 @@ export class ViewBranchComponent implements OnInit {
         this.pageLoader.hideLoader()
         this.snackBar.errorDialog('',error)
       })
+    })
+  }
+
+  onSlideToggleChange(row: any) {
+    const branchId = row.branchId;
+    const actionType = row.isActive ? 'Activate' : 'Deactivate';
+    const branch = row.branchName;
+    const text = `Do you want to ${actionType} this ${branch}?`
+    this.snackBar.showConfirmationDialog(text).then((confirmed) => {
+      if (confirmed) {
+        this.branchService.activateBranch(branchId).subscribe({
+          next: (_ => {
+            this.loadBranches()
+          }),
+          error: (error => {
+            this.snackBar.dangerNotification(error)
+          })
+        })
+      } else {
+        row.isActive = !row.isActive;
+      }
+    })
+  }
+
+  assignedAcademic(row: any) {
+    this.dialog.open(AssignedAcademicComponent, {
+      data: {
+        branchId: row.branchId
+      },
+      width: '70%'
     })
   }
 

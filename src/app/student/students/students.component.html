@@ -9,7 +9,7 @@
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
         <div class="card">
           <div class="header">
-            <h2>Search User</h2>
+            <h2>Search Student</h2>
           </div>
           <div class="body">
             <form [formGroup]="classForm!" class="search-form m-4" (ngSubmit)="onSubmit()">
@@ -30,13 +30,26 @@
                 <div class="col-md-4">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Level</mat-label>
-                    <mat-select formControlName="levelId">
+                    <mat-select formControlName="levelId" (selectionChange)="onLevelChange()">
                       <mat-option *ngFor="let level of levelList" [value]="level.levelId">
                         {{ level.levelName }}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="classForm?.get('levelId')?.hasError('required')">
                       Level is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Class</mat-label>
+                    <mat-select formControlName="classId">
+                      <mat-option *ngFor="let clas of classList" [value]="clas.class.classid">
+                        {{ clas.class.classname }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="classForm?.get('classId')?.hasError('required')">
+                      Class is required
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -68,40 +81,62 @@
             <table mat-table [dataSource]="dataSource">
 
               <!-- Class ID Column -->
-              <ng-container matColumnDef="classId">
-                <th mat-header-cell *matHeaderCellDef> Class ID </th>
-                <td mat-cell *matCellDef="let element"> {{ element.class.classid }} </td>
+              <ng-container matColumnDef="studentid">
+                <th mat-header-cell *matHeaderCellDef> Student ID </th>
+                <td mat-cell *matCellDef="let element"> {{ element.studentid }} </td>
               </ng-container>
-            
+
+              <!-- Class ID Column -->
+              <ng-container matColumnDef="rollNumber">
+                <th mat-header-cell *matHeaderCellDef> Roll Number</th>
+                <td mat-cell *matCellDef="let element"> {{ element.rollNumber }} </td>
+              </ng-container>
+
               <!-- Class Name Column -->
-              <ng-container matColumnDef="className">
-                <th mat-header-cell *matHeaderCellDef> Class Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.class.classname }} </td>
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef> First Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.firstName }} </td>
               </ng-container>
-            
+
+              <!-- Class Name Column -->
+              <ng-container matColumnDef="middleName">
+                <th mat-header-cell *matHeaderCellDef> Middle Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.middleName }} </td>
+              </ng-container>
+
               <!-- Date Created Column -->
-              <ng-container matColumnDef="dateCreated">
-                <th mat-header-cell *matHeaderCellDef> Date Created </th>
-                <td mat-cell *matCellDef="let element"> {{ element.class.datecreated | date: 'yyyy-MM-dd HH:mm:ss' }} </td>
+              <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef> last Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.lastName}} </td>
               </ng-container>
-            
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="responsibleName">
+                <th mat-header-cell *matHeaderCellDef> Responsible Phone</th>
+                <td mat-cell *matCellDef="let element"> {{ element.responsibleName}} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="responsiblePhone">
+                <th mat-header-cell *matHeaderCellDef> Responsible Phone </th>
+                <td mat-cell *matCellDef="let element"> {{ element.responsiblePhone}} </td>
+              </ng-container>
+
               <!-- Is Active Column -->
-              <ng-container matColumnDef="isActive">
-                <th mat-header-cell *matHeaderCellDef> Is Active </th>
-                <td mat-cell *matCellDef="let element"> {{ element.isActive ? 'Yes' : 'No' }} </td>
+              <ng-container matColumnDef="pob">
+                <th mat-header-cell *matHeaderCellDef> Pob </th>
+                <td mat-cell *matCellDef="let element"> {{ element.pob}} </td>
               </ng-container>
-              
+
+              <ng-container matColumnDef="academicYear">
+                <th mat-header-cell *matHeaderCellDef> Academic Year </th>
+                <td mat-cell *matCellDef="let element"> {{ element.academicYear }} </td>
+              </ng-container>
+
               <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <th mat-header-cell *matHeaderCellDef> Action </th>
                 <td mat-cell *matCellDef="let element">
-                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-                  <mat-menu #menu="matMenu" >
-                    <button mat-menu-item (click) = "assignClassSection(element)">
-                      <span>Assign Section</span>
-                    </button>
-                  </mat-menu>
+                  <button mat-raised-button class="m-2" (click)="editUsers(element)" color="primary">Edit</button>
                 </td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -110,7 +145,7 @@
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
           </div>
         </div>
-    </div>
+      </div>
     </div>
   </div>
 </section>

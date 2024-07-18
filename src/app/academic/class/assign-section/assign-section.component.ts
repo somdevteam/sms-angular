@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@shared/snackbar.service';
 import { AcademicService } from 'app/academic/academic.service';
@@ -12,11 +12,12 @@ import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 })
 export class AssignSectionComponent implements OnInit {
   sectionForm?: FormGroup;
-  sections: any[] = [];
+  sectionList: any[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<AssignSectionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { classId: number; className: string; branchId: number },
     private formBuilder: FormBuilder,
     private academicService: AcademicService,
     private snackBar: SnackbarService,
@@ -26,10 +27,10 @@ export class AssignSectionComponent implements OnInit {
   ngOnInit(): void {
     this.sectionForm = this.formBuilder.group({
       class: [this.data.className],
-      checkboxes: this.formBuilder.group({})
+      section: ['', Validators.required],
     });
 
-    this.loadSection()
+    this.loadSection();
   }
 
   closeDialog() {
@@ -37,23 +38,45 @@ export class AssignSectionComponent implements OnInit {
   }
 
   loadSection() {
-    this.academicService.findSections().subscribe({
-      next:(res) => {
-        this.sections = res
-        this.sections.forEach(item => {
-          this.sectionForm?.addControl(item.sectionid.toString(), new FormControl(false));
-        });
-      },
-      error:(error) => {
-        this.snackBar.dangerNotification(error);
-     }
-    })
-  }
+    const payload = {
+      classId: this.data.classId,
+      branchId: this.data.branchId,
+    };
+    console.log(payload);
 
+    this.academicService.findSectionsByFilter(payload).subscribe({
+      next: (res) => {
+        console.log(res);
+        
+        this.sectionList = res;
+      },
+      error: (error) => {
+        this.snackBar.dangerNotification(error);
+      },
+    });
+  }
 
   onSubmit() {
-    const selectedOptions = this.sections.filter(option => this.sectionForm?.get(option.sectionid.toString())?.value);
-    console.log(selectedOptions);
-    // Do something with the selected options
-  }
+    const payload = {
+      classId: this.data.classId,
+      branchId: this.data.branchId,
+      sections: this.sectionForm?.controls['section'].value,
+    }
+    this.pageLoader.showLoader()
+    this.academicService.assignSectionsToclass(payload).subscribe({
+      next: (resp => {
+        this.pageLoader.hideLoader()
+        const {message,data} = resp;
+
+        this.snackBar.successDialog('Success',message);
+        this.closeDialog()
+        
+      }),
+      error: (error) => {
+        this.pageLoader.hideLoader()
+        this.snackBar.dangerNotification(error);
+      }
+    })
+    
+  }  
 }

@@ -1,0 +1,106 @@
+<h1 mat-dialog-title>Edit User</h1>
+<form [formGroup]="updateUserForm!" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="row">
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>First name</mat-label>
+          <input matInput formControlName="firstName" required>
+          <mat-error *ngIf="updateUserForm!.get('firstName')?.hasError('required')">
+            First name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Middle name</mat-label>
+          <input matInput formControlName="middleName">
+          <mat-error *ngIf="updateUserForm!.get('middleName')?.hasError('required')">
+            Middle name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Last name</mat-label>
+          <input matInput formControlName="lastName">
+          <mat-error *ngIf="updateUserForm!.get('lastName')?.hasError('required')">
+            Last name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>RollN umber</mat-label>
+          <input matInput formControlName="rollNumber" type="number" required>
+          <mat-error *ngIf="updateUserForm!.get('rollNumber')?.hasError('required')">
+            Please enter mobile number
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Place Of Birth</mat-label>
+          <input matInput formControlName="pob" required>
+          <mat-error *ngIf="updateUserForm!.get('pob')?.hasError('required')">
+            Please enter place of birth
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Place Of Birth</mat-label>
+          <input matInput formControlName="responsibleName" required>
+          <mat-error *ngIf="updateUserForm!.get('responsibleName')?.hasError('required')">
+            Please enter place of birth
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Place Of Birth</mat-label>
+          <input matInput formControlName="responsiblePhone" required>
+          <mat-error *ngIf="updateUserForm!.get('responsiblePhone')?.hasError('required')">
+            Please enter place of birth
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isBranch">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Branch</mat-label>
+          <mat-select  formControlName="branchId">
+            <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
+              {{ branch.branchName }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="updateUserForm!.get('sex')?.hasError('required')">
+            Branch is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+<!--    <div class="row">-->
+<!--      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">-->
+<!--        <mat-form-field class="example-full-width mb-3" appearance="outline">-->
+<!--          <mat-label>Email</mat-label>-->
+<!--          <input matInput formControlName="email" required>-->
+<!--          <mat-error *ngIf="updateUserForm!.get('email')?.hasError('required')">-->
+<!--            email is required-->
+<!--          </mat-error>-->
+<!--          <mat-error *ngIf="updateUserForm!.get('email')?.hasError('email')">-->
+<!--            Please enter a valid email address-->
+<!--          </mat-error>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
+<!--    </div>-->
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!updateUserForm!.valid" type="submit" color="primary">Update</button>
+    <button mat-raised-button type="button" (click)="closeDialog()" color="warn">Close</button>
+  </div>
+</form>

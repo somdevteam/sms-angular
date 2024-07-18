@@ -38,9 +38,9 @@ const routes: Routes = [
       {
         path: 'student',
         canActivate: [AuthGuard],
-        data: {
-          role: Role.Student,
-        },
+        // data: {
+        //   role: Role.Student,
+        // },
         loadChildren: () =>
           import('./student/student.module').then((m) => m.StudentModule),
       },
@@ -85,6 +85,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'exams',
+        loadChildren: () =>
+          import('./exams/exams.module').then(
+            (m) => m.ExamsModule
+          ),
+      },
+      {
         path: 'multilevel',
         loadChildren: () =>
           import('./multilevel/multilevel.module').then(
@@ -101,6 +108,7 @@ const routes: Routes = [
         (m) => m.AuthenticationModule
       ),
   },
+  { path: 'exams', loadChildren: () => import('./exams/exams.module').then(m => m.ExamsModule) },
   { path: '**', component: Page404Component },
 ];
 @NgModule({

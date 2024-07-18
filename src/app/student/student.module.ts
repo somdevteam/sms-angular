@@ -10,9 +10,12 @@ import { StudentRoutingModule } from './student-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ComponentsModule } from '../shared/components/components.module';
 import { SharedModule } from '../shared/shared.module';
+import { AddStudentComponent } from './add-student/add-student.component';
+import { StudentsComponent } from './students/students.component';
+import { EditStudentComponent } from './edit-student/edit-student.component';
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, AddStudentComponent, StudentsComponent, EditStudentComponent],
   imports: [
     CommonModule,
     StudentRoutingModule,

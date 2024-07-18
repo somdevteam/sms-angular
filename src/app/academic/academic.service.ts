@@ -55,8 +55,6 @@ export class AcademicService {
        .pipe(
          map((resp) => {
           const { message,data } = resp;
-          console.log(resp)
-          // this.snackBar.successNotification(message);
           this.snackBar.successDialog('',message)
           return data;
          })
@@ -171,16 +169,18 @@ export class AcademicService {
 
    }
 
-   findSections() {
-    return this.apiService.sendHttpGetRequest(`/section/all`)
+   findSectionsByFilter(payload: any) {
+    return this.apiService.sendHttpPostRequest(`/section/sectionsByFilter`,payload)
     .pipe(
       map((resp) => {
        const { data } = resp;
        return data;
       })
     );
-
    }
 
+   assignSectionsToclass(payload: any) {
+    return this.apiService.sendHttpPostRequest(`/class-section/assingSectionsToClass`,payload);
 
+   }
 }
