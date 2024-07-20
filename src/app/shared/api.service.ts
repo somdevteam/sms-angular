@@ -15,6 +15,8 @@ export class ApiService {
 
   sendHttpPostRequest(endpoint: string, payload: any) {
     const url = environment.apiUrl+endpoint;
+    console.log(url);
+    console.log(payload);
     return this.http
       .post<any>(url, payload)
       .pipe(

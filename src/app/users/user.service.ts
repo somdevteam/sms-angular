@@ -22,7 +22,7 @@ export class UserService {
 
 
   getUsers() {
-    return this.apiService.sendHttpGetRequest('/user')
+    return this.apiService.sendHttpGetRequest('/getStudentByRollNumber')
        .pipe(
          map((resp) => {
           const { message,data } = resp;

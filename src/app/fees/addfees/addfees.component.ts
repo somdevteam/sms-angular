@@ -8,14 +8,9 @@ import {
   UntypedFormGroup,
   Validators
 } from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatIconModule} from "@angular/material/icon";
-import {MatSelectModule} from "@angular/material/select";
-import {MatOptionModule} from "@angular/material/core";
-import {MatRadioModule} from "@angular/material/radio";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatButtonModule} from "@angular/material/button";
+import {FeesService} from "../fees.service";
+import {SnackbarService} from "@shared/snackbar.service";
+
 
 @Component({
   selector: 'app-addfees',
@@ -26,6 +21,7 @@ import {MatButtonModule} from "@angular/material/button";
 
 export class AddfeesComponent {
   feesForm!: UntypedFormGroup;
+  selectedRollNumber : any = null;
   breadscrums = [
     {
       title: 'Add Fees',
@@ -33,7 +29,8 @@ export class AddfeesComponent {
       active: 'Add Fees',
     },
   ];
-  constructor(private fb: UntypedFormBuilder) {
+  constructor(private fb: UntypedFormBuilder,
+              private feesServices:FeesService,   private snackBar: SnackbarService,) {
     this.feesForm = this.fb.group({
       rollNo: ['', [Validators.required]],
       sName: ['', [Validators.required]],
@@ -49,8 +46,29 @@ export class AddfeesComponent {
     });
   }
 
+  ngOnInit(): void {
 
+
+  }
+  onChangeRollNumber(value: any) {
+    this.selectedRollNumber = Number(value.target.value);
+    // const fees =this.feesServices.getStudentByRollNumber(this.selectedRollNumber);
+    // console.log(fees);
+
+    this.feesServices.getStudentByRollNumber(this.selectedRollNumber).subscribe({
+      next: (res) => {
+        if (res.length > 0) {
+          console.log(res);
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.snackBar.dangerNotification(error);
+      },
+    });
+  }
   onSubmit() {
     console.log('Form Value', this.feesForm.value);
+
   }
 }

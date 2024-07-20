@@ -17,7 +17,7 @@
                 <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Roll No</mat-label>
-                    <input matInput formControlName="rollNo" required>
+                    <input matInput formControlName="rollNo" required (change)="onChangeRollNumber($event)" >
                     <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>label</mat-icon>
                     <mat-error *ngIf="feesForm.get('rollNo')?.hasError('required')">
                       First name is required
