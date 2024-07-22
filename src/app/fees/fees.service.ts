@@ -28,4 +28,15 @@ export class FeesService {
         })
       );
   }
+
+  getPaymentTypes() {
+    return this.apiService.sendHttpGetRequest('/payment/getpayment')
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          return data;
+        })
+      );
+  }
+
 }

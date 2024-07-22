@@ -29,6 +29,7 @@ export class AddfeesComponent {
       active: 'Add Fees',
     },
   ];
+  paymentTypes:any = []
   constructor(private fb: UntypedFormBuilder,
               private feesServices:FeesService,   private snackBar: SnackbarService,) {
     this.feesForm = this.fb.group({
@@ -67,6 +68,18 @@ export class AddfeesComponent {
       },
     });
   }
+
+  loadBranches() {
+    this.feesServices.getPaymentTypes().subscribe({
+      next:(res => {
+        this.paymentTypes = res
+      }),
+      error: (error => {
+        this.snackBar.dangerNotification(error)
+      })
+    })
+  }
+
   onSubmit() {
     console.log('Form Value', this.feesForm.value);
 
