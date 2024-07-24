@@ -119,21 +119,9 @@
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Payment Type</mat-label>
-                    <mat-select formControlName="pType" [required]="true">
-                      <mat-option [value]="'cash'">
-                        Cash
-                      </mat-option>
-                      <mat-option [value]="'cheque'">
-                        Cheque
-                      </mat-option>
-                      <mat-option [value]="'online transfer'">
-                        Online Transfer
-                      </mat-option>
-                      <mat-option [value]="'credit card'">
-                        Draft
-                      </mat-option>
-                      <mat-option [value]="'other'">
-                        Other
+                    <mat-select formControlName="pType"  [required]="true" >
+                      <mat-option *ngFor="let payment of paymentTypes" [value]="payment.paymenttypeid">
+                        {{payment.type}}
                       </mat-option>
                     </mat-select>
 

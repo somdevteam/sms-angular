@@ -43,6 +43,7 @@ export class ApiService {
 
   sendHttpGetRequest(endpoint: string) {
     const url = environment.apiUrl+endpoint;
+    console.log(url);
 
     return this.http
       .get<any>(url)

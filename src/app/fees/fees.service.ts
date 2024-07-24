@@ -30,10 +30,11 @@ export class FeesService {
   }
 
   getPaymentTypes() {
-    return this.apiService.sendHttpGetRequest('/payment/getpayment')
+    return this.apiService.sendHttpGetRequest('/payment/findAllPaymentTypes')
       .pipe(
         map((resp) => {
           const { data } = resp;
+          console.log(data);
           return data;
         })
       );

@@ -48,7 +48,7 @@ export class AddfeesComponent {
   }
 
   ngOnInit(): void {
-
+    this.loadPaymentTypes();
 
   }
   onChangeRollNumber(value: any) {
@@ -69,9 +69,10 @@ export class AddfeesComponent {
     });
   }
 
-  loadBranches() {
+  loadPaymentTypes() {
     this.feesServices.getPaymentTypes().subscribe({
       next:(res => {
+        console.log(res);
         this.paymentTypes = res
       }),
       error: (error => {
