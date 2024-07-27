@@ -85,15 +85,14 @@ export class AddfeesComponent {
     this.selectedRollNumber = Number(event.target.value);
     this.feesServices.getStudentByRollNumber(this.selectedRollNumber).subscribe({
       next: (res) => {
-        if (res.data) {
-          const studentData = res.data;
-          const studentName = `${studentData.firstname} ${studentData.middlename} ${studentData.lastname}`;
+        console.log("the resdata: "+JSON.stringify(res));
+        if (res) {
+          const studentData = res;
+          const studentName = this.createFullName(studentData.firstname,studentData.middlename,studentData.lastname);
+          console.log("fullname "+studentName)
           const studentClassId = studentData.studentClass[0]?.studentClassId;
-
-          // Set the retrieved values into the form
           this.feesForm.patchValue({
             sName: studentName
-           // studentClassId: studentClassId
           });
         }
       },
@@ -109,4 +108,25 @@ export class AddfeesComponent {
     console.log('Form Value', this.feesForm.value);
 
   }
+
+   createFullName(firstName:string, middleName:string, lastName:string) {
+    firstName = this.trimString(firstName);
+    middleName = this.trimString(middleName);
+    lastName = this.trimString(lastName);
+
+    var fullName = (firstName || '') + ' ' + (middleName || '') + ' ' + (lastName || '');
+
+    if(fullName)
+      fullName = this.trimString(fullName).toLowerCase();
+    return fullName.replace(/[^a-zA-Z0-9\/ ]/g,'');
+  }
+
+  trimString(str:any) {
+    if(str) {
+      str = str.toString().replace(/\s\s+/g, ' ');
+      str = str.trim();
+    }
+    return str;
+  }
+
 }
