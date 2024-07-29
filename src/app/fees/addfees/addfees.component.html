@@ -25,16 +25,29 @@
 
                   </mat-form-field>
                 </div>
-                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Student Name</mat-label>
                     <input matInput formControlName="sName" required>
+                    <input formControlName="studentClassId" type="hidden">
                     <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>account_circle</mat-icon>
                     <mat-error *ngIf="feesForm.get('sName')?.hasError('required')">
                       First name is required
                     </mat-error>
                   </mat-form-field>
                 </div>
+
+                <!--                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">-->
+<!--                  <mat-form-field class="example-full-width mb-3" appearance="outline">-->
+<!--                    <mat-label>Student Name</mat-label>-->
+<!--                    <input matInput formControlName="sName" required>-->
+<!--                    <input matInput formControlName="studentId" required type="hidden">-->
+<!--                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>account_circle</mat-icon>-->
+<!--                    <mat-error *ngIf="feesForm.get('sName')?.hasError('required')">-->
+<!--                      First name is required-->
+<!--                    </mat-error>-->
+<!--                  </mat-form-field>-->
+<!--                </div>-->
               </div>
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
@@ -149,14 +162,8 @@
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Status</mat-label>
                     <mat-select formControlName="status" [required]="true">
-                      <mat-option [value]="'paid'">
-                        Paid
-                      </mat-option>
-                      <mat-option [value]="'unpaid'">
-                        Unpaid
-                      </mat-option>
-                      <mat-option [value]="'pending'">
-                        Pending
+                      <mat-option  *ngFor="let paymentStates of paymentStates" [value]="paymentStates.paymentstateid" >
+                      {{paymentStates.description }}
                       </mat-option>
                     </mat-select>
                     <mat-error *ngIf="feesForm.get('status')?.hasError('required')">
@@ -176,6 +183,21 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Months</mat-label>
+                    <mat-select formControlName="monthName" [required]="true">
+                      <mat-option  *ngFor="let month of months" [value]="month.monthname" >
+                        {{month.monthname }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="feesForm.get('monthId')?.hasError('required')">
+                      First name is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
               </div>
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">

@@ -19,7 +19,7 @@ export class FeesService {
     //this.userOperation = this.appDataService.support_data['userOperation'] || null;
   }
 
-  getStudentByRollNumber(rollNumber:number) {
+  getStudentByRollNumber(rollNumber:any) {
     return this.apiService.sendHttpPostRequest('/student/getStudentByRollNumber',rollNumber)
       .pipe(
         map((resp) => {
@@ -31,6 +31,37 @@ export class FeesService {
 
   getPaymentTypes() {
     return this.apiService.sendHttpGetRequest('/payment/findAllPaymentTypes')
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          console.log(data);
+          return data;
+        })
+      );
+  }
+  getPaymentStates() {
+    return this.apiService.sendHttpGetRequest('/payment/findAllPaymentStates')
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          console.log(data);
+          return data;
+        })
+      );
+  }
+
+  createPayment(payload:any) {
+    return this.apiService.sendHttpPostRequest('/payment/add',payload)
+      .pipe(
+        map((resp) => {
+          const { message,data } = resp;
+          this.snackBar.successNotification(message)
+          return data;
+        })
+      );
+  }
+  getMonths() {
+    return this.apiService.sendHttpGetRequest('/payment/findAllMonths')
       .pipe(
         map((resp) => {
           const { data } = resp;
