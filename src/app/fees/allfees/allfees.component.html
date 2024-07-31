@@ -1,1 +1,68 @@
-<p>allfees works!</p>
+<section class="content">
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+<div class="container">
+  <form [formGroup]="paymentForm" (ngSubmit)="searchPayments()">
+    <mat-form-field appearance="fill">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Roll Number</mat-label>
+      <input matInput type="number" formControlName="rollNumber">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Search</button>
+  </form>
+
+  <mat-table [dataSource]="payments" class="mat-elevation-z8">
+    <ng-container matColumnDef="studentfeeid">
+      <mat-header-cell *matHeaderCellDef> Payment ID </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.studentfeeid}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.amount}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="studentFullName">
+      <mat-header-cell *matHeaderCellDef> Student Full Name </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{element.studentClass.student.firstname}} {{element.studentClass.student.middlename}} {{element.studentClass.student.lastname}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="rollNumber">
+      <mat-header-cell *matHeaderCellDef> Roll Number </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.studentClass.student.rollNumber}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="paymentType">
+      <mat-header-cell *matHeaderCellDef> Payment Type </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.studentFeeType.type}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="paymentState">
+      <mat-header-cell *matHeaderCellDef> Payment State </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.paymentStateId.description}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="datecreated">
+      <mat-header-cell *matHeaderCellDef> Date Created </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.datecreated | date}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
+  </div>
+</section>

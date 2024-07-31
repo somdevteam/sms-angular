@@ -21,7 +21,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'allfees',
+    path: 'allFees',
     canActivate: [AuthGuard],
     component: AllfeesComponent,
     data: {

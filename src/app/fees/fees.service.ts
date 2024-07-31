@@ -71,4 +71,15 @@ export class FeesService {
       );
   }
 
+  getPayments(payload:any) {
+    return this.apiService.sendHttpPostRequest('/payment/getPaymentByFilter',payload)
+      .pipe(
+        map((resp) => {
+          const { message,data } = resp;
+          return data;
+        })
+      );
+  }
+
+
 }
