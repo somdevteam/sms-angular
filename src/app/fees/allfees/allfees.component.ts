@@ -1,16 +1,21 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {FeesService} from "../fees.service";
-import {SnackbarService} from "@shared/snackbar.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { FeesService } from "../fees.service";
+import { SnackbarService } from "@shared/snackbar.service";
+import { MatDialog } from "@angular/material/dialog";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { Payment } from "../fees";
 
 @Component({
   selector: 'app-allfees',
   templateUrl: './allfees.component.html',
   styleUrls: ['./allfees.component.scss']
 })
-export class AllfeesComponent {
+export class AllfeesComponent implements OnInit {
   paymentForm: FormGroup;
-  payments: any[] = [];
+  payments: MatTableDataSource<Payment> = new MatTableDataSource<Payment>();
   displayedColumns: string[] = [
     'studentfeeid',
     'amount',
@@ -18,7 +23,8 @@ export class AllfeesComponent {
     'rollNumber',
     'paymentType',
     'paymentState',
-    'datecreated'
+    'datecreated',
+    'actions'
   ];
   breadscrums = [
     {
@@ -27,38 +33,75 @@ export class AllfeesComponent {
       active: 'Payments',
     },
   ];
-  constructor(private fb: FormBuilder,
-              private feesServices: FeesService,
-              private snackBar: SnackbarService) {
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private fb: FormBuilder,
+    private feesServices: FeesService,
+    private snackBar: SnackbarService,
+    private dialog: MatDialog,
+  ) {
     this.paymentForm = this.fb.group({
       date: [''],
       rollNumber: ['']
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.fetchPayments();
+  }
 
+  ngAfterViewInit() {
+    this.payments.paginator = this.paginator;
+    this.payments.sort = this.sort;
+  }
+
+  fetchPayments() {
+    // Initially fetch all payments
+    this.feesServices.getPayments({}).subscribe({
+      next: (res) => {
+        if (res) {
+          this.payments.data = res;
+        }
+      },
+      error: (error) => {
+        this.snackBar.dangerNotification(error);
+      }
+    });
+  }
 
   searchPayments() {
-    console.log('Form Value', this.paymentForm.value);
     const formFees = this.paymentForm.value;
     const payload = {
       date: formFees.date,
       rollNumber: formFees.rollNumber,
-
-    }
+    };
     this.feesServices.getPayments(payload).subscribe({
       next: (res) => {
-        console.log("the resdata: "+JSON.stringify(res));
         if (res) {
-            this.payments = res;
+          this.payments.data = res;
         }
       },
       error: (error) => {
-        console.log(error);
         this.snackBar.dangerNotification(error);
-      },
+      }
     });
+  }
 
+  editPayment(payment: any): void {
+    // Logic for editing payment
+    console.log('Edit payment:', payment);
+  }
+
+  modifyPayment(payment: any): void {
+    // Logic for modifying payment
+    console.log('Modify payment:', payment);
+  }
+
+  viewReceipt(payment: any): void {
+    // Logic for viewing receipt
+    console.log('View receipt:', payment);
   }
 }

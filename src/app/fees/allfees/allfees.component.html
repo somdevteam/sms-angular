@@ -1,68 +1,82 @@
 <section class="content">
   <div class="content-block">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
-      <!-- breadcrumb -->
       <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
       </app-breadcrumb>
     </div>
-<div class="container">
-  <form [formGroup]="paymentForm" (ngSubmit)="searchPayments()">
-    <mat-form-field appearance="fill">
-      <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="date">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    <div class="container">
+      <form [formGroup]="paymentForm" (ngSubmit)="searchPayments()">
+        <mat-form-field appearance="fill">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Roll Number</mat-label>
-      <input matInput type="number" formControlName="rollNumber">
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Roll Number</mat-label>
+          <input matInput type="number" formControlName="rollNumber">
+        </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Search</button>
-  </form>
+        <button mat-raised-button color="primary" type="submit">Search</button>
+      </form>
 
-  <mat-table [dataSource]="payments" class="mat-elevation-z8">
-    <ng-container matColumnDef="studentfeeid">
-      <mat-header-cell *matHeaderCellDef> Payment ID </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.studentfeeid}} </mat-cell>
-    </ng-container>
+      <div class="table-container">
+        <table mat-table [dataSource]="payments" matSort class="mat-elevation-z8">
+          <ng-container matColumnDef="studentfeeid">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.studentfeeid}} </td>
+          </ng-container>
 
-    <ng-container matColumnDef="amount">
-      <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.amount}} </mat-cell>
-    </ng-container>
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+            <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+          </ng-container>
 
-    <ng-container matColumnDef="studentFullName">
-      <mat-header-cell *matHeaderCellDef> Student Full Name </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        {{element.studentClass.student.firstname}} {{element.studentClass.student.middlename}} {{element.studentClass.student.lastname}}
-      </mat-cell>
-    </ng-container>
+          <ng-container matColumnDef="studentFullName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> FullName </th>
+            <td mat-cell *matCellDef="let element">
+              {{element.studentClass.student.firstname}} {{element.studentClass.student.middlename}} {{element.studentClass.student.lastname}}
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="rollNumber">
-      <mat-header-cell *matHeaderCellDef> Roll Number </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.studentClass.student.rollNumber}} </mat-cell>
-    </ng-container>
+          <ng-container matColumnDef="rollNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> RollNo </th>
+            <td mat-cell *matCellDef="let element"> {{element.studentClass.student.rollNumber}} </td>
+          </ng-container>
 
-    <ng-container matColumnDef="paymentType">
-      <mat-header-cell *matHeaderCellDef> Payment Type </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.studentFeeType.type}} </mat-cell>
-    </ng-container>
+          <ng-container matColumnDef="paymentType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type </th>
+            <td mat-cell *matCellDef="let element"> {{element.studentFeeType.type}} </td>
+          </ng-container>
 
-    <ng-container matColumnDef="paymentState">
-      <mat-header-cell *matHeaderCellDef> Payment State </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.paymentStateId.description}} </mat-cell>
-    </ng-container>
+          <ng-container matColumnDef="paymentState">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>State </th>
+            <td mat-cell *matCellDef="let element"> {{element.paymentStateId.description}} </td>
+          </ng-container>
 
-    <ng-container matColumnDef="datecreated">
-      <mat-header-cell *matHeaderCellDef> Date Created </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.datecreated | date}} </mat-cell>
-    </ng-container>
+          <ng-container matColumnDef="datecreated">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.datecreated | date}} </td>
+          </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="action-buttons">
+                <button mat-button color="primary" class="action-button" (click)="editPayment(element)">Edit</button>
+<!--                <button mat-button color="accent" class="action-button" (click)="modifyPayment(element)">Payment Modification</button>-->
+                <button mat-button color="warn" class="action-button" (click)="viewReceipt(element)">View Receipt</button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="payments.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+    </div>
   </div>
 </section>

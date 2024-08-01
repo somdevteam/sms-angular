@@ -1,12 +1,44 @@
+.table-container {
+  height: 400px;
+  overflow: auto;
+}
+
+//.mat-column-actions {
+//  display: flex;
+//  justify-content: flex-start;
+//}
+
+//.action-buttons {
+//  display: flex;
+//  flex-direction: row;
+//  gap: 8px;
+//}
+//
+//.action-button {
+//  white-space: nowrap;
+//}
+
+.mat-header-cell, .mat-cell {
+  padding: 8px 16px;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+}
+
+.mat-table {
+  width: 100%;
+}
+
 .container {
-  padding: 20px;
+  padding: 16px;
 }
 
 .mat-form-field {
-  margin-right: 20px;
-  margin-bottom: 20px;
+  width: 200px;
+  margin-right: 16px;
 }
 
-.mat-elevation-z8 {
-  margin-top: 20px;
+button {
+  min-width: 100px;
 }

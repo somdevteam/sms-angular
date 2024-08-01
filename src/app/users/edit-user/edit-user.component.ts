@@ -37,7 +37,7 @@ export class EditUserComponent implements OnInit {
       email: [this.userData.email, Validators.required],
       branchId: [this.userData.branchId],
       roleId: [this.userData.roleId, Validators.required],
-    });    
+    });
 
     this.loadBranches()
     this.loadRoles()
@@ -45,9 +45,7 @@ export class EditUserComponent implements OnInit {
 
   closeDialog(result:any = 'close') {
     this.ref.close(result);
-  }
-
-  onSubmit() {
+  }  onSubmit() {
     if (this.updateUserForm?.valid) {
       const userId = this.userData.userId;
       const payload = this.updateUserForm.value;
@@ -61,6 +59,8 @@ export class EditUserComponent implements OnInit {
       })
     }
   }
+
+
 
   loadBranches() {
     this.userService.getBranches().subscribe({
