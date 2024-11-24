@@ -50,6 +50,16 @@ export class FeesService {
       );
   }
 
+  getFeeTypes() {
+    return this.apiService.sendHttpGetRequest('/payment/findAllFeeTypes')
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          console.log(data);
+          return data;
+        })
+      );
+  }
   createPayment(payload:any) {
     return this.apiService.sendHttpPostRequest('/payment/add',payload)
       .pipe(
@@ -80,6 +90,51 @@ export class FeesService {
         })
       );
   }
+  getStudentsByResponsible(respId:number) {
+    const responsibleId ={responsibleId:respId}
+    console.log("respId:"+respId);
+    return this.apiService.sendHttpPostRequest('/student/getStudentsByResponsibleId',responsibleId)
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          console.log(data);
+          return data;
+        })
+      );
+  }
+
+  getStudentPaymentsByLevel(levelId:number) {
+    return this.apiService.sendHttpGetRequest('/payment/findStudentPaymentByLevel')
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          console.log(data);
+          return data;
+        })
+      );
+  }
+
+  getStudentDetails(studentId:number) {
+    return this.apiService.sendHttpGetRequest('/student/studentId')
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          console.log(data);
+          return data;
+        })
+      );
+  }
+  getResponsibleByMobile(mobile: string) {
+    return this.apiService.sendHttpGetRequest(`/responsible/getResponsibleByPhone/${mobile}`)
+      .pipe(
+        map((resp) => {
+          const { data } = resp;
+          console.warn("data of the responsible"+JSON.stringify(data));
+          return data;
+        })
+      );  }
+
+
 
 
 }
