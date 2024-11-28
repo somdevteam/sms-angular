@@ -159,9 +159,20 @@ export class StudentsService {
 
   }
 
-    findClassByLevelId(payload: any) {
-        return this.apiService.sendHttpPostRequest(`/levelclass/classbybranchandlevel`, payload)
-            .pipe(
+    findClassByBranchId(payload: any) {
+      return this.apiService.sendHttpPostRequest(`/levelclass/classbybranchandlevel?branchId=${payload.branchId}`, payload)
+      .pipe(
+                map((resp) => {
+                    const { data } = resp;
+                    return data;
+                })
+            );
+
+    }
+
+    findSectionsByFilter(payload: any) {
+      return this.apiService.sendHttpPostRequest(`/section/sectionsByFilter`, payload)
+      .pipe(
                 map((resp) => {
                     const { data } = resp;
                     return data;

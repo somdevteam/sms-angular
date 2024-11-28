@@ -15,6 +15,7 @@ export class AddStudentComponent {
   studentForm!: FormGroup;
   levelList: any;
   classList: any;
+  sectionList: any = []
   breadscrums = [
     {
       title: 'Add Student',
@@ -52,14 +53,13 @@ export class AddStudentComponent {
       lastName: ['', [Validators.required, Validators.pattern('[a-zA-Z]+')]],
       pob: ['', [Validators.required]],
       branchId: [''],
-      gender: ['', [Validators.required, Validators.pattern(/^(M|F)$/i)]],
+      gender: ['M', [Validators.required, Validators.pattern(/^(M|F)$/i)]],
       dateOfBirth: ['', Validators.required],
       responsibleName: ['',Validators.required],
       responsiblePhone: ['',Validators.required],
-      levelId:  ['', [Validators.required]],
       classId:  ['', Validators.required],
       isActive: ['1'],
-      sectionId: [1],
+      sectionId: [],
       rollNumber: ['', Validators.required]
     }
     this.studentForm = this.fb.group(formFields );
@@ -80,7 +80,6 @@ export class AddStudentComponent {
   }
 
   onSubmit() {
-    console.log('Form Value', this.studentForm.value);
     if(this.studentForm.valid){
       const payload = this.studentForm.value;
       payload.rollNumber = Number(payload.rollNumber);
@@ -97,36 +96,11 @@ export class AddStudentComponent {
 
   }
 
-  isGenderInvalid(): boolean {
-    const genderControl = this.studentForm.get('gender');
-    return genderControl!.invalid && (genderControl!.dirty || genderControl!.touched);
-  }
-
-  isDateOfBirthInvalid(): boolean {
-    const dateOfBirthControl = this.studentForm.get('dateOfBirth');
-    return dateOfBirthControl!.invalid && (dateOfBirthControl!.dirty || dateOfBirthControl!.touched);
-  }
-
   onBranchChange(branchId: any) {
-    this.studentsService.findLevelByBranchId(branchId).subscribe({
-      next:(res) => {
-        this.levelList = res;
-      },
-      error:(error) => {
-        this.snackBar.dangerNotification(error);
-      }
-    })
-  }
-
-  onLevelChange() {
-    console.log(this.studentForm?.controls['branchId'].value);
     const payload = {
-      branchId: this.studentForm?.controls['branchId'].value,
-      levelId: this.studentForm?.controls['levelId'].value,
-      isActive: this.studentForm?.controls['isActive'].value
+      branchId: branchId
     }
-
-    this.studentsService.findClassByLevelId(payload).subscribe({
+    this.studentsService.findClassByBranchId(payload).subscribe({
       next:(res) => {
         this.classList = res;
       },
@@ -134,6 +108,22 @@ export class AddStudentComponent {
         this.snackBar.dangerNotification(error);
       }
     })
+  }
+
+  onClassChange() {
+    const payload = {
+      classId: this.studentForm?.controls['classId'].value,
+      branchId: this.studentForm?.controls['branchId'].value,
+      isActive: this.studentForm?.controls['isActive'].value
+  }
+  this.studentsService.findSectionsByFilter(payload).subscribe({
+      next: (res) => {
+          this.sectionList = res;
+      },
+      error: (error) => {
+          this.snackBar.dangerNotification(error);
+      }
+  })
   }
 
 

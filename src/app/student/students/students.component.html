@@ -17,7 +17,7 @@
                 <div class="col-md-4">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Branch</mat-label>
-                    <mat-select formControlName="branchId" (selectionChange)="onBranchChange($event.value)">
+                    <mat-select formControlName="branchId" (selectionChange)="onBranchChange()">
                       <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
                         {{ branch.branchName }}
                       </mat-option>
@@ -29,21 +29,8 @@
                 </div>
                 <div class="col-md-4">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Level</mat-label>
-                    <mat-select formControlName="levelId" (selectionChange)="onLevelChange()">
-                      <mat-option *ngFor="let level of levelList" [value]="level.levelId">
-                        {{ level.levelName }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="classForm?.get('levelId')?.hasError('required')">
-                      Level is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Class</mat-label>
-                    <mat-select formControlName="classId">
+                    <mat-select formControlName="classId" (selectionChange)="onClassChange()">
                       <mat-option *ngFor="let clas of classList" [value]="clas.class.classid">
                         {{ clas.class.classname }}
                       </mat-option>
@@ -51,13 +38,26 @@
                     <mat-error *ngIf="classForm?.get('classId')?.hasError('required')">
                       Class is required
                     </mat-error>
+                    <div class="spinner-container" *ngIf="isLoadingClass">
+                      <mat-spinner [diameter]="20" mode="indeterminate"></mat-spinner>
+                    </div>
                   </mat-form-field>
                 </div>
-                <div class="col-md-3">
-                  <mat-radio-group formControlName="isActive">
-                    <mat-radio-button value="1">Active</mat-radio-button>
-                    <mat-radio-button value="0">Inactive</mat-radio-button>
-                  </mat-radio-group>
+                <div class="col-md-4">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Section</mat-label>
+                    <mat-select formControlName="sectionId">
+                      <mat-option *ngFor="let sect of sectionList" [value]="sect.sectionid">
+                        {{ sect.sectionname }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Roll Number</mat-label>
+                    <input matInput formControlName="rollNumber">
+                  </mat-form-field>
                 </div>
                 <div class="col-md-12">
                   <div class="float-end">
@@ -81,9 +81,9 @@
             <table mat-table [dataSource]="dataSource">
 
               <!-- Class ID Column -->
-              <ng-container matColumnDef="studentid">
+              <ng-container matColumnDef="studentId">
                 <th mat-header-cell *matHeaderCellDef> Student ID </th>
-                <td mat-cell *matCellDef="let element"> {{ element.studentid }} </td>
+                <td mat-cell *matCellDef="let element"> {{ element.studentId }} </td>
               </ng-container>
 
               <!-- Class ID Column -->
@@ -108,6 +108,18 @@
               <ng-container matColumnDef="lastName">
                 <th mat-header-cell *matHeaderCellDef> last Name </th>
                 <td mat-cell *matCellDef="let element"> {{ element.lastName}} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="className">
+                <th mat-header-cell *matHeaderCellDef> Class </th>
+                <td mat-cell *matCellDef="let element"> {{ element.className}} </td>
+              </ng-container>
+
+              <!-- Date Created Column -->
+              <ng-container matColumnDef="sectionName">
+                <th mat-header-cell *matHeaderCellDef> Section </th>
+                <td mat-cell *matCellDef="let element"> {{ element.sectionName}} </td>
               </ng-container>
 
               <!-- Date Created Column -->
