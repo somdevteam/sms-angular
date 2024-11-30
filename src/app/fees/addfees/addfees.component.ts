@@ -31,7 +31,33 @@ export class AddfeesComponent implements OnInit {
     private feesService: FeesService,
     private snackBar: SnackbarService
   ) {
-    this.initializeForm();
+    this.feesForm = this.fb.group({
+      rollNo: ['', ],
+      fullName: ['', ],
+      fType: [''],
+      department: [''],
+      date: [''],
+      invoiceNo: [''],
+      pType: [''],
+      paymentState: [''],
+      amount:[''],
+      duration: [''],
+      details: [''],
+      studentClassId: [''],
+      monthName: [''],
+      monthId:[''],
+      mobile: [''],
+      responsibleName: [''],
+      responsibleTell: [''],
+      responsibleAddress: [''],
+      responsiblePhone: [''],
+      studentId: [''],
+      sectionId: [''],
+      className:[''],
+      sectionName:[''],
+      levelName:['']// Added for student selection
+    });
+    // this.initializeForm();
   }
 
   ngOnInit(): void {
@@ -63,7 +89,10 @@ export class AddfeesComponent implements OnInit {
       responsibleAddress: [''],
       responsiblePhone: [''],
       studentId: [''],
-      sectionId: [''],// Added for student selection
+      sectionId: [''],
+      className:[''],
+      sectionName:[''],
+      levelName:['']// Added for student selection
     });
   }
 
@@ -137,11 +166,13 @@ export class AddfeesComponent implements OnInit {
 
     // Find the selected student directly from the students array
     this.selectedStudent = this.students.find(student => student.studentid === studentId) || null;
+    this.feesForm.patchValue({ fullName: this.selectedStudent?.fullName });
+    this.feesForm.patchValue({ rollNo: this.selectedStudent?.rollNumber });
+    this.feesForm.patchValue({ sectionName: this.selectedStudent?.studentClass[0].sectionName });
+    this.feesForm.patchValue({ className: this.selectedStudent?.studentClass[0].className});
+    this.feesForm.patchValue({ levelName: this.selectedStudent?.studentClass[0].levelName});
+    this.feesForm.patchValue({ amount: this.selectedStudent?.studentClass[0].levelFee});
     console.log(this.selectedStudent);
-    // Load only the payment information based on the student's level
-    // if (this.selectedStudent) {
-    //   this.loadStudentPayments(this.selectedStudent.studentClass[0]?.studentClassId);
-    // }
   }
 
 
@@ -173,16 +204,24 @@ export class AddfeesComponent implements OnInit {
 
     const formFees = this.feesForm.value;
     console.log(formFees);
-    return;
+
     const payload = {
       studentClassId: formFees.studentClassId,
       sName: formFees.sName,
       paymentTypeId: formFees.pType,
-      paymentStateId: formFees.status,
+      paymentStateId: formFees.paymentState,
       rollNo: formFees.rollNo,
       amount: formFees.amount,
       description: formFees.details,
       monthName: formFees.monthName,
+      studentid:formFees.studentid,
+      responsibleId:formFees.responsibleId,
+      monthId:formFees.monthId,
+      className:formFees.className,
+      sectionName:formFees.sectionName,
+      levelName:formFees.levelName
+
+
     };
 
     this.feesService.createPayment(payload).subscribe({

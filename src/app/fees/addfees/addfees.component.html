@@ -88,47 +88,55 @@
               <div *ngIf="selectedStudent">
                 <!-- Roll Number -->
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Roll Number</mat-label>
-                  <input matInput formControlName="rollNo" value="{{ selectedStudent.rollNumber || 'N/A' }}" readonly />
+                  <mat-label>Responsible Name</mat-label>
+                  <input matInput formControlName="rollNo" readonly>
+                  <mat-error *ngIf="feesForm.get('rollNo')?.hasError('required')">
+                    rollNo is required
+                  </mat-error>
                 </mat-form-field>
+
 
                 <!-- Student Name -->
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Student Name</mat-label>
-                  <input matInput formControlName="fullName" value="{{ selectedStudent.fullName || 'N/A' }}" readonly />
+                  <input matInput formControlName="fullName" readonly>
+                  <mat-error *ngIf="feesForm.get('fullName')?.hasError('required')">
+                    fullName is required
+                  </mat-error>
+                </mat-form-field>
+                <!-- Student Class Id  -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>studentClassId</mat-label>
+                  <input matInput formControlName="studentClassId" readonly>
+                  <mat-error *ngIf="feesForm.get('studentClassId')?.hasError('required')">
+                    studentClassId is required
+                  </mat-error>
                 </mat-form-field>
 
-                <!-- Class ID -->
-<!--                <mat-form-field appearance="outline" class="full-width">-->
-<!--                  <mat-label>Class ID</mat-label>-->
-<!--                  <input matInput formControlName="studentClassId" readonly />-->
-<!--                </mat-form-field>-->
 
                 <!-- Class Name -->
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Class Name</mat-label>
-                  <input matInput value="{{ selectedStudent.studentClass[0]?.sectionName || 'N/A' }}" readonly />
+                  <mat-label>className</mat-label>
+                  <input matInput formControlName="className" readonly>
+                  <mat-error *ngIf="feesForm.get('className')?.hasError('required')">
+                    className is required
+                  </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>sectionName</mat-label>
+                  <input matInput formControlName="sectionName" readonly>
+                  <mat-error *ngIf="feesForm.get('sectionName')?.hasError('required')">
+                    sectionName is required
+                  </mat-error>
                 </mat-form-field>
 
                 <!-- Section ID -->
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Section ID</mat-label>
-                  <input matInput formControlName="sectionId" value="{{ selectedStudent.studentClass[0]?.sectionId || 'N/A' }}" readonly />
+                  <input matInput formControlName="sectionId" value="{{ selectedStudent.studentClass[0].sectionId}}" readonly />
                 </mat-form-field>
-
-                <!-- Section Name -->
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Section Name</mat-label>
-                  <input matInput value="{{ selectedStudent.studentClass[0]?.sectionName || 'N/A' }}" readonly />
-                </mat-form-field>
-
-
-                <!--                <p><strong>Student FullName:</strong> {{ selectedStudent.fullName }}</p>-->
-<!--                <p><strong>Roll No:</strong> {{ selectedStudent.rollNumber }}</p>-->
-<!--                <p><strong>Class ID:</strong> {{ selectedStudent.studentClass[0]?.className || 'N/A' }}</p>-->
-<!--                <p><strong>Class Name:</strong> {{ selectedStudent.studentClass[0]?.className || 'N/A' }}</p>-->
-<!--                <p><strong>Section ID:</strong> {{ selectedStudent.studentClass[0]?.sectionId || 'N/A' }}</p>-->
-<!--                <p><strong>Section Name:</strong> {{ selectedStudent.studentClass[0]?.sectionName || 'N/A' }}</p>-->
               </div>
             </div>
           </div>
@@ -143,7 +151,7 @@
             <div class="body">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Fee Type</mat-label>
-                <mat-select formControlName="feeType">
+                <mat-select formControlName="fType">
                   <mat-option *ngFor="let feeType of feeTypes" [value]="feeType.feetypeid">
                     {{ feeType.description }}
                   </mat-option>
@@ -161,7 +169,7 @@
 
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Payment Type</mat-label>
-                <mat-select formControlName="paymentType">
+                <mat-select formControlName="pType">
                   <mat-option *ngFor="let type of paymentTypes" [value]="type.paymenttypeid">
                     {{ type.type }}
                   </mat-option>
@@ -170,7 +178,7 @@
 
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Month</mat-label>
-                <mat-select formControlName="month">
+                <mat-select formControlName="monthId">
                   <mat-option *ngFor="let month of months" [value]="month.monthid">
                     {{ month.monthname }}
                   </mat-option>
@@ -179,11 +187,13 @@
 
               <!-- Payment Details -->
               <div *ngIf="selectedStudent">
-                <p >
-                  <strong>Amount Fee:</strong> {{ selectedStudent.studentClass[0].levelFee }},
-                  <!--                  <strong>Amount:</strong> {{ payment.amount | currency }},-->
-                  <!--                  <strong>Status:</strong> {{ payment.status }}-->
-                </p>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Amount</mat-label>
+                  <input matInput formControlName="amount" readonly>
+                  <mat-error *ngIf="feesForm.get('amount')?.hasError('required')">
+                    amount is required
+                  </mat-error>
+                </mat-form-field>
               </div>
 
               <!-- No Payment Information Message -->
