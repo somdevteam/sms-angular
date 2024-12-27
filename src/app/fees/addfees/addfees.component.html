@@ -36,6 +36,16 @@
                   ResponsibleName is required
                 </mat-error>
               </mat-form-field>
+
+              <!-- Responsible Address -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Responsible Address</mat-label>
+                <input matInput formControlName="responsibleId" readonly [hidden]="true">
+                <mat-error *ngIf="feesForm.get('responsibleId')?.hasError('required')">
+                  responsibleId  is required
+                </mat-error>
+              </mat-form-field>
+
               <!-- Responsible Address -->
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Responsible Address</mat-label>
@@ -129,6 +139,22 @@
                   <input matInput formControlName="sectionName" readonly>
                   <mat-error *ngIf="feesForm.get('sectionName')?.hasError('required')">
                     sectionName is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>studentClassId</mat-label>
+                  <input matInput formControlName="studentClassId" readonly >
+                  <mat-error *ngIf="feesForm.get('studentClassId')?.hasError('required')">
+                    studentClassId is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>studentId</mat-label>
+                  <input matInput formControlName="studentId" readonly >
+                  <mat-error *ngIf="feesForm.get('studentId')?.hasError('required')">
+                    studentId is required
                   </mat-error>
                 </mat-form-field>
 

@@ -51,6 +51,7 @@ export class AddfeesComponent implements OnInit {
       responsibleTell: [''],
       responsibleAddress: [''],
       responsiblePhone: [''],
+      responsibleId:[''],
       studentId: [''],
       sectionId: [''],
       className:[''],
@@ -143,6 +144,7 @@ export class AddfeesComponent implements OnInit {
           this.feesForm.patchValue({ responsibleAddres: responsible.address });
           this.feesForm.patchValue({ responsiblePhone: responsible.phone });
           this.feesForm.patchValue({ responsibleTell: responsible.phone2 });
+          this.feesForm.patchValue({ responsibleId: responsible.responsibleid });
           this.loadStudents(responsible.responsibleid);
           this.selectedStudent = null; // Reset selected student when new responsible is searched
           this.feesForm.get('studentId')?.reset(); // Reset student dropdown
@@ -172,6 +174,8 @@ export class AddfeesComponent implements OnInit {
     this.feesForm.patchValue({ className: this.selectedStudent?.studentClass[0].className});
     this.feesForm.patchValue({ levelName: this.selectedStudent?.studentClass[0].levelName});
     this.feesForm.patchValue({ amount: this.selectedStudent?.studentClass[0].levelFee});
+    this.feesForm.patchValue({ studentClassId: this.selectedStudent?.studentClass[0].studentClassId});
+    this.feesForm.patchValue({ studentId: this.selectedStudent?.studentid});
     console.log(this.selectedStudent);
   }
 
@@ -203,6 +207,7 @@ export class AddfeesComponent implements OnInit {
     }
 
     const formFees = this.feesForm.value;
+    console.log("form fees");
     console.log(formFees);
 
     const payload = {
@@ -214,7 +219,7 @@ export class AddfeesComponent implements OnInit {
       amount: formFees.amount,
       description: formFees.details,
       monthName: formFees.monthName,
-      studentid:formFees.studentid,
+      studentid:formFees.studentId,
       responsibleId:formFees.responsibleId,
       monthId:formFees.monthId,
       className:formFees.className,
