@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {ApiService} from "@shared/api.service";
 import {SnackbarService} from "@shared/snackbar.service";
 import {AppDataService} from "@shared/app-data.service";
-import {map} from "rxjs";
+import {map, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +70,18 @@ export class FeesService {
         })
       );
   }
+
+  createMultiplePayments(payload: any[]): Observable<any> {
+    return this.apiService.sendHttpPostRequest('/payment/add-multiple', { payments: payload })
+      .pipe(
+        map((resp) => {
+          const { message, data } = resp;
+          this.snackBar.successNotification(message);
+          return data;
+        })
+      );
+  }
+
   getMonths() {
     return this.apiService.sendHttpGetRequest('/payment/findAllMonths')
       .pipe(

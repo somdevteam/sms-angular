@@ -9,13 +9,15 @@ import {UsersRoutingModule} from "../users/users-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ComponentsModule} from "@shared/components/components.module";
 import {SharedModule} from "@shared";
+import { PaymentConfirmationDialogComponent } from './payment-confirmation-dialog/payment-confirmation-dialog.component';
 
 
 @NgModule({
   declarations: [
     AllfeesComponent,
     AddfeesComponent,
-    EditfeesComponent
+    EditfeesComponent,
+    PaymentConfirmationDialogComponent
   ],
   imports: [
     CommonModule,
