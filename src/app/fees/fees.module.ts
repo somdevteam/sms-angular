@@ -10,6 +10,9 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ComponentsModule} from "@shared/components/components.module";
 import {SharedModule} from "@shared";
 import { PaymentConfirmationDialogComponent } from './payment-confirmation-dialog/payment-confirmation-dialog.component';
+import { ReceiptComponent } from './receipt/receipt.component';
+import {Calendar, CalendarModule} from "primeng/calendar";
+import {TableModule} from "primeng/table";
 
 
 @NgModule({
@@ -17,7 +20,8 @@ import { PaymentConfirmationDialogComponent } from './payment-confirmation-dialo
     AllfeesComponent,
     AddfeesComponent,
     EditfeesComponent,
-    PaymentConfirmationDialogComponent
+    PaymentConfirmationDialogComponent,
+    ReceiptComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +30,8 @@ import { PaymentConfirmationDialogComponent } from './payment-confirmation-dialo
     ReactiveFormsModule,
     ComponentsModule,
     SharedModule,
+    TableModule,
+    CalendarModule,
   ]
 })
 export class FeesModule { }

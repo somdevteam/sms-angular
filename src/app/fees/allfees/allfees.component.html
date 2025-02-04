@@ -1,81 +1,112 @@
 <section class="content">
   <div class="content-block">
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
-      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-      </app-breadcrumb>
+      <app-breadcrumb
+        [title]="breadscrum.title"
+        [items]="breadscrum.items"
+        [active_item]="breadscrum.active"
+      ></app-breadcrumb>
     </div>
+
     <div class="container">
-      <form [formGroup]="paymentForm" (ngSubmit)="searchPayments()">
-        <mat-form-field appearance="fill">
-          <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+      <!-- Form Section -->
+      <form [formGroup]="paymentForm" (ngSubmit)="searchPayments()" class="payment-form">
+        <div class="form-grid">
+          <!-- Date Picker -->
+          <div class="form-item">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="datePicker" formControlName="date" />
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+            </mat-form-field>
+          </div>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Roll Number</mat-label>
-          <input matInput type="number" formControlName="rollNumber">
-        </mat-form-field>
+          <!-- Roll Number Input -->
+          <div class="form-item">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Roll Number</mat-label>
+              <input matInput type="number" formControlName="rollNumber" />
+            </mat-form-field>
+          </div>
+        </div>
 
-        <button mat-raised-button color="primary" type="submit">Search</button>
+        <!-- Search Button -->
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit">
+            <mat-icon>search</mat-icon> Search
+          </button>
+        </div>
       </form>
 
+      <!-- Table Section -->
       <div class="table-container">
-        <table mat-table [dataSource]="payments" matSort class="mat-elevation-z8">
+        <table mat-table [dataSource]="payments.data" matSort class="mat-elevation-z8">
+          <!-- Columns -->
           <ng-container matColumnDef="studentfeeid">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID </th>
-            <td mat-cell *matCellDef="let element"> {{element.studentfeeid}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let element">{{ element.studentfeeid }}</td>
           </ng-container>
 
           <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
-            <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+            <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
           </ng-container>
 
           <ng-container matColumnDef="studentFullName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> FullName </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
             <td mat-cell *matCellDef="let element">
-              {{element.studentClass.student.firstname}} {{element.studentClass.student.middlename}} {{element.studentClass.student.lastname}}
+              {{ element.studentClass.student.firstname }}
+              {{ element.studentClass.student.middlename }}
+              {{ element.studentClass.student.lastname }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="rollNumber">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> RollNo </th>
-            <td mat-cell *matCellDef="let element"> {{element.studentClass.student.rollNumber}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Roll No</th>
+            <td mat-cell *matCellDef="let element">{{ element.studentClass.student.rollNumber }}</td>
           </ng-container>
 
           <ng-container matColumnDef="paymentType">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type </th>
-            <td mat-cell *matCellDef="let element"> {{element.studentFeeType.type}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+            <td mat-cell *matCellDef="let element">{{ element.studentFeeType.type }}</td>
           </ng-container>
 
           <ng-container matColumnDef="paymentState">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>State </th>
-            <td mat-cell *matCellDef="let element"> {{element.paymentStateId.description}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+            <td mat-cell *matCellDef="let element">{{ element.paymentStateId.description }}</td>
           </ng-container>
 
           <ng-container matColumnDef="datecreated">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.datecreated | date}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+            <td mat-cell *matCellDef="let element">{{ element.datecreated | date }}</td>
           </ng-container>
 
+          <!-- Action Buttons -->
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let element">
-              <div class="action-buttons">
-                <button mat-button color="primary" class="action-button" (click)="editPayment(element)">Edit</button>
-<!--                <button mat-button color="accent" class="action-button" (click)="modifyPayment(element)">Payment Modification</button>-->
-                <button mat-button color="warn" class="action-button" (click)="viewReceipt(element)">View Receipt</button>
-              </div>
+              <button mat-icon-button color="primary" (click)="editPayment(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" (click)="viewReceipt(element)">
+                <mat-icon>visibility</mat-icon>
+              </button>
             </td>
           </ng-container>
 
+          <!-- Header and Row -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
 
-        <mat-paginator [length]="payments.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        <!-- Paginator -->
+        <mat-paginator
+          [length]="payments.data.length"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons
+        ></mat-paginator>
       </div>
     </div>
   </div>

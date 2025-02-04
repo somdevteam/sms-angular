@@ -5,6 +5,7 @@ import { SnackbarService } from '@shared/snackbar.service';
 import { Student } from '../../student/student';
 import {MatDialog} from "@angular/material/dialog";
 import {PaymentConfirmationDialogComponent} from "../payment-confirmation-dialog/payment-confirmation-dialog.component";
+import {ReceiptComponent} from "../receipt/receipt.component";
 
 @Component({
   selector: 'app-addfees',
@@ -29,6 +30,7 @@ export class AddfeesComponent implements OnInit {
   studentPayments: any[] = [];
   pendingPayments: any[] = [];
   filteredStudents: any[] = [];
+  private responsibleParty: any;
 
 
   constructor(
@@ -278,10 +280,17 @@ export class AddfeesComponent implements OnInit {
     console.log("array of pending payment ");
     console.log(this.pendingPayments);
     this.feesService.createMultiplePayments(this.pendingPayments).subscribe({
-      next: () => {
+      next: (response) => {
         this.snackBar.successNotification('Payments created successfully.');
+        this.dialog.open(ReceiptComponent, {
+          data: {
+            payments: response.receipts,
+            responsibleParty: null
+          },
+          width: '800px'
+        });
         this.pendingPayments = [];
-        this.dialog.closeAll();
+       // this.dialog.closeAll();
       },
       error: () => this.snackBar.dangerNotification('Failed to create payments.'),
     });
