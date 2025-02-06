@@ -127,7 +127,7 @@ export class AcademicService {
    }
 
    findClassesByBranchIdAndLevel(payload: any) {
-    return this.apiService.sendHttpPostRequest(`/levelclass/classByBranchAndLevel`,payload)
+    return this.apiService.sendHttpPostRequest(`/levelclass/classbybranchandlevel`,payload)
        .pipe(
          map((resp) => {
           const { data } = resp;
@@ -148,7 +148,7 @@ export class AcademicService {
    }
 
    findLevelByBranchId(branchId:any) {
-    return this.apiService.sendHttpGetRequest(`/levelclass/levelbybranch/${branchId}`)
+    return this.apiService.sendHttpGetRequest(`/level/findLevelsByBranchId/${branchId}`)
     .pipe(
       map((resp) => {
        const { data } = resp;

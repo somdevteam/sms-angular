@@ -66,7 +66,7 @@ export class ExamsService {
     }
 
     addExamToClass(payload: any) {
-        return this.apiService.sendHttpPostRequest('/class-exam', payload)
+        return this.apiService.sendHttpPostRequest('/exams/addclassexam', payload)
             .pipe(
                 map((resp) => {
                     const { data } = resp;
