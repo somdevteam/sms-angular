@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Assign Subject</h2>
+<mat-dialog-content>
+  <form [formGroup]="assignSubjectForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Select Subject</mat-label>
+      <mat-select formControlName="subjectId">
+        <mat-option *ngFor="let subject of subjects" [value]="subject.subjectId">
+          {{ subject.subjectName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="onAssign()" [disabled]="!assignSubjectForm.valid">Assign</button>
+</mat-dialog-actions>

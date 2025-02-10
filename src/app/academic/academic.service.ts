@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/api.service';
 import { AppDataService } from '@shared/app-data.service';
 import { SnackbarService } from '@shared/snackbar.service';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -181,6 +181,9 @@ export class AcademicService {
 
    assignSectionsToclass(payload: any) {
     return this.apiService.sendHttpPostRequest(`/class-section/assingSectionsToClass`,payload);
-
    }
+
+   getSubjects(): Observable<any> {
+    return this.apiService.sendHttpGetRequest('/api/subjects');
+  }
 }

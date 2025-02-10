@@ -13,6 +13,7 @@ import { AssingClassComponent } from './levels/assing-class/assing-class.compone
 import { ViewClassComponent } from './levels/view-class/view-class.component';
 import { ClassComponent } from './class/class.component';
 import { AssignSectionComponent } from './class/assign-section/assign-section.component';
+import { AssignSubjectComponent } from './class/assign-subject/assign-subject.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { AssignSectionComponent } from './class/assign-section/assign-section.co
     ViewClassComponent,
     ClassComponent,
     AssignSectionComponent,
+    AssignSubjectComponent,
   ],
   imports: [
     CommonModule,
