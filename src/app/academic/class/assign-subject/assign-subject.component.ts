@@ -20,16 +20,21 @@ export class AssignSubjectComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.assignSubjectForm = this.fb.group({
-      subjectId: ['', Validators.required]
+      class: [this.data.className],
+      subjectId: [null, Validators.required]
     });
   }
 
   ngOnInit(): void {
-    // this.loadSubjects();
+    this.loadSubjects();
   }
 
   loadSubjects() {
-    this.academicService.getSubjects().subscribe({
+    const payload = {
+      classId: this.data.classId,
+      branchId: this.data.branchId
+    }
+    this.academicService.getSubjects(payload).subscribe({
       next: (res) => {
         this.subjects = res;
       },
@@ -43,8 +48,11 @@ export class AssignSubjectComponent implements OnInit {
     if (this.assignSubjectForm.valid) {
       const payload = {
         classId: this.data.classId,
+        branchId: this.data.branchId,
         subjectId: this.assignSubjectForm.value.subjectId
       };
+      console.log(payload);
+      
       this.dialogRef.close(payload);
     }
   }

@@ -183,7 +183,7 @@ export class AcademicService {
     return this.apiService.sendHttpPostRequest(`/class-section/assingSectionsToClass`,payload);
    }
 
-   getSubjects(): Observable<any> {
-    return this.apiService.sendHttpGetRequest('/api/subjects');
+   getSubjects(payload: any): Observable<any> {
+    return this.apiService.sendHttpPostRequest('/class-subject/unassignedsubjects',payload);
   }
 }

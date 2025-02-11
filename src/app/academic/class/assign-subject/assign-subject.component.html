@@ -1,14 +1,24 @@
-<h2 mat-dialog-title>Assign Subject</h2>
+<h1 mat-dialog-title>Assign Subject</h1>
 <mat-dialog-content>
   <form [formGroup]="assignSubjectForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Select Subject</mat-label>
-      <mat-select formControlName="subjectId">
-        <mat-option *ngFor="let subject of subjects" [value]="subject.subjectId">
-          {{ subject.subjectName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="row mt-4 mb-4">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Class</mat-label>
+          <input matInput formControlName="class" readonly="">
+        </mat-form-field>
+      </div>
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <mat-form-field class="example-full-width mb-3" appearance="outline">
+          <mat-label>Select Subject</mat-label>
+          <mat-select formControlName="subjectId" multiple>
+            <mat-option *ngFor="let subject of subjects" [value]="subject.subject_id">
+              {{ subject.subject_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
