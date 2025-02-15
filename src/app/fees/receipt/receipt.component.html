@@ -1,0 +1,70 @@
+<div class="receipt-container">
+  <!-- Mock Logo & Business Details -->
+  <div class="header">
+    <img src="https://via.placeholder.com/150x50?text=LOGO" alt="Logo" class="logo" />
+    <div class="business-info">
+      <h2>ABC International School</h2>
+      <p>123 Education St, Knowledge City</p>
+      <p>Phone: +123 456 789 | Email: info@school.com</p>
+    </div>
+  </div>
+
+  <!-- Receipt Details -->
+  <mat-card class="receipt-card">
+    <mat-card-header>
+      <mat-card-title>Payment Receipt</mat-card-title>
+      <mat-card-subtitle>Date: {{ payments[0]?.dateCreated | date: 'longDate' }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <h3 class="section-title">Student Information</h3>
+      <table class="receipt-table">
+        <tr>
+          <td><strong>Student Name:</strong></td>
+          <td>{{ payments[0]?.fullname }}</td>
+        </tr>
+        <tr>
+          <td><strong>Roll No:</strong></td>
+          <td>{{ payments[0]?.rollNo }}</td>
+        </tr>
+        <tr>
+          <td><strong>Class:</strong></td>
+          <td>{{ payments[0]?.className }}</td>
+        </tr>
+        <tr>
+          <td><strong>Section:</strong></td>
+          <td>{{ payments[0]?.sectionName }}</td>
+        </tr>
+        <tr>
+          <td><strong>Level:</strong></td>
+          <td>{{ payments[0]?.levelName }}</td>
+        </tr>
+        <tr>
+          <td><strong>Responsible Party:</strong></td>
+          <td>{{ payments[0]?.responsibleName }}</td>
+        </tr>
+      </table>
+
+      <!-- Payment Breakdown -->
+      <h3 class="section-title">Payment Details</h3>
+      <table class="payment-table">
+        <tr>
+          <th>Month</th>
+          <th>Status</th>
+          <th>Amount</th>
+        </tr>
+        <tr *ngFor="let item of payments">
+          <td>{{ item.monthName }}</td>
+          <td>{{ item.paymentState }}</td>
+          <td>${{ item.amount }}</td>
+        </tr>
+      </table>
+
+      <h3 class="total">Total: ${{ totalAmount }}</h3>
+    </mat-card-content>
+
+    <mat-card-actions class="actions">
+      <button mat-button color="primary" (click)="printReceipt()">Print</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

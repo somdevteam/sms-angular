@@ -267,6 +267,8 @@ export class AddfeesComponent implements OnInit {
         this.createPayments();  // Call the createPayments method when 'create' action is selected
       } else if (result?.action === 'add') {
         this.addAnotherPayment();  // Handle add another payment if selected
+      } else if (result?.action === 'remove') {
+        this.pendingPayments = this.pendingPayments.filter(p => p !== result.payment);
       }
     });
 

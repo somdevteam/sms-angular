@@ -19,6 +19,7 @@ export class PaymentConfirmationDialogComponent {
 
   removePayment(payment: any): void {
     this.payments = this.payments.filter(p => p !== payment);
+    this.dialogRef.close({ action: 'remove', payment });
   }
 
   onAddAnother(): void {
