@@ -12,30 +12,74 @@
       <!-- Form Section -->
       <form [formGroup]="paymentForm" (ngSubmit)="searchPayments()" class="payment-form">
         <div class="form-grid">
-          <!-- Date Picker -->
-          <div class="form-item">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Date</mat-label>
-              <input matInput [matDatepicker]="datePicker" formControlName="date" />
-              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-              <mat-datepicker #datePicker></mat-datepicker>
-            </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput formControlName="searchFilter" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" />
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" />
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="form-grid-drop">
+          <!-- Class Dropdown -->
+          <mat-form-field appearance="outline">
+            <mat-label>Class</mat-label>
+            <mat-select formControlName="class">
+              <mat-option *ngFor="let classItem of classes" [value]="classItem.id">
+                {{ classItem.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Section Dropdown -->
+          <mat-form-field appearance="outline">
+            <mat-label>Section</mat-label>
+            <mat-select formControlName="section">
+              <mat-option *ngFor="let sectionItem of sections" [value]="sectionItem.id">
+                {{ sectionItem.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+        <div class="type-status-container">
+          <!-- Type Selection (Left) -->
+          <div class="type-group">
+            <mat-label>Type</mat-label>
+            <mat-radio-group formControlName="type">
+              <mat-radio-button value="pending">RollNo</mat-radio-button>
+              <mat-radio-button value="blocked">Mobile</mat-radio-button>
+              <mat-radio-button value="returned">Class</mat-radio-button>
+            </mat-radio-group>
           </div>
 
-          <!-- Roll Number Input -->
-          <div class="form-item">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Roll Number</mat-label>
-              <input matInput type="number" formControlName="rollNumber" />
-            </mat-form-field>
+          <!-- Status Selection (Right) -->
+          <div class="status-group">
+            <mat-label>Status</mat-label>
+            <mat-radio-group formControlName="status">
+              <mat-radio-button value="Paid">Paid</mat-radio-button>
+              <mat-radio-button value="Pending">Pending</mat-radio-button>
+              <mat-radio-button value="Returned">Returned</mat-radio-button>
+            </mat-radio-group>
           </div>
         </div>
 
+
         <!-- Search Button -->
         <div class="button-container">
-          <button mat-raised-button color="primary" type="submit">
-            <mat-icon>search</mat-icon> Search
-          </button>
+          <button mat-raised-button color="primary" type="submit">Search</button>
         </div>
       </form>
 

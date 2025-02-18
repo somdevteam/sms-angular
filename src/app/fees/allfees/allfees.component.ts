@@ -16,6 +16,10 @@ import { Payment } from "../fees";
 export class AllfeesComponent implements OnInit {
   paymentForm: FormGroup;
   payments: MatTableDataSource<Payment> = new MatTableDataSource<Payment>();
+  branches: any[] = [];
+  classes: any[] = [];
+  sections: any[] = [];
+
   displayedColumns: string[] = [
     'studentfeeid',
     'amount',
@@ -103,5 +107,8 @@ export class AllfeesComponent implements OnInit {
   viewReceipt(payment: any): void {
     // Logic for viewing receipt
     console.log('View receipt:', payment);
+  }
+  onSearch() {
+
   }
 }
