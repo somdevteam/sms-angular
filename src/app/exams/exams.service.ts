@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/api.service';
 import { SnackbarService } from '@shared/snackbar.service';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ExamsService {
-
+    private baseUrl = 'http://localhost:3000/api'; 
     constructor(
         private apiService: ApiService,
         private snackBar: SnackbarService,
@@ -74,5 +74,27 @@ export class ExamsService {
                 })
             );
     }
+
+    getBranches(): Observable<any[]> {
+        return this.apiService.sendHttpGetRequest('/branches');
+      }
+    
+      getExamsByBranch(branchId: number): Observable<any> {
+        return this.apiService.sendHttpGetRequest(`/exams/findexamsbybranch?branchId=${branchId}`);
+      }
+    
+      getClassesByExam(examId: number): Observable<any[]> {
+        return this.apiService.sendHttpGetRequest(`/exams/getclassbyexam?examId=${examId}`);
+      }
+    
+      getSectionsByClass(classId: number): Observable<any[]> {
+        return this.apiService.sendHttpGetRequest(`/sections/getsectionsbyclass?classId=${classId}`);
+      }
+    
+      submitExamResult(data: any): Observable<any> {
+        return this.apiService.sendHttpPostRequest('/exam-results', data);
+      }
+
+
 
 }

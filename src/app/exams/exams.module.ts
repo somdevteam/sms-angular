@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ExamsRoutingModule } from './exams-routing.module';
 import { AddExamComponent } from './add-exam/add-exam.component';
@@ -8,21 +9,31 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SharedModule } from '@shared';
 import { ExamListComponent } from './exam-list/exam-list.component';
-
+import { ExamResultComponent } from './exam-result/exam-result.component';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [
         AddExamComponent,
         ExamListComponent,
+        ExamResultComponent,
     ],
     imports: [
         CommonModule,
+        HttpClientModule,
         ExamsRoutingModule,
         FormsModule,
         ReactiveFormsModule,
         ComponentsModule,
         SharedModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatInputModule,
+        BreadcrumbModule
     ]
 })
 export class ExamsModule { }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '@core';
 import { SnackbarService } from '@shared/snackbar.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
@@ -7,6 +6,7 @@ import { AcademicService } from '../academic.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AssingClassComponent } from './assing-class/assing-class.component';
 import { ViewClassComponent } from './view-class/view-class.component';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-levels',
@@ -22,28 +22,29 @@ export class LevelsComponent implements OnInit {
     },
   ];
 
-  levelsData!: MatTableDataSource<any>;
+  levelsData: any[] = [];
   displayedColumns: string[] = ['levelid', 'levelname', 'datecreated', 'isactive','actions'];
 
+
   constructor(
-    private academicService:AcademicService,
+    private academicService: AcademicService,
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
     private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
-    this.loadLevels()
+    // Remove auto-loading of data
   }
 
-  assingClass(row:any) {
+  assingClass(row: any) {
     const dialogRef = this.dialog.open(AssingClassComponent, {
       width: '50%',
       data: row,
     });
   }
 
-  viewClass(row:any) {
+  viewClass(row: any) {
     const dialogRef = this.dialog.open(ViewClassComponent, {
       width: '80%',
       data: row,
@@ -55,11 +56,8 @@ export class LevelsComponent implements OnInit {
     this.academicService.findAllLevels().subscribe({
       next: (res) => {
         this.pageLoader.hideLoader()
-        this.levelsData = new MatTableDataSource(res);
-        // this.academicData.sort = this.sort;
-        // this.academicData.paginator = this.paginator;
+        this.levelsData = res;
         console.log(res);
-        
       },
       error: (error) => {
         this.pageLoader.hideLoader()
@@ -67,5 +65,12 @@ export class LevelsComponent implements OnInit {
       },
     });
   }
-  
+
+  getStatusSeverity(status: boolean): string {
+    return status ? 'success' : 'danger';
+  }
+
+  onSearch() {
+    this.loadLevels();
+  }
 }

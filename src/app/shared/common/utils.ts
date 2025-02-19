@@ -18,3 +18,19 @@ export function setupConditionalValidation(form: FormGroup, mainControlName: str
     }
   });
 }
+
+
+export function objectToQueryString(obj: Record<string, any>): string {
+  const params = new URLSearchParams();
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      if (value !== undefined && value !== null) {
+        params.append(key, value.toString());
+      }
+    }
+  }
+
+  return params.toString() ? `?${params.toString()}` : '';
+}

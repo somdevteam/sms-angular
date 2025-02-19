@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@core';
@@ -6,9 +6,6 @@ import { SnackbarService } from '@shared/snackbar.service';
 import { BranchService } from 'app/branch/branch.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { AcademicService } from '../academic.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { AssignSectionComponent } from './assign-section/assign-section.component';
 import { AssignSubjectComponent } from './assign-subject/assign-subject.component';
 
@@ -39,10 +36,10 @@ export class ClassComponent implements OnInit {
   levelList: any;
   classForm?: FormGroup;
   selectedStatus: '0' | '1' = '1';
-  displayedColumns: string[] = ['classId', 'className', 'dateCreated', 'isActive', 'actions'];
-  dataSource!: MatTableDataSource<any>;
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  classes: any[] = [];
+  subjects: any;
+
+  @ViewChild('viewSubjectsDialog') viewSubjectsDialog!: TemplateRef<any>;
 
   ngOnInit(): void {
     let formFields = {
@@ -83,9 +80,7 @@ export class ClassComponent implements OnInit {
     this.pageLoader.showLoader();
     this.academicService.findClassByBranchAndLevel(payload).subscribe({
       next: (res) => {
-        this.dataSource = new MatTableDataSource(res);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.classes = res;
         this.pageLoader.hideLoader();
       },
       error: (error) => {
@@ -113,5 +108,22 @@ export class ClassComponent implements OnInit {
         branchId: row.branch.branchId
       }
     });
+  }
+
+  openViewSubjectsDialog(row: any): void {
+    const payload = {
+      classId: row.class.classid,
+      branchId: row.branch.branchId
+    }
+   this.academicService.findSubjectsByClass(payload).subscribe({
+    next: (res) => {
+      this.subjects = res.data;
+      this.dialog.open(this.viewSubjectsDialog);
+    },
+    error: (error) => {
+      this.snackBar.dangerNotification(error);
+    }
+   });
+  
   }
 }

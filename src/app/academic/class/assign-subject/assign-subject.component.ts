@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SnackbarService } from '@shared/snackbar.service';
 import { AcademicService } from 'app/academic/academic.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class AssignSubjectComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private academicService: AcademicService,
+    private snackBar: SnackbarService,
     public dialogRef: MatDialogRef<AssignSubjectComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -34,11 +36,12 @@ export class AssignSubjectComponent implements OnInit {
       classId: this.data.classId,
       branchId: this.data.branchId
     }
-    this.academicService.getSubjects(payload).subscribe({
+    this.academicService.getunassignedSubjects(payload).subscribe({
       next: (res) => {
-        this.subjects = res;
+        this.subjects = res.data;
       },
       error: (error) => {
+        this.snackBar.openSnackBar(error);
         console.error('Error loading subjects', error);
       }
     });
@@ -51,9 +54,17 @@ export class AssignSubjectComponent implements OnInit {
         branchId: this.data.branchId,
         subjectId: this.assignSubjectForm.value.subjectId
       };
-      console.log(payload);
-      
-      this.dialogRef.close(payload);
+
+      this.academicService.assignSUbjectToclass(payload).subscribe({
+        next: (res) => {
+          this.snackBar.openSnackBar(res.message);
+          this.dialogRef.close(payload);
+        },
+        error: (error) => {
+          this.snackBar.openSnackBar(error);
+          console.error('Error loading subjects', error);
+        }
+      });
     }
   }
 

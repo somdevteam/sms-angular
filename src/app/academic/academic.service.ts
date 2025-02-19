@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@shared/api.service';
 import { AppDataService } from '@shared/app-data.service';
+import { objectToQueryString } from '@shared/common/utils';
 import { SnackbarService } from '@shared/snackbar.service';
 import { map, Observable } from 'rxjs';
 
@@ -183,7 +184,16 @@ export class AcademicService {
     return this.apiService.sendHttpPostRequest(`/class-section/assingSectionsToClass`,payload);
    }
 
-   getSubjects(payload: any): Observable<any> {
+   getunassignedSubjects(payload: any): Observable<any> {
     return this.apiService.sendHttpPostRequest('/class-subject/unassignedsubjects',payload);
+  }
+
+  assignSUbjectToclass(payload: any) {
+    return this.apiService.sendHttpPostRequest(`/class-subject`,payload);
+  }
+
+  findSubjectsByClass(payload: any) {
+    const queryString = objectToQueryString(payload);
+    return this.apiService.sendHttpGetRequest(`/class-subject/subjects${queryString}`);
   }
 }

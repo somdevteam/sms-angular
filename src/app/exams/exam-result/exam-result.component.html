@@ -1,0 +1,91 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header" *ngFor="let breadscrum of breadscrums">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Exam Results</h2>
+          </div>
+          <div class="body">
+            <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Select Branch</mat-label>
+                    <mat-select formControlName="branch">
+                      <mat-option *ngIf="loading.branches">Loading...</mat-option>
+                      <mat-option *ngFor="let branch of branches" [value]="branch.branchId">
+                        {{branch.branchName}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="examForm.get('branch')?.invalid && examForm.get('branch')?.touched">
+                      {{getErrorMessage('branch')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Select Exam</mat-label>
+                    <mat-select formControlName="exam">
+                      <mat-option *ngIf="loading.exams">Loading...</mat-option>
+                      <mat-option *ngFor="let exam of exams" [value]="exam.examId">
+                        {{exam.examName}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="examForm.get('exam')?.invalid && examForm.get('exam')?.touched">
+                      {{getErrorMessage('exam')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Select Class</mat-label>
+                    <mat-select formControlName="class">
+                      <mat-option *ngIf="loading.classes">Loading...</mat-option>
+                      <mat-option *ngIf="!examForm.get('exam')?.value" disabled>Please select an exam first</mat-option>
+                      <mat-option *ngFor="let class of classes" [value]="class.classid">
+                        {{class.classname}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="examForm.get('class')?.invalid && examForm.get('class')?.touched">
+                      {{getErrorMessage('class')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Select Section</mat-label>
+                    <mat-select formControlName="section">
+                      <mat-option *ngIf="loading.sections">Loading...</mat-option>
+                      <mat-option *ngIf="!examForm.get('class')?.value" disabled>Please select a class first</mat-option>
+                      <mat-option *ngFor="let section of sections" [value]="section.id">
+                        {{section.name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="examForm.get('section')?.invalid && examForm.get('section')?.touched">
+                      {{getErrorMessage('section')}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                  <button mat-raised-button color="primary" type="submit" [disabled]="loading.submit">
+                    {{loading.submit ? 'Submitting...' : 'Submit'}}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

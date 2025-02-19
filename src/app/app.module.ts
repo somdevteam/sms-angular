@@ -1,4 +1,8 @@
 import { NgModule } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { TableModule } from 'primeng/table';
+import { MenuModule } from 'primeng/menu';
 
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
@@ -51,6 +55,10 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     NgScrollbarModule,
     PageLoaderModule,
+    ButtonModule,
+    RippleModule,
+    TableModule,
+    MenuModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
