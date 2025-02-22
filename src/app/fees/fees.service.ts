@@ -146,7 +146,22 @@ export class FeesService {
         })
       );  }
 
+  getClasses() {
+    return this.apiService.sendHttpGetRequest('/class/list/all')
+      .pipe(
+        map((resp) => {
+          return resp;
+        })
+      );
+  }
 
-
+  getSections() {
+    return this.apiService.sendHttpGetRequest('/section')
+      .pipe(
+        map((resp) => {
+          return resp;
+        })
+      );
+  }
 
 }
