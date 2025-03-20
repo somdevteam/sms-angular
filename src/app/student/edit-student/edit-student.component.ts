@@ -38,6 +38,7 @@ export class EditStudentComponent {
       middleName: [this.userData.middleName, Validators.required],
       lastName: [this.userData.lastName, Validators.required],
       pob: [this.userData.pob, Validators.required],
+      dateOfBirth: [this.userData.dateOfBirth, Validators.required],
       rollNumber: [this.userData.rollNumber, Validators.required],
       responsibleName: [this.userData.responsibleName, Validators.required],
       responsiblePhone: [this.userData.responsiblePhone],

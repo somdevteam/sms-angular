@@ -14,6 +14,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
     declarations: [
@@ -33,7 +35,9 @@ import { MatInputModule } from '@angular/material/input';
         MatSelectModule,
         MatButtonModule,
         MatInputModule,
-        BreadcrumbModule
+        BreadcrumbModule,
+        TableModule,
+        InputNumberModule
     ]
 })
 export class ExamsModule { }

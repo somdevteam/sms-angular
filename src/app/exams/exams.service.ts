@@ -87,14 +87,24 @@ export class ExamsService {
         return this.apiService.sendHttpGetRequest(`/exams/getclassbyexam?examId=${examId}`);
       }
     
-      getSectionsByClass(classId: number): Observable<any[]> {
-        return this.apiService.sendHttpGetRequest(`/sections/getsectionsbyclass?classId=${classId}`);
+      getSectionsByClassAndBranch(payload: any): Observable<any[]> {
+        return this.apiService.sendHttpPostRequest(`/class-section/getSectionByClassAndBranch`, payload);
       }
     
       submitExamResult(data: any): Observable<any> {
         return this.apiService.sendHttpPostRequest('/exam-results', data);
       }
 
+      getExamResults(payload: any): Observable<any> {
+        return this.apiService.sendHttpPostRequest('/student-exam-marks', payload);
+      }
 
+      addStudentExamResult(payload: any): Observable<any> {
+        return this.apiService.sendHttpPostRequest('/student-exam-marks/add', payload);
+      }
+
+      updateStudentExamResult(payload: any, id: number): Observable<any> {
+        return this.apiService.sendHttpUpdateRequest('/student-exam-marks/update', id, payload);
+      }
 
 }

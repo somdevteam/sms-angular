@@ -70,6 +70,7 @@ export class ExamListComponent implements OnInit {
     this.editForm = this.fb.group({
       branch: [null, [Validators.required]],
       exam: [null, [Validators.required]],
+      examMarks: [null, [Validators.required, Validators.min(1)]],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
       description: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(50)]],
@@ -123,12 +124,14 @@ export class ExamListComponent implements OnInit {
     const startDate = exam.examsInfo.startDate;
     const endDate = exam.examsInfo.endDate;
     const description = exam.examsInfo.description;
+    const examMarks = exam.examsInfo.examMarks;
     this.editForm.patchValue({
       branch: branchId,
       exam: examId,
       startDate: startDate,
       endDate: endDate,
       description: description,
+      examMarks: examMarks
     });
 
     this.dialog.open(this.editDialog, {
@@ -144,6 +147,7 @@ export class ExamListComponent implements OnInit {
     const payload = {
       branchId: this.editForm.get('branch')?.value,
       examId: this.editForm.get('exam')?.value,
+      examMarks: this.editForm.get('examMarks')?.value,
       startDate: this.editForm.get('startDate')?.value,
       endDate: this.editForm.get('endDate')?.value,
       description: this.editForm.get('description')?.value

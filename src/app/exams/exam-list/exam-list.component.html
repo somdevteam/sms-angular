@@ -143,6 +143,20 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Exam Marks</mat-label>
+            <input matInput formControlName="examMarks" type="number" min="1" step="any">
+            <mat-error *ngIf="editForm.get('examMarks')?.hasError('required')">
+              Exam Marks is required
+            </mat-error>
+            <mat-error *ngIf="editForm.get('examMarks')?.hasError('min')">
+              Exam Marks must be a positive number
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Start Date</mat-label>
@@ -158,7 +172,7 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" [min]="today">
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
             <mat-datepicker touchUi #endDatePicker></mat-datepicker>
             <mat-error *ngIf="editForm.get('endDate')?.hasError('required')">
@@ -182,7 +196,7 @@
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="closeDialog()">Cancel</button>
-    <button mat-button (click)="onUpdate()">Edit</button>
+    <button mat-button [disabled]="!editForm.valid" (click)="onUpdate()">Edit</button>
   </div>
 </ng-template>
 

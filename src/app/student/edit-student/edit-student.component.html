@@ -51,20 +51,22 @@
       </div>
       <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
         <mat-form-field class="example-full-width mb-3" appearance="outline">
-          <mat-label>Place Of Birth</mat-label>
-          <input matInput formControlName="responsibleName" required>
-          <mat-error *ngIf="updateUserForm!.get('responsibleName')?.hasError('required')">
-            Please enter place of birth
+          <mat-label>Date of Birth</mat-label>
+          <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth">
+          <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #dobPicker></mat-datepicker>
+          <mat-error *ngIf="updateUserForm!.get('dateOfBirth')?.hasError('required')">
+            Please select a valid date of birth
           </mat-error>
         </mat-form-field>
       </div>
 
       <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
         <mat-form-field class="example-full-width mb-3" appearance="outline">
-          <mat-label>Place Of Birth</mat-label>
+          <mat-label>Responsible Phone</mat-label>
           <input matInput formControlName="responsiblePhone" required>
           <mat-error *ngIf="updateUserForm!.get('responsiblePhone')?.hasError('required')">
-            Please enter place of birth
+            Please enter responsible phone number
           </mat-error>
         </mat-form-field>
       </div>

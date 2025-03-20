@@ -17,43 +17,43 @@
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Select Branch</mat-label>
-                    <mat-select formControlName="branch">
+                    <mat-select formControlName="branchId">
                       <mat-option *ngIf="loading.branches">Loading...</mat-option>
                       <mat-option *ngFor="let branch of branches" [value]="branch.branchId">
                         {{branch.branchName}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="examForm.get('branch')?.invalid && examForm.get('branch')?.touched">
-                      {{getErrorMessage('branch')}}
+                    <mat-error *ngIf="examForm.get('branchId')?.invalid && examForm.get('branchId')?.touched">
+                      {{getErrorMessage('branchId')}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Select Exam</mat-label>
-                    <mat-select formControlName="exam">
+                    <mat-select formControlName="examId">
                       <mat-option *ngIf="loading.exams">Loading...</mat-option>
                       <mat-option *ngFor="let exam of exams" [value]="exam.examId">
                         {{exam.examName}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="examForm.get('exam')?.invalid && examForm.get('exam')?.touched">
-                      {{getErrorMessage('exam')}}
+                    <mat-error *ngIf="examForm.get('examId')?.invalid && examForm.get('examId')?.touched">
+                      {{getErrorMessage('examId')}}
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Select Class</mat-label>
-                    <mat-select formControlName="class">
+                    <mat-select formControlName="classId">
                       <mat-option *ngIf="loading.classes">Loading...</mat-option>
-                      <mat-option *ngIf="!examForm.get('exam')?.value" disabled>Please select an exam first</mat-option>
+                      <mat-option *ngIf="!examForm.get('examId')?.value" disabled>Please select an exam first</mat-option>
                       <mat-option *ngFor="let class of classes" [value]="class.classid">
                         {{class.classname}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="examForm.get('class')?.invalid && examForm.get('class')?.touched">
-                      {{getErrorMessage('class')}}
+                    <mat-error *ngIf="examForm.get('classId')?.invalid && examForm.get('classId')?.touched">
+                      {{getErrorMessage('classId')}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -62,15 +62,15 @@
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Select Section</mat-label>
-                    <mat-select formControlName="section">
+                    <mat-select formControlName="sectionId">
                       <mat-option *ngIf="loading.sections">Loading...</mat-option>
-                      <mat-option *ngIf="!examForm.get('class')?.value" disabled>Please select a class first</mat-option>
-                      <mat-option *ngFor="let section of sections" [value]="section.id">
-                        {{section.name}}
+                      <mat-option *ngIf="!examForm.get('classId')?.value" disabled>Please select a class first</mat-option>
+                      <mat-option *ngFor="let section of sections" [value]="section.sectionid">
+                        {{section.sectionname}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="examForm.get('section')?.invalid && examForm.get('section')?.touched">
-                      {{getErrorMessage('section')}}
+                    <mat-error *ngIf="examForm.get('sectionId')?.invalid && examForm.get('sectionId')?.touched">
+                      {{getErrorMessage('sectionId')}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -83,6 +83,45 @@
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="header">
+            <h2>Exam Results</h2>
+          </div>
+          <div class="body">
+            <p-table [value]="results" [responsive]="true" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
+              [rowsPerPageOptions]="[5, 10, 20]">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Student Name</th>
+                  <th *ngFor="let subject of subjects">{{subject.subject_name}}</th>
+                  <th>Total</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-result>
+                <tr>
+                  <td>{{result.firstName + ' ' + result.middleName + ' ' + result.lastName}}</td>
+                  <td *ngFor="let subject of subjects">
+                    <p-inputNumber 
+                    [id]="'marks-' + result.studentId + '-' + subject.subject_id"
+                    [min]="0"
+                    [max]="100"
+                    [size]="1"
+                    inputId="withoutgrouping"
+                    (onInput)="updateMarks(result, subject.subject_id, $event)"
+                    [ngModel]="result[subject.subject_name]" 
+                    [useGrouping]="false"/>
+                  </td>
+                  <td>{{result.total || 0}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
         </div>
       </div>

@@ -36,6 +36,7 @@ export class AddExamComponent implements OnInit {
     this.examForm = this.fb.group({
       branch: ['', [Validators.required]],
       exam: ['', [Validators.required]],
+      examMarks: ['', [Validators.required, Validators.min(1)]],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(50)]],
@@ -72,6 +73,7 @@ export class AddExamComponent implements OnInit {
     const payload = {
       "branchId": this.examForm?.controls['branch'].value,
       "examId": this.examForm?.controls['exam'].value,
+      "examMarks": this.examForm?.controls['examMarks'].value,
       "startDate": this.examForm?.controls['startDate'].value,
       "endDate": this.examForm?.controls['endDate'].value,
       "description": this.examForm?.controls['description'].value,
