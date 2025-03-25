@@ -112,7 +112,6 @@
                     [id]="'marks-' + result.studentId + '-' + subject.subject_id"
                     [min]="0"
                     [max]="100"
-                    [size]="1"
                     inputId="withoutgrouping"
                     (onInput)="updateMarks(result, subject.subject_id, $event)"
                     [ngModel]="result[subject.subject_name]" 

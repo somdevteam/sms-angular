@@ -49,55 +49,43 @@
                   <h2> All Users</h2>
                 </div>
                 <div class="body table-responsive">
-                  <table mat-table [dataSource]="dataSource" class="w-100">
-                    <!-- No Column -->
-                    <ng-container matColumnDef="userId">
-                      <th mat-header-cell *matHeaderCellDef> ID. </th>
-                      <td mat-cell *matCellDef="let element"> {{element.userId}} </td>
-                    </ng-container>
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="firstName">
-                      <th mat-header-cell *matHeaderCellDef> First Name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
-                    </ng-container>
-                    <!-- Gender Column -->
-                    <ng-container matColumnDef="middleName">
-                      <th mat-header-cell *matHeaderCellDef> Middle name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.middleName}} </td>
-                    </ng-container>
-                    <!-- Email Column -->
-                    <ng-container matColumnDef="lastName">
-                      <th mat-header-cell *matHeaderCellDef> Last Name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
-                    </ng-container>
-                    <!-- Address Column -->
-                    <ng-container matColumnDef="username">
-                      <th mat-header-cell *matHeaderCellDef> User name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.username}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="mobile">
-                      <th mat-header-cell *matHeaderCellDef> Mobile </th>
-                      <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="email">
-                      <th mat-header-cell *matHeaderCellDef> Email </th>
-                      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-                    </ng-container>
-                    <ng-container matColumnDef="action">
-                      <th mat-header-cell *matHeaderCellDef> Action </th>
-                      <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button class="m-2" (click)="editUsers(element)"color="primary">Edit User</button>
-                        <button mat-raised-button class="m-2" (click)="resetPassword(element)" color="primary">Reset User</button>
-                        <button mat-raised-button class="m-2" (click)="loginHistories(element)"  color="primary">Login Histories</button>
-                      </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                  </table>
-                  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                  <p-table [value]="dataSource" [paginator]="true" [rows]="10" 
+                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[5,10,20]"
+                    [globalFilterFields]="['firstName','lastName','username','email','mobile']"
+                    styleClass="p-datatable-responsive-demo">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Middle Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-element>
+                      <tr>
+                        <td>{{element.userId}}</td>
+                        <td>{{element.firstName}}</td>
+                        <td>{{element.middleName}}</td>
+                        <td>{{element.lastName}}</td>
+                        <td>{{element.username}}</td>
+                        <td>{{element.mobile}}</td>
+                        <td>{{element.email}}</td>
+                        <td>
+                          <div class="flex justify-content-center" style="display: flex; gap: 8px;">
+                            <button mat-raised-button mat-raised-button (click)="editUsers(element)" color="primary">Edit User</button>
+                            <button mat-raised-button (click)="resetPassword(element)" color="primary">Reset User</button>
+                            <button mat-raised-button (click)="permissions(element)" color="primary">Permissions</button>
+                            <button mat-raised-button (click)="loginHistories(element)" color="primary">Login Histories</button>
+                          </div>
+                        
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
                 </div>
               </div>
           </div>

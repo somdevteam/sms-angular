@@ -10,8 +10,10 @@ import { ListUsersComponent } from './list-users/list-users.component';
 import { ResetPasswordComponent } from './list-users/reset-password/reset-password.component';
 import { LoginHistoriesComponent } from './list-users/login-histories/login-histories.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
-
-
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { PermissionsComponent } from './permissions/permissions.component';
+import {  TreeModule } from 'primeng/tree';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     ListUsersComponent,
     ResetPasswordComponent,
     LoginHistoriesComponent,
-    EditUserComponent
+    EditUserComponent,
+    PermissionsComponent
   ],
   imports: [
     CommonModule,
@@ -28,6 +31,9 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     ReactiveFormsModule,
     ComponentsModule,
     SharedModule,
+    TableModule,
+    ButtonModule,
+    TreeModule
   ]
 })
 export class UsersModule { }

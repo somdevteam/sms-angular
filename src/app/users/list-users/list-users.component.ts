@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
   UntypedFormBuilder,
@@ -7,15 +7,12 @@ import {
 import { SnackbarService } from '@shared/snackbar.service';
 import { UserService } from '../user.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { LoginHistoriesComponent } from './login-histories/login-histories.component';
-import {Router} from "@angular/router";
 import { AuthService, User } from '@core';
 import { EditUserComponent } from '../edit-user/edit-user.component';
+import { PermissionsComponent } from '../permissions/permissions.component';
 
 @Component({
   selector: 'app-list-users',
@@ -34,22 +31,8 @@ export class ListUsersComponent implements OnInit {
   selectedBranch: any;
   branchesList: any;
   selectedStatus: '0' | '1' = '1';
-
-  displayedColumns: string[] = [
-      "userId",
-      "username",
-      "firstName",
-      "middleName",
-      "lastName",
-      "email",
-      "mobile",
-      "action",
-  ];
+  dataSource: any[] = [];
   userInfo!:User;
-
-  dataSource!: MatTableDataSource<any>;
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -58,11 +41,10 @@ export class ListUsersComponent implements OnInit {
     private pageLoader: PageLoaderService,
     private dialog: MatDialog,
     private authService:AuthService
-
   ) {
     this.userInfo = this.authService.currentUserValue;
-
   }
+
   ngOnInit(): void {
     let formFields = {
       branchId: ['', [Validators.required]],
@@ -79,9 +61,7 @@ export class ListUsersComponent implements OnInit {
     this.pageLoader.showLoader();
     this.userService.getUsersFilter(payload).subscribe({
       next: (res => {
-        this.dataSource = new MatTableDataSource(res);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
+        this.dataSource = res;
         this.pageLoader.hideLoader()
       }),
       error: (error => {
@@ -89,7 +69,6 @@ export class ListUsersComponent implements OnInit {
         this.snackBar.dangerNotification(error)
       })
     })
-
   }
 
   loadBranches() {
@@ -117,13 +96,8 @@ export class ListUsersComponent implements OnInit {
   }
 
   editUsers(user : any){
-    // this.userService.setUserOperation(user);
-    // console.log(user);
-    // this.router.navigateByUrl('users/edit?edit=true')
-
-   const dialogRef =  this.dialog.open(EditUserComponent, {
+    const dialogRef =  this.dialog.open(EditUserComponent, {
       data: user,
-      // position: {top: '10%'},
       width: '70%',
     }).afterClosed().subscribe((result) => {
       if (result == 'edited') {
@@ -134,6 +108,13 @@ export class ListUsersComponent implements OnInit {
 
   loginHistories(data:any) {
     this.dialog.open(LoginHistoriesComponent,{
+      data
+    })
+  }
+
+  permissions(data:any) {
+    this.dialog.open(PermissionsComponent,{
+      width: '70%',
       data
     })
   }

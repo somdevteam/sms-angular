@@ -113,5 +113,9 @@ export class UserService {
       );
   }
 
+  getMenusWithPermissions(): Observable<any> {
+    return this.apiService.sendHttpGetRequest('/user/menuswithpermission');
+  }
+
 
 }
