@@ -74,7 +74,7 @@ export class EditfeesComponent {
     })
   }
   loadMonths() {
-    this.feesServices.getMonths().subscribe({
+    this.feesServices.getAllMonths().subscribe({
       next:(res => {
         console.log(res);
         this.months = res
@@ -88,14 +88,14 @@ export class EditfeesComponent {
   onChangeRollNumber(event: any) {
     this.selectedRollNumber = Number(event.target.value);
     const payload ={ rollNumber:this.selectedRollNumber}
-    this.feesServices.getStudentByRollNumber(payload).subscribe({
+    this.feesServices.getStudentsByRollNumber(payload.rollNumber).subscribe({
       next: (res) => {
         console.log("the resdata: "+JSON.stringify(res));
         if (res) {
           const studentData = res;
-          const studentName = this.createFullName(studentData.firstname,studentData.middlename,studentData.lastname);
+          const studentName = '' // this.createFullName(studentData.firstanme,studentData.middlename,studentData.lastname) || null;
           console.log("fullname "+studentName)
-          const studentClassId = studentData.studentClass[0].studentClassId;
+          const studentClassId =1; // studentData.studentClass[0].studentClassId;
           this.editfeesForm.patchValue({
             sName: studentName,
             studentClassId:studentClassId
@@ -125,18 +125,18 @@ export class EditfeesComponent {
       description: formFees.description,
       monthName:formFees.monthName
     }
-    this.feesServices.createPayment(payload).subscribe({
-      next: (res) => {
-        console.log("the resdata: "+JSON.stringify(res));
-        if (res) {
-          this.editfeesForm.reset();
-        }
-      },
-      error: (error) => {
-        console.log(error);
-        this.snackBar.dangerNotification(error);
-      },
-    });
+    // this.feesServices.createPayment(payload).subscribe({
+    //   next: (res) => {
+    //     console.log("the resdata: "+JSON.stringify(res));
+    //     if (res) {
+    //       this.editfeesForm.reset();
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.log(error);
+    //     this.snackBar.dangerNotification(error);
+    //   },
+    // });
 
   }
 

@@ -1,346 +1,244 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FeesService } from '../fees.service';
-import { SnackbarService } from '@shared/snackbar.service';
-import { Student } from '../../student/student';
-import {MatDialog} from "@angular/material/dialog";
-import {PaymentConfirmationDialogComponent} from "../payment-confirmation-dialog/payment-confirmation-dialog.component";
-import {ReceiptComponent} from "../receipt/receipt.component";
-
+import { SnackbarService } from '../../shared/snackbar.service';
+import { PageLoaderService } from '../../layout/page-loader/page-loader.service';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-addfees',
   templateUrl: './addfees.component.html',
-  styleUrls: ['./addfees.component.scss'],
+  styleUrls: ['./addfees.component.scss']
 })
 export class AddfeesComponent implements OnInit {
-  breadscrums = [
-    {
-      title: 'Add Fees',
-      items: ['Fees'],
-      active: 'Add Fees',
-    },
-  ];
-  feesForm!: UntypedFormGroup;
+  searchForm!: FormGroup;
+  paymentForm!: FormGroup;
+  studentData: any = null;
   paymentTypes: any[] = [];
-  feeTypes: any[] = [];
   paymentStates: any[] = [];
   months: any[] = [];
-  students: Student[] = [];
-  selectedStudent: Student | null = null;
-  studentPayments: any[] = [];
-  pendingPayments: any[] = [];
-  filteredStudents: any[] = [];
-  private responsibleParty: any;
-
+  showPaymentForm = false;
+  students: any[] = [];
 
   constructor(
-    private fb: UntypedFormBuilder,
+    private fb: FormBuilder,
     private feesService: FeesService,
     private snackBar: SnackbarService,
+    private pageLoader: PageLoaderService,
     private dialog: MatDialog
   ) {
-    this.feesForm = this.fb.group({
-      rollNo: ['', ],
-      fullName: ['', ],
-      fType: [''],
-      department: [''],
-      date: [''],
-      invoiceNo: [''],
-      pType: [''],
-      paymentState: [''],
-      amount:[''],
-      duration: [''],
-      details: [''],
-      studentClassId: [''],
-      monthName: [''],
-      monthId:[''],
-      mobile: [''],
-      responsibleName: [''],
-      responsibleTell: [''],
-      responsibleAddress: [''],
-      responsiblePhone: [''],
-      responsibleId:[''],
-      studentId: [''],
-      sectionId: [''],
-      className:[''],
-      sectionName:[''],
-      levelName:['']// Added for student selection
+    this.initializeForms();
+  }
+
+  ngOnInit() {
+    this.loadDropdownData();
+  }
+
+  private initializeForms() {
+    this.searchForm = this.fb.group({
+      searchType: ['', Validators.required],
+      searchValue: ['', Validators.required]
     });
-    // this.initializeForm();
-  }
 
-  ngOnInit(): void {
-    this.loadPaymentTypes();
-    this.loadPaymentStates();
-    this.loadMonths();
-    this.loadFeetypes();
-  }
-
-  // Initialize the form with necessary fields and validation
-  private initializeForm(): void {
-    this.feesForm = this.fb.group({
-      rollNo: ['', ],
-      fullName: ['', ],
-      fType: [''],
-      department: [''],
-      date: [''],
-      invoiceNo: [''],
-      pType: [''],
-      status: [''],
-      amount:[''],
-      duration: [''],
-      details: [''],
-      studentClassId: [''],
-      monthName: [''],
-      mobile: [''],
-      responsibleName: [''],
-      responsibleTell: [''],
-      responsibleAddress: [''],
-      responsiblePhone: [''],
-      studentId: [''],
-      sectionId: [''],
-      className:[''],
-      sectionName:[''],
-      levelName:['']// Added for student selection
+    this.paymentForm = this.fb.group({
+      studentId: ['', Validators.required],
+      studentClassId: ['', Validators.required],
+      amount: ['', [Validators.required, Validators.min(0)]],
+      monthId: ['', Validators.required],
+      paymentTypeId: ['', Validators.required],
+      paymentStateId: ['', Validators.required],
+      responsibleId: ['', Validators.required],
+      rollNo: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      details: ['']
     });
   }
 
-  // Load dropdown options for payment types
-  private loadPaymentTypes(): void {
-    this.feesService.getPaymentTypes().subscribe({
-      next: (res) => (this.paymentTypes = res),
-      error: (error) => this.handleError(error),
-    });
-  }
+  private loadDropdownData() {
+    this.pageLoader.showLoader();
 
-  // Load dropdown options for payment states
-  private loadPaymentStates(): void {
-    this.feesService.getPaymentStates().subscribe({
-      next: (res) => (this.paymentStates = res),
-      error: (error) => this.handleError(error),
-    });
-  }
-
-  private loadFeetypes(): void {
-    this.feesService.getFeeTypes().subscribe({
-      next: (res) => (this.feeTypes = res),
-      error: (error) => this.handleError(error),
-    });
-  }
-
-
-  // Load dropdown options for months
-  private loadMonths(): void {
-    this.feesService.getMonths().subscribe({
-      next: (res) => (this.months = res),
-      error: (error) => this.handleError(error),
-    });
-  }
-
-  // Handle searching responsible party by mobile number
-  searchResponsibleByMobile(): void {
-    const mobile = this.feesForm.get('mobile')?.value;
-    if (!mobile) {
-      console.warn('Mobile number is undefined or empty');
-      return;
-    }
-
-    this.feesService.getResponsibleByMobile(mobile).subscribe({
-      next: (responsible) => {
-        if (responsible) {
-          this.feesForm.patchValue({ responsibleName: responsible.responsiblename });
-          this.feesForm.patchValue({ responsibleAddres: responsible.address });
-          this.feesForm.patchValue({ responsiblePhone: responsible.phone });
-          this.feesForm.patchValue({ responsibleTell: responsible.phone2 });
-          this.feesForm.patchValue({ responsibleId: responsible.responsibleid });
-          this.loadStudents(responsible.responsibleid);
-          this.selectedStudent = null; // Reset selected student when new responsible is searched
-          this.feesForm.get('studentId')?.reset(); // Reset student dropdown
-        }
+    // Create separate subscriptions for each API call
+    this.feesService.getAllPaymentTypes().subscribe({
+      next: (response) => {
+        this.paymentTypes = response.data || [];
       },
-      error: (error) => this.handleError(error),
-    });
-  }
-
-  // Load students based on the responsible ID
-  private loadStudents(responsibleId: number): void {
-    this.feesService.getStudentsByResponsible(responsibleId).subscribe({
-      next: (students: Student[]) => (this.students = students),
-      error: (error) => this.handleError(error),
-    });
-  }
-
-  // Handle student selection and load details
-  onStudentSelect(event: any): void {
-    const studentId = event.value;
-
-    // Find the selected student directly from the students array
-    this.selectedStudent = this.students.find(student => student.studentid === studentId) || null;
-    this.feesForm.patchValue({ fullName: this.selectedStudent?.fullName });
-    this.feesForm.patchValue({ rollNo: this.selectedStudent?.rollNumber });
-    this.feesForm.patchValue({ sectionName: this.selectedStudent?.studentClass[0].sectionName });
-    this.feesForm.patchValue({ className: this.selectedStudent?.studentClass[0].className});
-    this.feesForm.patchValue({ levelName: this.selectedStudent?.studentClass[0].levelName});
-    this.feesForm.patchValue({ amount: this.selectedStudent?.studentClass[0].levelFee});
-    this.feesForm.patchValue({ studentClassId: this.selectedStudent?.studentClass[0].studentClassId});
-    this.feesForm.patchValue({ studentId: this.selectedStudent?.studentid});
-    console.log(this.selectedStudent);
-  }
-
-
-  // Load selected student's details and payment information
-  private loadStudentDetails(studentId: number): void {
-    this.feesService.getStudentDetails(studentId).subscribe({
-      next: (student: Student) => {
-        this.selectedStudent = student;
-        this.loadStudentPayments(student.studentClass[0].studentClassId);
-      },
-      error: (error) => this.handleError(error),
-    });
-  }
-
-  // Load payment details based on student level
-  private loadStudentPayments(level: number): void {
-    this.feesService.getStudentPaymentsByLevel(level).subscribe({
-      next: (payments) => (this.studentPayments = payments),
-      error: (error) => this.handleError(error),
-    });
-  }
-
-  // Submit form data
-  onSubmit(): void {
-    if (this.feesForm.invalid) {
-      this.snackBar.dangerNotification('Please fill out all required fields.');
-      return;
-    }
-    const formFees = this.feesForm.value;
-   // payment.sName = this.selectedStudent.fullName;
-    const payload = {
-      studentClassId: formFees.studentClassId,
-      fullName: formFees.fullName,
-      paymentTypeId: formFees.pType,
-      paymentStateId: formFees.paymentState,
-      rollNo: formFees.rollNo,
-      amount: formFees.amount,
-      description: formFees.details,
-      monthName: formFees.monthName,
-      studentid:formFees.studentId,
-      responsibleId:formFees.responsibleId,
-      monthId:formFees.monthId,
-      className:formFees.className,
-      sectionName:formFees.sectionName,
-      levelName:formFees.levelName
-
-
-    };
-    // Add the current payment to the pending list
-    this.pendingPayments.push(payload);
-    console.log("pending payments");
-    console.log(this.pendingPayments);
-
-    // Reset form for another payment
-   // this.feesForm.reset();
-   // this.selectedStudent = null;
-    this.students = this.students.filter(
-      student => student.studentid !== this.selectedStudent?.studentid,
-
-    );
-  if (this.students){
-    this.feesForm.patchValue({ fullName: null });
-    this.feesForm.patchValue({ rollNo: null });
-    this.feesForm.patchValue({ sectionName: null });
-    this.feesForm.patchValue({ className: null});
-    this.feesForm.patchValue({ levelName:null});
-    this.feesForm.patchValue({ amount: null});
-    this.feesForm.patchValue({ studentClassId: null});
-    this.feesForm.patchValue({ studentId: null})
-  }
-
-    // Show confirmation dialog
-    const dialogRef = this.dialog.open(PaymentConfirmationDialogComponent, {
-      data: { payments: this.pendingPayments }
-    });
-
-    // Subscribe to the dialog result after it closes
-    dialogRef.afterClosed().subscribe(result => {
-      if (result?.action === 'create') {
-        this.createPayments();  // Call the createPayments method when 'create' action is selected
-      } else if (result?.action === 'add') {
-        this.addAnotherPayment();  // Handle add another payment if selected
-      } else if (result?.action === 'remove') {
-        this.pendingPayments = this.pendingPayments.filter(p => p !== result.payment);
+      error: (error) => {
+        this.snackBar.dangerNotification('Error loading payment types');
       }
     });
 
-  }
-
-  createPayments(): void {
-    if (this.pendingPayments.length === 0) {
-      this.snackBar.dangerNotification('No payments to create.');
-      return;
-    }
-    console.log("array of pending payment ");
-    console.log(this.pendingPayments);
-    this.feesService.createMultiplePayments(this.pendingPayments).subscribe({
+    this.feesService.getAllPaymentStates().subscribe({
       next: (response) => {
-        this.snackBar.successNotification('Payments created successfully.');
-        this.dialog.open(ReceiptComponent, {
-          data: {
-            payments: response.receipts,
-            responsibleParty: null
-          },
-          width: '800px'
-        });
-        this.pendingPayments = [];
-       // this.dialog.closeAll();
+        this.paymentStates = response.data || [];
       },
-      error: () => this.snackBar.dangerNotification('Failed to create payments.'),
+      error: (error) => {
+        this.snackBar.dangerNotification('Error loading payment states');
+      }
     });
 
-
-
-
-    // const formFees = this.feesForm.value;
-    // console.log("form fees");
-    // console.log(formFees);
-
-
-
-    // const payload = {
-    //   studentClassId: formFees.studentClassId,
-    //   sName: formFees.sName,
-    //   paymentTypeId: formFees.pType,
-    //   paymentStateId: formFees.paymentState,
-    //   rollNo: formFees.rollNo,
-    //   amount: formFees.amount,
-    //   description: formFees.details,
-    //   monthName: formFees.monthName,
-    //   studentid:formFees.studentId,
-    //   responsibleId:formFees.responsibleId,
-    //   monthId:formFees.monthId,
-    //   className:formFees.className,
-    //   sectionName:formFees.sectionName,
-    //   levelName:formFees.levelName
-    //
-    //
-    // };
-
-    // this.feesService.createPayment(payload).subscribe({
-    //   next: (res) => {
-    //     this.snackBar.successNotification('Fees added successfully.');
-    //     this.feesForm.reset();
-    //   },
-    //   error: (error) => this.handleError(error),
-    // });
+    this.feesService.getAllMonths().subscribe({
+      next: (response) => {
+        this.months = response.data || [];
+      },
+      error: (error) => {
+        this.snackBar.dangerNotification('Error loading months');
+      },
+      complete: () => {
+        this.pageLoader.hideLoader();
+      }
+    });
   }
 
-  // Centralized error handling
-  private handleError(error: any): void {
-    console.error(error);
-    this.snackBar.dangerNotification('An error occurred. Please try again.');
+  onSearchTypeChange() {
+    const searchControl = this.searchForm.get('searchValue');
+    searchControl?.setValue('');
+    this.showPaymentForm = false;
+    this.studentData = null;
+    this.students = [];
   }
 
-  addAnotherPayment(): void {
-    this.dialog.closeAll();
+  searchStudent() {
+    if (this.searchForm.invalid) {
+      this.snackBar.warningNotification('Please fill in all required fields');
+      return;
+    }
+
+    const searchType = this.searchForm.get('searchType')?.value;
+    const searchValue = this.searchForm.get('searchValue')?.value;
+
+    this.pageLoader.showLoader();
+
+    if (searchType === 'rollNumber') {
+      this.feesService.getStudentsByRollNumber(searchValue).subscribe({
+        next: (response) => {
+          if (response?.data && response.data.length > 0) {
+            this.students = response.data;
+            if (this.students.length === 1) {
+              this.onStudentSelect(this.students[0]);
+            }
+          } else {
+            this.snackBar.warningNotification('No student found');
+            this.students = [];
+          }
+          this.pageLoader.hideLoader();
+        },
+        error: (error) => {
+          this.snackBar.dangerNotification(error?.error?.message || 'Error fetching student data');
+          this.pageLoader.hideLoader();
+          this.students = [];
+        }
+      });
+    } else if (searchType === 'mobile') {
+      this.feesService.getStudentsByResponsibleMobile(searchValue).subscribe({
+        next: (response) => {
+          if (response?.data && response.data.length > 0) {
+            this.students = response.data;
+          } else {
+            this.snackBar.warningNotification('No students found for this guardian');
+            this.students = [];
+          }
+          this.pageLoader.hideLoader();
+        },
+        error: (error) => {
+          this.snackBar.dangerNotification(error?.error?.message || 'Error fetching guardian data');
+          this.pageLoader.hideLoader();
+          this.students = [];
+        }
+      });
+    }
   }
+
+  getStudentDisplayText(student: any): string {
+    const fullName = `${student.firstname} ${student.middlename} ${student.lastname}`.trim();
+    const className = student.studentClass?.[0]?.className || '';
+    const sectionName = student.studentClass?.[0]?.sectionName || '';
+    const rollNumber = student.rollNumber || '';
+
+    return `${fullName} - Class: ${className} ${sectionName} (Roll No: ${rollNumber})`;
+  }
+
+  onStudentSelect(student: any) {
+    this.handleStudentData(student);
+  }
+
+  private handleStudentData(student: any) {
+    this.studentData = student;
+    this.showPaymentForm = true;
+
+    // Get the level fee from student data
+    const levelFee = student.studentClass?.[0]?.levelFee || 0;
+
+    this.paymentForm.patchValue({
+      studentId: student.studentid,
+      studentClassId: student.studentClass?.[0]?.studentClassId,
+      rollNo: student.rollNumber.toString(),
+      responsibleId: student.responsible?.responsibleid,
+      amount: levelFee
+    });
+
+  }
+
+  submitPayment() {
+    if (this.paymentForm.invalid) {
+      this.snackBar.warningNotification('Please fill in all required fields');
+      return;
+    }
+
+    const paymentData: PaymentFormData = {
+      ...this.paymentForm.value,
+      rollNo: this.paymentForm.value.rollNo.toString(),
+      amount: Number(this.paymentForm.value.amount),
+      studentId: Number(this.paymentForm.value.studentId),
+      studentClassId: Number(this.paymentForm.value.studentClassId),
+      monthId: Number(this.paymentForm.value.monthId),
+      paymentTypeId: Number(this.paymentForm.value.paymentTypeId),
+      paymentStateId: Number(this.paymentForm.value.paymentStateId),
+      responsibleId: Number(this.paymentForm.value.responsibleId)
+    };
+
+    this.pageLoader.showLoader();
+    this.feesService.createPayment(paymentData).subscribe({
+      next: (response) => {
+        this.snackBar.successNotification('Payment created successfully');
+        if (response) {
+          this.showReceipt(response);
+        }
+        this.resetForms();
+        this.pageLoader.hideLoader();
+      },
+      error: (error) => {
+        this.snackBar.dangerNotification(error?.error?.message || 'Error creating payment');
+        this.pageLoader.hideLoader();
+      }
+    });
+  }
+
+  private showReceipt(paymentData: any) {
+    // Implement receipt display logic
+  }
+
+  private resetForms() {
+    this.searchForm.reset();
+    this.paymentForm.reset();
+    this.showPaymentForm = false;
+    this.studentData = null;
+    this.students = [];
+  }
+
+  getSearchPlaceholder(): string {
+    const searchType = this.searchForm.get('searchType')?.value;
+    return searchType === 'rollNumber' ? 'Enter Roll Number' :
+           searchType === 'mobile' ? 'Enter Mobile Number' :
+           'Select search type first';
+  }
+}
+
+export interface PaymentFormData {
+  studentId: number;
+  studentClassId: number;
+  amount: number;
+  monthId: number;
+  paymentTypeId: number;
+  paymentStateId: number;
+  responsibleId: number;
+  rollNo: string;
+  details?: string;
 }

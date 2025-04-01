@@ -15,7 +15,16 @@
         <div class="form-grid">
           <mat-form-field appearance="outline">
             <mat-label>Search</mat-label>
-            <input matInput formControlName="searchFilter" placeholder="Enter RollNumber or Responsible Mobile">
+            <input matInput 
+                   formControlName="searchFilter" 
+                   [placeholder]="getSearchPlaceholder()"
+                   [type]="paymentForm.get('type')?.value === 'rollNumber' || paymentForm.get('type')?.value === 'mobileNumber' ? 'number' : 'text'">
+            <mat-error *ngIf="paymentForm.get('type')?.value === 'rollNumber' && paymentForm.get('searchFilter')?.value">
+              Please enter a valid roll number
+            </mat-error>
+            <mat-error *ngIf="paymentForm.get('type')?.value === 'mobileNumber' && paymentForm.get('searchFilter')?.value">
+              Please enter a valid mobile number
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -83,18 +92,20 @@
 
       <!-- Table Section -->
       <div class="table-container">
-        <table mat-table [dataSource]="payments.data" matSort class="mat-elevation-z8">
-          <!-- Columns -->
+        <table mat-table [dataSource]="payments" matSort class="mat-elevation-z8">
+          <!-- ID Column -->
           <ng-container matColumnDef="studentfeeid">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
             <td mat-cell *matCellDef="let element">{{ element.studentfeeid }}</td>
           </ng-container>
 
+          <!-- Amount Column -->
           <ng-container matColumnDef="amount">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
             <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
           </ng-container>
 
+          <!-- Student Full Name Column -->
           <ng-container matColumnDef="studentFullName">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
             <td mat-cell *matCellDef="let element">
@@ -104,21 +115,25 @@
             </td>
           </ng-container>
 
+          <!-- Roll Number Column -->
           <ng-container matColumnDef="rollNumber">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Roll No</th>
-            <td mat-cell *matCellDef="let element">{{ element.studentClass.student.rollNumber }}</td>
+            <td mat-cell *matCellDef="let element">{{ element.rollNo }}</td>
           </ng-container>
 
+          <!-- Payment Type Column -->
           <ng-container matColumnDef="paymentType">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-            <td mat-cell *matCellDef="let element">{{ element.studentFeeType.type }}</td>
+            <td mat-cell *matCellDef="let element">{{ element.paymentType.type }}</td>
           </ng-container>
 
+          <!-- Payment State Column -->
           <ng-container matColumnDef="paymentState">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
-            <td mat-cell *matCellDef="let element">{{ element.paymentStateId.description }}</td>
+            <td mat-cell *matCellDef="let element">{{ element.paymentState.description }}</td>
           </ng-container>
 
+          <!-- Date Created Column -->
           <ng-container matColumnDef="datecreated">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
             <td mat-cell *matCellDef="let element">{{ element.datecreated | date }}</td>

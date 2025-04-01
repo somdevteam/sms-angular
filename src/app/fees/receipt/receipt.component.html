@@ -1,70 +1,100 @@
 <div class="receipt-container">
-  <!-- Mock Logo & Business Details -->
-  <div class="header">
-    <img src="https://via.placeholder.com/150x50?text=LOGO" alt="Logo" class="logo" />
-    <div class="business-info">
-      <h2>ABC International School</h2>
-      <p>123 Education St, Knowledge City</p>
-      <p>Phone: +123 456 789 | Email: info@school.com</p>
-    </div>
+  <div class="print-actions">
+    <button mat-icon-button (click)="printReceipt()" matTooltip="Print Receipt">
+      <mat-icon>print</mat-icon>
+    </button>
+    <button mat-icon-button (click)="closeDialog()" matTooltip="Close">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
 
-  <!-- Receipt Details -->
-  <mat-card class="receipt-card">
-    <mat-card-header>
-      <mat-card-title>Payment Receipt</mat-card-title>
-      <mat-card-subtitle>Date: {{ payments[0]?.dateCreated | date: 'longDate' }}</mat-card-subtitle>
-    </mat-card-header>
+  <div class="receipt-content" *ngFor="let receipt of receipts">
+    <!-- School Header -->
+    <div class="school-header">
+      <h1>{{ receipt.header.schoolName }}</h1>
+      <p>{{ receipt.header.schoolAddress }}</p>
+      <div class="contact-info">
+        <span>{{ receipt.header.schoolContact }}</span> |
+        <span>{{ receipt.header.schoolEmail }}</span>
+      </div>
+      <div class="receipt-title">
+        <h2>Payment Receipt</h2>
+      </div>
+    </div>
 
-    <mat-card-content>
-      <h3 class="section-title">Student Information</h3>
-      <table class="receipt-table">
-        <tr>
-          <td><strong>Student Name:</strong></td>
-          <td>{{ payments[0]?.fullname }}</td>
-        </tr>
-        <tr>
-          <td><strong>Roll No:</strong></td>
-          <td>{{ payments[0]?.rollNo }}</td>
-        </tr>
-        <tr>
-          <td><strong>Class:</strong></td>
-          <td>{{ payments[0]?.className }}</td>
-        </tr>
-        <tr>
-          <td><strong>Section:</strong></td>
-          <td>{{ payments[0]?.sectionName }}</td>
-        </tr>
-        <tr>
-          <td><strong>Level:</strong></td>
-          <td>{{ payments[0]?.levelName }}</td>
-        </tr>
-        <tr>
-          <td><strong>Responsible Party:</strong></td>
-          <td>{{ payments[0]?.responsibleName }}</td>
-        </tr>
-      </table>
+    <!-- Receipt Details -->
+    <div class="receipt-details">
+      <div class="detail-row">
+        <div class="detail-item">
+          <label>Receipt No:</label>
+          <span>{{ receipt.paymentDetails.receiptId }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Date:</label>
+          <span>{{ formatDate(receipt.paymentDetails.dateCreated) }}</span>
+        </div>
+      </div>
 
-      <!-- Payment Breakdown -->
-      <h3 class="section-title">Payment Details</h3>
-      <table class="payment-table">
-        <tr>
-          <th>Month</th>
-          <th>Status</th>
-          <th>Amount</th>
-        </tr>
-        <tr *ngFor="let item of payments">
-          <td>{{ item.monthName }}</td>
-          <td>{{ item.paymentState }}</td>
-          <td>${{ item.amount }}</td>
-        </tr>
-      </table>
+      <div class="detail-row">
+        <div class="detail-item">
+          <label>Student Name:</label>
+          <span>{{ receipt.paymentDetails.fullname }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Roll No:</label>
+          <span>{{ receipt.paymentDetails.rollNo }}</span>
+        </div>
+      </div>
 
-      <h3 class="total">Total: ${{ totalAmount }}</h3>
-    </mat-card-content>
+      <div class="detail-row">
+        <div class="detail-item">
+          <label>Class:</label>
+          <span>{{ receipt.paymentDetails.className }} - {{ receipt.paymentDetails.sectionName }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Month:</label>
+          <span>{{ receipt.paymentDetails.monthName }}</span>
+        </div>
+      </div>
 
-    <mat-card-actions class="actions">
-      <button mat-button color="primary" (click)="printReceipt()">Print</button>
-    </mat-card-actions>
-  </mat-card>
+      <div class="detail-row">
+        <div class="detail-item">
+          <label>Payment Type:</label>
+          <span>{{ receipt.paymentDetails.paymentType }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Status:</label>
+          <span>{{ receipt.paymentDetails.paymentState }}</span>
+        </div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-item">
+          <label>Guardian:</label>
+          <span>{{ receipt.paymentDetails.responsibleName }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Amount -->
+    <div class="amount-section">
+      <div class="amount-row">
+        <label>Amount Paid:</label>
+        <span class="amount">
+          {{ formatAmount(receipt.paymentDetails.amount) }}
+        </span>
+      </div>
+      <div class="total-amount">
+        <label>Total Amount:</label>
+        <span class="amount">
+          {{ formatAmount(receipt.paymentDetails.totalAmount) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="receipt-footer">
+      <p>This is a computer generated receipt. No signature required.</p>
+    </div>
+  </div>
 </div>

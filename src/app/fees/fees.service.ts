@@ -3,27 +3,87 @@ import {ApiService} from "@shared/api.service";
 import {SnackbarService} from "@shared/snackbar.service";
 import {AppDataService} from "@shared/app-data.service";
 import {map, Observable} from "rxjs";
+import { StudentFeeInfo } from './types/student-fee.types';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../src/environments/environment';
+import {PaymentFormData} from "./addfees/addfees.component";
+
+interface StudentClass {
+  studentClassId: number;
+  classId: number;
+  className: string;
+  sectionId: number;
+  sectionName: string;
+  classSectionId: number;
+  levelClassId: number;
+  levelId: number;
+  levelName: string;
+  levelFee: number;
+  isActive: boolean;
+}
+
+interface Student {
+  studentid: number;
+  rollNumber: string;
+  firstname: string;
+  middlename: string;
+  lastname: string;
+  Sex: string;
+  dob: string;
+  bob: string;
+  fullName: string;
+  studentClass: StudentClass[];
+}
+
+export interface ApiResponse {
+  message: string;
+  status: number;
+  data: Student[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeesService {
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private apiService:ApiService,
     private snackBar:SnackbarService,
     private appDataService: AppDataService,
-
+    private http: HttpClient
   )
   {
     //this.userOperation = this.appDataService.support_data['userOperation'] || null;
   }
 
-  getStudentByRollNumber(rollNumber:any) {
-    return this.apiService.sendHttpPostRequest('/student/getStudentByRollNumber',rollNumber)
+  // getStudentByRollNumber(rollNumber: string): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/payment/student/${rollNumber}`);
+  // }
+
+  // getResponsibleByMobile(mobile: string): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/payment/responsible/${mobile}`);
+  // }
+
+  getAllPaymentTypes(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/payment/findAllPaymentTypes`);
+  }
+
+  getAllPaymentStates(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/payment/findAllPaymentStates`);
+  }
+
+  getAllMonths(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/payment/findAllMonths`);
+  }
+
+  createPayment(paymentData: PaymentFormData): Observable<any> {
+    // Remove the nested payments structure
+    return this.apiService.sendHttpPostRequest('/payment/add', paymentData)
       .pipe(
         map((resp) => {
-          const { message,data } = resp;
+          const { message, data } = resp;
+          this.snackBar.successNotification(message);
           return data;
         })
       );
@@ -60,16 +120,6 @@ export class FeesService {
         })
       );
   }
-  createPayment(payload:any) {
-    return this.apiService.sendHttpPostRequest('/payment/add',payload)
-      .pipe(
-        map((resp) => {
-          const { message,data } = resp;
-          this.snackBar.successNotification(message)
-          return data;
-        })
-      );
-  }
 
   createMultiplePayments(payload: any[]): Observable<any> {
     return this.apiService.sendHttpPostRequest('/payment/add-multiple', { payments: payload })
@@ -77,17 +127,6 @@ export class FeesService {
         map((resp) => {
           const { message, data } = resp;
           this.snackBar.successNotification(message);
-          return data;
-        })
-      );
-  }
-
-  getMonths() {
-    return this.apiService.sendHttpGetRequest('/payment/findAllMonths')
-      .pipe(
-        map((resp) => {
-          const { data } = resp;
-          console.log(data);
           return data;
         })
       );
@@ -136,15 +175,6 @@ export class FeesService {
         })
       );
   }
-  getResponsibleByMobile(mobile: string) {
-    return this.apiService.sendHttpGetRequest(`/responsible/getResponsibleByPhone/${mobile}`)
-      .pipe(
-        map((resp) => {
-          const { data } = resp;
-          console.warn("data of the responsible"+JSON.stringify(data));
-          return data;
-        })
-      );  }
 
   getClasses() {
     return this.apiService.sendHttpGetRequest('/class/list/all')
@@ -160,6 +190,38 @@ export class FeesService {
       .pipe(
         map((resp) => {
           return resp;
+        })
+      );
+  }
+
+  generateReceipt(paymentIds: number) {
+    return this.apiService.sendHttpPostRequest('/payment/generate-receipts', { paymentIds });
+  }
+
+  getStudentsByRollNumber(rollNumber: string): Observable<any> {
+    return this.apiService.sendHttpPostRequest('/student/getStudentsByRollNumber', { rollNumber })
+      .pipe(
+        map((resp: any) => {
+          return resp;
+        })
+      );
+  }
+
+  getStudentsByResponsibleMobile(mobile: string): Observable<any> {
+    return this.apiService.sendHttpPostRequest('/student/getStudentsByResponsibleMobile', { mobile })
+      .pipe(
+        map((resp) => {
+          return resp
+        })
+      );
+  }
+
+  getPaymentss(payload:any) {
+    return this.apiService.sendHttpPostRequest('/payment/getPaymentByFilter',payload)
+      .pipe(
+        map((resp) => {
+          const { message,data } = resp;
+          return data;
         })
       );
   }
