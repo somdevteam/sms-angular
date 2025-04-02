@@ -1,0 +1,90 @@
+.container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+    color: #333;
+  }
+}
+
+.filter-card {
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+.filter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.table-card {
+  .table-container {
+    overflow-x: auto;
+  }
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 80px;
+  text-align: center;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.pending {
+    background-color: #fff3e0;
+    color: #f57c00;
+  }
+
+  &.paid {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.overdue {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .filter-row {
+    flex-direction: column;
+    gap: 8px;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .filter-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+} 

@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Generate Payment Charges</h2>
+
+<form [formGroup]="generateForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Class</mat-label>
+        <mat-select formControlName="classId">
+          <mat-option *ngFor="let class of classes" [value]="class.classId">
+            {{class.className}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="generateForm.get('classId')?.hasError('required')">
+          Class is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Section</mat-label>
+        <mat-select formControlName="sectionId">
+          <mat-option *ngFor="let section of sections" [value]="section.sectionId">
+            {{section.sectionName}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="generateForm.get('sectionId')?.hasError('required')">
+          Section is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Due Category</mat-label>
+        <mat-select formControlName="dueCategory">
+          <mat-option value="MONTHLY">Monthly</mat-option>
+          <mat-option value="QUARTERLY">Quarterly</mat-option>
+        </mat-select>
+        <mat-error *ngIf="generateForm.get('dueCategory')?.hasError('required')">
+          Due category is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Due Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dueDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="generateForm.get('dueDate')?.hasError('required')">
+          Due date is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" formControlName="amount">
+      <span matPrefix>$&nbsp;</span>
+      <mat-error *ngIf="generateForm.get('amount')?.hasError('required')">
+        Amount is required
+      </mat-error>
+      <mat-error *ngIf="generateForm.get('amount')?.hasError('min')">
+        Amount must be greater than 0
+      </mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!generateForm.valid">
+      Generate Charges
+    </button>
+  </mat-dialog-actions>
+</form> 

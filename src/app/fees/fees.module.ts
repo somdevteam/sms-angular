@@ -9,6 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
+import { RouterModule } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { FeesRoutingModule } from './fees-routing.module';
 import { AllfeesComponent } from './allfees/allfees.component';
@@ -23,7 +31,8 @@ import {Calendar, CalendarModule} from "primeng/calendar";
 import {TableModule} from "primeng/table";
 import { StudentSelectionDialogComponent } from './student-selection-dialog/student-selection-dialog.component';
 import { MaterialModule } from '../shared/material.module';
-
+import { PaymentChargeListComponent } from './payment-charge-list/payment-charge-list.component';
+import { GenerateChargesDialogComponent } from './payment-charge-list/generate-charges-dialog/generate-charges-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +41,9 @@ import { MaterialModule } from '../shared/material.module';
     EditfeesComponent,
     PaymentConfirmationDialogComponent,
     ReceiptComponent,
-    StudentSelectionDialogComponent
+    StudentSelectionDialogComponent,
+    PaymentChargeListComponent,
+    GenerateChargesDialogComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +62,18 @@ import { MaterialModule } from '../shared/material.module';
     MatTooltipModule,
     MatDialogModule,
     MatListModule,
-    MaterialModule
+    MaterialModule,
+    RouterModule,
+    MatCardModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSnackBarModule
+  ],
+  exports: [
+    PaymentChargeListComponent
   ]
 })
 export class FeesModule { }
