@@ -54,6 +54,7 @@
     "ngx-echarts": "^16.0.0",
     "ngx-gauge": "^8.0.0",
     "ngx-mask": "^16.2.5",
+    "ngx-mat-select-search": "^8.0.0",
     "ngx-scrollbar": "^13.0.3",
     "primeicons": "^6.0.1",
     "primeng": "^16.9.1",

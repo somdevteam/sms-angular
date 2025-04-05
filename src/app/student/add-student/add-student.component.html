@@ -13,6 +13,11 @@
           </div>
           <div class="body">
             <form class="m-4" [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+              <!-- Personal Information Section -->
+              <div class="section-title mb-3">
+                <h5>Personal Information</h5>
+                <hr>
+              </div>
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
@@ -44,7 +49,7 @@
               </div>
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Date of Birth</mat-label>
                     <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth">
                     <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
@@ -59,19 +64,26 @@
                     <mat-label>Place Of Birth</mat-label>
                     <input matInput formControlName="pob" required>
                     <mat-error *ngIf="studentForm.get('pob')?.hasError('required')">
-                      Please enter user name
+                      Place of birth is required
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
-                  <mat-radio-group formControlName="gender">
+                  <label class="mb-2 d-block">Gender</label>
+                  <mat-radio-group formControlName="gender" class="d-flex gap-4">
                     <mat-radio-button value="M">Male</mat-radio-button>
                     <mat-radio-button value="F">Female</mat-radio-button>
                   </mat-radio-group>
                   <mat-error *ngIf="studentForm?.get('gender')?.hasError('required')">
-                    Sex is required
+                    Gender is required
                   </mat-error>
                 </div>
+              </div>
+
+              <!-- Academic Information Section -->
+              <div class="section-title mt-4 mb-3">
+                <h5>Academic Information</h5>
+                <hr>
               </div>
               <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
@@ -79,39 +91,17 @@
                     <mat-label>Roll Number</mat-label>
                     <input matInput formControlName="rollNumber" required pattern="[0-9]*">
                     <mat-error *ngIf="studentForm.get('rollNumber')?.hasError('required')">
-                      First name is required
+                      Roll number is required
                     </mat-error>
                     <mat-error *ngIf="studentForm.get('rollNumber')?.hasError('pattern')">
                       Roll number must contain only numbers
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Responsible name</mat-label>
-                    <input matInput formControlName="responsibleName" required>
-                    <mat-error *ngIf="studentForm.get('responsibleName')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Responsible Phone</mat-label>
-                    <input matInput formControlName="responsiblePhone">
-                    <mat-error *ngIf="studentForm.get('responsiblePhone')?.hasError('required')">
-                      Middle name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-              </div>
-              <div class="row">
                 <div class="col-md-4">
-<!--                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" *ngIf="!isBranch">-->
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Branch</mat-label>
-                    <mat-select  formControlName="branchId" (selectionChange)="onBranchChange($event.value)">
+                    <mat-select formControlName="branchId" (selectionChange)="onBranchChange($event.value)">
                       <mat-option *ngFor="let branch of branchesList" [value]="branch.branchId">
                         {{ branch.branchName }}
                       </mat-option>
@@ -120,9 +110,7 @@
                       Branch is required
                     </mat-error>
                   </mat-form-field>
-
                 </div>
-             
                 <div class="col-md-4">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Class</mat-label>
@@ -136,6 +124,8 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col-md-4">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Section</mat-label>
@@ -146,12 +136,72 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
+                <div class="col-md-4" *ngIf="studentTypes.length > 0">
+                  <label class="mb-2 d-block">Student Type</label>
+                  <mat-radio-group formControlName="studentType" class="d-flex gap-4">
+                    <mat-radio-button *ngFor="let type of studentTypes" [value]="type.id">
+                      {{ type.name }}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+
+              <!-- Responsible Information Section -->
+              <div class="section-title mt-4 mb-3">
+                <h5>Responsible Information</h5>
+                <hr>
               </div>
               <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+
+                  <label class="mb-2 d-block">Responsible Type</label>
+                  <mat-radio-group formControlName="responsibleType" class="d-flex gap-4">
+                    <mat-radio-button value="existing">Select Existing Responsible</mat-radio-button>
+                    <mat-radio-button value="new">Add New Responsible</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+
+
+              <!-- Existing Responsible Selection -->
+              <div class="row" *ngIf="studentForm.get('responsibleType')?.value === 'existing'">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Search Responsible</mat-label>
+                    <input matInput type="text" [matAutocomplete]="auto" formControlName="existingResponsible">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayResponsibleFn">
+                      <mat-option *ngFor="let responsible of filteredResponsibles" [value]="responsible">
+                        {{responsible.responsiblename}} - {{responsible.phone}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- New Responsible Information -->
+              <div class="row" *ngIf="studentForm.get('responsibleType')?.value === 'new'">
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Responsible Name</mat-label>
+                    <input matInput formControlName="responsibleName">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Responsible Phone</mat-label>
+                    <input matInput formControlName="responsiblePhone">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="row mt-4">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                  <button class="btn-space" *ngIf="authService.isUserAuthorized([permissions.CREATE_USER, permissions.UPDATE_USER ])
-        "
-                          [disabled]="!studentForm.valid " type="submit" mat-raised-button color="primary">Create Studnet</button>
+                  <button class="btn-space"
+                    *ngIf="authService.isUserAuthorized([permissions.CREATE_USER, permissions.UPDATE_USER ])"
+                    [disabled]="!studentForm.valid" type="submit" mat-raised-button color="primary">
+                    Create Student
+                  </button>
                   <button type="button" mat-raised-button color="warn">Cancel</button>
                 </div>
               </div>

@@ -4,6 +4,7 @@ import {ApiService} from "@shared/api.service";
 import {SnackbarService} from "@shared/snackbar.service";
 import {AppDataService} from "@shared/app-data.service";
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -211,6 +212,24 @@ export class StudentsService {
           return data;
         }
       )
+    );
+  }
+
+  searchResponsibles(query: string): Observable<any[]> {
+    return this.apiService.sendHttpGetRequest(`/student/responsibles?search=${query}`).pipe(
+      map((resp) => {
+        const { data } = resp;
+        return data;
+      })
+    );
+  }
+
+  getStudentTypes() {
+    return this.apiService.sendHttpGetRequest(`/student/studentTypes`).pipe(
+      map((resp) => {
+        const { data } = resp;
+        return data;
+      })
     );
   }
 }
