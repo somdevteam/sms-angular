@@ -2,66 +2,31 @@
 
 <form [formGroup]="generateForm" (ngSubmit)="onSubmit()">
   <mat-dialog-content>
-    <div class="form-row">
+    <div class="form-container">
+
       <mat-form-field appearance="outline">
-        <mat-label>Class</mat-label>
-        <mat-select formControlName="classId">
-          <mat-option *ngFor="let class of classes" [value]="class.classId">
-            {{class.className}}
+        <mat-label>Charge Type</mat-label>
+        <mat-select formControlName="chargeTypeCode" (selectionChange)="onChargeTypeSelected()">
+          <mat-option *ngFor="let type of chargeTypes" [value]="type.chargeTypeCode">
+            {{type.name}}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="generateForm.get('classId')?.hasError('required')">
-          Class is required
+        <mat-error *ngIf="generateForm.get('chargeTypeId')?.hasError('required')">
+          Charge Type is required
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Section</mat-label>
-        <mat-select formControlName="sectionId">
-          <mat-option *ngFor="let section of sections" [value]="section.sectionId">
-            {{section.sectionName}}
+      <mat-form-field *ngIf="isMonthlyChargeType" appearance="outline" >
+        <mat-label>Month</mat-label>
+        <mat-select formControlName="monthId">
+          <mat-option [value]="null">All Months</mat-option>
+          <mat-option *ngFor="let month of months" [value]="month.monthId">
+            {{month.monthname}}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="generateForm.get('sectionId')?.hasError('required')">
-          Section is required
-        </mat-error>
       </mat-form-field>
+
     </div>
-
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Due Category</mat-label>
-        <mat-select formControlName="dueCategory">
-          <mat-option value="MONTHLY">Monthly</mat-option>
-          <mat-option value="QUARTERLY">Quarterly</mat-option>
-        </mat-select>
-        <mat-error *ngIf="generateForm.get('dueCategory')?.hasError('required')">
-          Due category is required
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Due Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="dueDate">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="generateForm.get('dueDate')?.hasError('required')">
-          Due date is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Amount</mat-label>
-      <input matInput type="number" formControlName="amount">
-      <span matPrefix>$&nbsp;</span>
-      <mat-error *ngIf="generateForm.get('amount')?.hasError('required')">
-        Amount is required
-      </mat-error>
-      <mat-error *ngIf="generateForm.get('amount')?.hasError('min')">
-        Amount must be greater than 0
-      </mat-error>
-    </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
@@ -70,4 +35,4 @@
       Generate Charges
     </button>
   </mat-dialog-actions>
-</form> 
+</form>

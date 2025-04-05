@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaymentChargeRequestService } from '../payment-charge-request.service';
 import { GenerateChargesDialogComponent } from './generate-charges-dialog/generate-charges-dialog.component';
-import {FeesService} from "../fees.service";
+import { FeesService } from "../fees.service";
+import { CollectFeesDialogComponent } from './collect-fees-dialog/collect-fees-dialog.component';
+import {formatDate} from "@shared/utilities";
 
 @Component({
   selector: 'app-payment-charge-list',
@@ -13,13 +15,13 @@ import {FeesService} from "../fees.service";
 })
 export class PaymentChargeListComponent implements OnInit {
   displayedColumns: string[] = [
-    'studentName',
-    'rollNo',
+    'studentFullName',
+    'rollNumber',
     'className',
     'sectionName',
-    'amount',
+    'levelFee',
     'dueDate',
-    'dueCategory',
+    'chargeType',
     'status',
     'actions'
   ];
@@ -27,12 +29,20 @@ export class PaymentChargeListComponent implements OnInit {
   filterForm: FormGroup;
   classes: any[] = [];
   sections: any[] = [];
+  chargeTypes: any[] = [];
   loading = false;
+  breadscrums = [
+    {
+      title: 'Payment',
+      items: ['Payment Charge'],
+      active: 'Payments',
+    },
+  ];
 
   constructor(
     private fb: FormBuilder,
     private paymentChargeService: PaymentChargeRequestService,
-    private feesService:FeesService,
+    private feesService: FeesService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
@@ -40,7 +50,7 @@ export class PaymentChargeListComponent implements OnInit {
       classId: [''],
       sectionId: [''],
       status: [''],
-      dueCategory: [''],
+      chargeTypeId: [''],
       startDate: [''],
       endDate: ['']
     });
@@ -48,7 +58,8 @@ export class PaymentChargeListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClasses();
-    this.loadPaymentCharges();
+    this.loadChargeTypes();
+   // this.loadPaymentCharges();
   }
 
   loadClasses(): void {
@@ -58,6 +69,17 @@ export class PaymentChargeListComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.open('Error loading classes', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  loadChargeTypes(): void {
+    this.paymentChargeService.getChargeTypes().subscribe({
+      next: (response) => {
+        this.chargeTypes = response.data;
+      },
+      error: (error) => {
+        this.snackBar.open('Error loading charge types', 'Close', { duration: 3000 });
       }
     });
   }
@@ -74,13 +96,24 @@ export class PaymentChargeListComponent implements OnInit {
           this.snackBar.open('Error loading sections', 'Close', { duration: 3000 });
         }
       });
+    } else {
+      this.sections = [];
+      this.filterForm.patchValue({ sectionId: '' });
     }
   }
 
   loadPaymentCharges(): void {
     this.loading = true;
-    const filters = this.filterForm.value;
-    this.paymentChargeService.getPaymentCharges(filters).subscribe({
+    const formValues = this.filterForm.value;
+    const payload = {
+      classId: Number(formValues.classId),
+      chargeTypeId:Number( formValues.chargeTypes),
+      sectionId: Number(formValues.sectionId),
+      startDate : formValues.startDate ? formatDate(formValues.startDate) : null,
+      endDate : formValues.endDate ? formatDate(formValues.endDate) : null,
+      status:formValues.status
+    }
+    this.paymentChargeService.getPaymentCharges(payload).subscribe({
       next: (response) => {
         this.dataSource = response.data;
         this.loading = false;
@@ -96,8 +129,7 @@ export class PaymentChargeListComponent implements OnInit {
     const dialogRef = this.dialog.open(GenerateChargesDialogComponent, {
       width: '500px',
       data: {
-        classes: this.classes,
-        sections: this.sections
+        chargeTypes: this.chargeTypes
       }
     });
 
@@ -116,14 +148,17 @@ export class PaymentChargeListComponent implements OnInit {
     });
   }
 
-  markAsPaid(chargeId: number): void {
-    this.paymentChargeService.markAsPaid(chargeId).subscribe({
-      next: (response) => {
-        this.snackBar.open('Payment marked as paid successfully', 'Close', { duration: 3000 });
+  openCollectFeesDialog(charge: any): void {
+    const dialogRef = this.dialog.open(CollectFeesDialogComponent, {
+      width: '500px',
+      data: {
+        charge: charge
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
         this.loadPaymentCharges();
-      },
-      error: (error) => {
-        this.snackBar.open('Error marking payment as paid', 'Close', { duration: 3000 });
       }
     });
   }

@@ -1,37 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import {map, Observable} from 'rxjs';
+import { ApiService } from '../shared/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PaymentChargeRequestService {
-  private apiUrl = `${environment.apiUrl}/payment-charge-request`;
-
-  constructor(private http: HttpClient) { }
+  constructor(private apiService: ApiService) {}
 
   getPaymentCharges(filters: any): Observable<any> {
-    return this.http.get(this.apiUrl, { params: filters });
-  }
-
-  getPaymentCharge(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
-  }
-
-  createPaymentCharge(data: any): Observable<any> {
-    return this.http.post(this.apiUrl, data);
-  }
-
-  updatePaymentCharge(id: number, data: any): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}`, data);
-  }
-
-  markAsPaid(id: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${id}/mark-paid`, {});
+    return this.apiService.sendHttpPostRequest('/payment-charge-request/filter', filters)
+      .pipe(
+        map((resp) => {
+          return resp;
+        })
+      );
   }
 
   generateCharges(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/generate-charges`, data);
+    return this.apiService.sendHttpPostRequest('/payment-charge-request/generate-charges', data);
   }
-} 
+
+  getChargeTypes(): Observable<any> {
+    return this.apiService.sendHttpGetRequest('/payment-charge-request/charge-types');
+  }
+  markAsPaid(chargeId: number): Observable<any> {
+    return this.apiService.sendHttpUpdateRequest('/payment-charge-request/mark-as-paid', chargeId, {});
+  }
+
+  collectPayment(chargeId: number): Observable<any> {
+    return this.apiService.sendHttpUpdateRequest('/payment-charge-request/mark-as-paid', chargeId, {});
+  }
+}

@@ -33,6 +33,7 @@ import { StudentSelectionDialogComponent } from './student-selection-dialog/stud
 import { MaterialModule } from '../shared/material.module';
 import { PaymentChargeListComponent } from './payment-charge-list/payment-charge-list.component';
 import { GenerateChargesDialogComponent } from './payment-charge-list/generate-charges-dialog/generate-charges-dialog.component';
+import {CollectFeesDialogComponent} from "./payment-charge-list/collect-fees-dialog/collect-fees-dialog.component";
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { GenerateChargesDialogComponent } from './payment-charge-list/generate-c
     ReceiptComponent,
     StudentSelectionDialogComponent,
     PaymentChargeListComponent,
-    GenerateChargesDialogComponent
+    GenerateChargesDialogComponent,
+    CollectFeesDialogComponent
   ],
   imports: [
     CommonModule,

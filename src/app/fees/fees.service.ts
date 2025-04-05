@@ -7,6 +7,7 @@ import { StudentFeeInfo } from './types/student-fee.types';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../src/environments/environment';
 import {PaymentFormData} from "./addfees/addfees.component";
+import { ApiBaseResponse } from '../common/dto/apiresponses.dto';
 
 interface StudentClass {
   studentClassId: number;
@@ -185,13 +186,32 @@ export class FeesService {
       );
   }
 
-  getSections() {
-    return this.apiService.sendHttpGetRequest('/section')
+  getSections(): Observable<any> {
+    return this.apiService.sendHttpGetRequest(`/section`)
       .pipe(
         map((resp) => {
           return resp;
         })
       );
+  }
+
+  getSectionsByClassId(classId: number): Observable<any> {
+    return this.apiService.sendHttpGetRequest(`/section/by-class/${classId}`)
+      .pipe(
+        map((resp) => {
+          return resp;
+        })
+      );
+  }
+
+
+
+  getBranches(): Observable<any> {
+    return this.apiService.sendHttpGetRequest('/branch/all');
+  }
+
+  getMonths(): Observable<any> {
+    return this.apiService.sendHttpGetRequest('/payment/findAllMonths');
   }
 
   generateReceipt(paymentIds: number) {

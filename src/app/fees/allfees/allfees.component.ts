@@ -8,6 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { ReceiptComponent } from '../receipt/receipt.component';
+import {formatDate} from "@shared/utilities";
 
 interface Class {
   classid: number;
@@ -162,14 +163,6 @@ export class AllfeesComponent implements OnInit {
   }
 
   // Add this utility function to format dates
-  private formatDate(date: Date | null): string | null {
-    if (!date) return null;
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
 
   searchPayments() {
     const formValues = this.paymentForm.value;
@@ -195,8 +188,8 @@ export class AllfeesComponent implements OnInit {
     }
 
     // Format the dates properly
-    const startDate = formValues.startDate ? this.formatDate(formValues.startDate) : null;
-    const endDate = formValues.endDate ? this.formatDate(formValues.endDate) : null;
+    const startDate = formValues.startDate ? formatDate(formValues.startDate) : null;
+    const endDate = formValues.endDate ? formatDate(formValues.endDate) : null;
 
     // Validate dates
     if (!startDate || !endDate) {

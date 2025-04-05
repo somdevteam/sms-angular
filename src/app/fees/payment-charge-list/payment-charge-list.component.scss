@@ -1,5 +1,11 @@
 .container {
-  padding: 20px;
+//   padding: 20px;
+//   width: 100%;
+//   overflow-x: auto;
+display: flex;
+flex-direction: column;
+gap: 16px;
+padding: 16px 0;
 }
 
 .header {
@@ -16,10 +22,12 @@
 
 .filter-card {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .filter-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 16px;
 
@@ -36,13 +44,18 @@
 }
 
 .table-card {
-  .table-container {
-    overflow-x: auto;
-  }
-}
-
-table {
   width: 100%;
+  overflow: hidden;
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    
+    table {
+      width: 100%;
+      min-width: 1000px; // Ensures table doesn't get too squeezed
+    }
+  }
 }
 
 .mat-column-actions {
@@ -73,10 +86,9 @@ table {
 }
 
 // Responsive styles
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .filter-row {
     flex-direction: column;
-    gap: 8px;
 
     mat-form-field {
       width: 100%;
@@ -86,5 +98,17 @@ table {
   .filter-actions {
     width: 100%;
     justify-content: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
   }
 } 
