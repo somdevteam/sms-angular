@@ -6,8 +6,6 @@ import { SnackbarService } from '@shared/snackbar.service';
 import { BranchService } from 'app/branch/branch.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { StudentsService } from '../students.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { EditStudentComponent } from "../edit-student/edit-student.component";
 import { setupConditionalValidation } from '@shared/common/utils';
 
@@ -44,9 +42,7 @@ export class StudentsComponent {
     classForm?: FormGroup;
     selectedStatus: '0' | '1' = '1';
     displayedColumns: string[] = ['studentId', 'rollNumber', 'firstName', 'middleName', 'lastName','className','sectionName', 'responsibleName', 'responsiblePhone', 'pob', 'academicYear', 'actions'];
-    dataSource!: MatTableDataSource<any>;
-    @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-    @ViewChild(MatSort) sort!: MatSort;
+    students: any[] = [];
 
     ngOnInit(): void {
         let formFields = {
@@ -117,9 +113,7 @@ export class StudentsComponent {
         this.studentService.findClassByBranchAndLevel(payload).subscribe({
             next: (res) => {
                 console.log(res);
-                this.dataSource = new MatTableDataSource(res);
-                this.dataSource.sort = this.sort;
-                this.dataSource.paginator = this.paginator;
+                this.students = res;
                 this.pageLoader.hideLoader()
             },
             error: (error) => {

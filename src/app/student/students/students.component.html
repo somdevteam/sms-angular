@@ -78,83 +78,40 @@
             <h2> Classes</h2>
           </div>
           <div class="body table-responsive">
-            <table mat-table [dataSource]="dataSource">
-
-              <!-- Class ID Column -->
-              <ng-container matColumnDef="studentId">
-                <th mat-header-cell *matHeaderCellDef> Student ID </th>
-                <td mat-cell *matCellDef="let element"> {{ element.studentId }} </td>
-              </ng-container>
-
-              <!-- Class ID Column -->
-              <ng-container matColumnDef="rollNumber">
-                <th mat-header-cell *matHeaderCellDef> Roll Number</th>
-                <td mat-cell *matCellDef="let element"> {{ element.rollNumber }} </td>
-              </ng-container>
-
-              <!-- Class Name Column -->
-              <ng-container matColumnDef="firstName">
-                <th mat-header-cell *matHeaderCellDef> First Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.firstName }} </td>
-              </ng-container>
-
-              <!-- Class Name Column -->
-              <ng-container matColumnDef="middleName">
-                <th mat-header-cell *matHeaderCellDef> Middle Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.middleName }} </td>
-              </ng-container>
-
-              <!-- Date Created Column -->
-              <ng-container matColumnDef="lastName">
-                <th mat-header-cell *matHeaderCellDef> last Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.lastName}} </td>
-              </ng-container>
-
-              <!-- Date Created Column -->
-              <ng-container matColumnDef="className">
-                <th mat-header-cell *matHeaderCellDef> Class </th>
-                <td mat-cell *matCellDef="let element"> {{ element.className}} </td>
-              </ng-container>
-
-              <!-- Date Created Column -->
-              <ng-container matColumnDef="sectionName">
-                <th mat-header-cell *matHeaderCellDef> Section </th>
-                <td mat-cell *matCellDef="let element"> {{ element.sectionName}} </td>
-              </ng-container>
-
-              <!-- Date Created Column -->
-              <ng-container matColumnDef="responsibleName">
-                <th mat-header-cell *matHeaderCellDef> Responsible Phone</th>
-                <td mat-cell *matCellDef="let element"> {{ element.responsibleName}} </td>
-              </ng-container>
-
-              <!-- Date Created Column -->
-              <ng-container matColumnDef="responsiblePhone">
-                <th mat-header-cell *matHeaderCellDef> Responsible Phone </th>
-                <td mat-cell *matCellDef="let element"> {{ element.responsiblePhone}} </td>
-              </ng-container>
-
-              <!-- Is Active Column -->
-              <ng-container matColumnDef="pob">
-                <th mat-header-cell *matHeaderCellDef> Pob </th>
-                <td mat-cell *matCellDef="let element"> {{ element.pob}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="academicYear">
-                <th mat-header-cell *matHeaderCellDef> Academic Year </th>
-                <td mat-cell *matCellDef="let element"> {{ element.academicYear }} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Action </th>
-                <td mat-cell *matCellDef="let element">
-                  <button mat-raised-button class="m-2" (click)="editUsers(element)" color="primary">Edit</button>
-                </td>
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <p-table [value]="students" [paginator]="true" [rows]="10" 
+                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 20]"
+                    styleClass="p-datatable-striped">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Student ID</th>
+                  <th>Roll Number</th>
+                  <th>Name</th>
+                  <th>Class</th>
+                  <th>Section</th>
+                  <th>Responsible Name</th>
+                  <th>Responsible Phone</th>
+                  <th>Pob</th>
+                  <th>Academic Year</th>
+                  <th>Action</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-element>
+                <tr>
+                  <td>{{ element.studentId }}</td>
+                  <td>{{ element.rollNumber }}</td>
+                  <td>{{ element.firstName }} {{ element.middleName }} {{ element.lastName }}</td>
+                  <td>{{ element.className }}</td>
+                  <td>{{ element.sectionName }}</td>
+                  <td>{{ element.responsibleName }}</td>
+                  <td>{{ element.responsiblePhone }}</td>
+                  <td>{{ element.pob }}</td>
+                  <td>{{ element.academicYear }}</td>
+                  <td>
+                    <button mat-raised-button class="m-2" (click)="editUsers(element)" color="primary">Edit</button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
         </div>
       </div>

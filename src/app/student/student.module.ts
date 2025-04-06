@@ -5,6 +5,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgChartsModule } from 'ng2-charts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { TableModule } from 'primeng/table';
 
 import { StudentRoutingModule } from './student-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -29,6 +30,7 @@ import { EditStudentComponent } from './edit-student/edit-student.component';
     NgApexchartsModule,
     ComponentsModule,
     SharedModule,
+    TableModule,
   ],
 })
 export class StudentModule {}

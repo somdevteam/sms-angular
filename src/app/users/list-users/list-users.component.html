@@ -76,10 +76,10 @@
                         <td>{{element.email}}</td>
                         <td>
                           <div class="flex justify-content-center" style="display: flex; gap: 8px;">
-                            <button mat-raised-button mat-raised-button (click)="editUsers(element)" color="primary">Edit User</button>
-                            <button mat-raised-button (click)="resetPassword(element)" color="primary">Reset User</button>
-                            <button mat-raised-button (click)="permissions(element)" color="primary">Permissions</button>
-                            <button mat-raised-button (click)="loginHistories(element)" color="primary">Login Histories</button>
+                            <button mat-raised-button class="m-2" (click)="editUsers(element)" color="primary">Edit</button>
+                            <button mat-raised-button class="m-2" (click)="resetPassword(element)" color="primary">Reset User</button>
+                            <button mat-raised-button class="m-2" (click)="permissions(element)" color="primary">Permissions</button>
+                            <button mat-raised-button class="m-2" (click)="loginHistories(element)" color="primary">Login Histories</button>
                           </div>
                         
                         </td>
