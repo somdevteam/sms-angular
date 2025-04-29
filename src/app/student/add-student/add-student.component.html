@@ -146,50 +146,51 @@
                 </div>
               </div>
 
-              <!-- Responsible Information Section -->
+
+              <!-- Guardians Information Section -->
               <div class="section-title mt-4 mb-3">
-                <h5>Responsible Information</h5>
+                <h5>Guardians Information</h5>
                 <hr>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
 
-                  <label class="mb-2 d-block">Responsible Type</label>
-                  <mat-radio-group formControlName="responsibleType" class="d-flex gap-4">
-                    <mat-radio-button value="existing">Select Existing Responsible</mat-radio-button>
-                    <mat-radio-button value="new">Add New Responsible</mat-radio-button>
+                  <label class="mb-2 d-block">Guardian Type</label>
+                  <mat-radio-group formControlName="guardianType" class="d-flex gap-4">
+                    <mat-radio-button value="existing">Select Existing Guardian</mat-radio-button>
+                    <mat-radio-button value="new">Add New Guardian</mat-radio-button>
                   </mat-radio-group>
                 </div>
               </div>
 
 
-              <!-- Existing Responsible Selection -->
-              <div class="row" *ngIf="studentForm.get('responsibleType')?.value === 'existing'">
+              <!-- Existing Guardians Selection -->
+              <div class="row" *ngIf="studentForm.get('guardianType')?.value === 'existing'">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Search Responsible</mat-label>
-                    <input matInput type="text" [matAutocomplete]="auto" formControlName="existingResponsible">
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayResponsibleFn">
-                      <mat-option *ngFor="let responsible of filteredResponsibles" [value]="responsible">
-                        {{responsible.responsiblename}} - {{responsible.phone}}
+                    <mat-label>Search Guardian</mat-label>
+                    <input matInput type="text" [matAutocomplete]="auto" formControlName="existingGuardian">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayGuardianFn">
+                      <mat-option *ngFor="let guardian of filteredGuardians" [value]="guardian">
+                        {{guardian.guardianname}} - {{guardian.phone}}
                       </mat-option>
                     </mat-autocomplete>
                   </mat-form-field>
                 </div>
               </div>
 
-              <!-- New Responsible Information -->
-              <div class="row" *ngIf="studentForm.get('responsibleType')?.value === 'new'">
+              <!-- New Guardian Information -->
+              <div class="row" *ngIf="studentForm.get('guardianType')?.value === 'new'">
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Responsible Name</mat-label>
-                    <input matInput formControlName="responsibleName">
+                    <mat-label>Guardian Name</mat-label>
+                    <input matInput formControlName="guardianName">
                   </mat-form-field>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Responsible Phone</mat-label>
-                    <input matInput formControlName="responsiblePhone">
+                    <mat-label>Guardian Phone</mat-label>
+                    <input matInput formControlName="guardianPhone">
                   </mat-form-field>
                 </div>
               </div>

@@ -19,7 +19,7 @@ export class AddStudentComponent {
   levelList: any;
   classList: any;
   sectionList: any = [];
-  filteredResponsibles: any[] = [];
+  filteredGuardians: any[] = [];
   breadscrums = [
     {
       title: 'Add Student',
@@ -62,10 +62,10 @@ export class AddStudentComponent {
       branchId: [''],
       gender: ['M', [Validators.required, Validators.pattern(/^(M|F)$/i)]],
       dateOfBirth: ['', Validators.required],
-      responsibleType: ['new'],
-      existingResponsible: [''],
-      responsibleName: [''],
-      responsiblePhone: [''],
+      guardianType: ['new'],
+      existingGuardian: [''],
+      guardianName: [''],
+      guardianPhone: [''],
       classId:  ['', Validators.required],
       isActive: ['1'],
       sectionId: [],
@@ -75,30 +75,30 @@ export class AddStudentComponent {
     this.studentForm = this.fb.group(formFields);
 
     // Set up guardian search
-    this.studentForm.get('existingResponsible')?.valueChanges
+    this.studentForm.get('existingGuardian')?.valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
         switchMap(value => {
           if (typeof value === 'string' && value) {
-            return this.searchResponsibles(value);
+            return this.searchGuardians(value);
           }
           return of([]);
         })
       )
-      .subscribe(responsibles => {
-        this.filteredResponsibles = responsibles;
+      .subscribe(guardians => {
+        this.filteredGuardians = guardians;
       });
 
     this.loadInitialData();
   }
 
-  displayResponsibleFn(responsible: any): string {
-    return responsible ? `${responsible.responsiblename} - ${responsible.phone}` : '';
+  displayGuardianFn(guardian: any): string {
+    return guardian ? `${guardian.guardianname} - ${guardian.phone}` : '';
   }
 
-  private searchResponsibles(query: string): Observable<any[]> {
-    return this.studentsService.searchResponsibles(query);
+  private searchGuardians(query: string): Observable<any[]> {
+    return this.studentsService.searchGuardians(query);
   }
 
   loadInitialData() {
@@ -135,17 +135,17 @@ export class AddStudentComponent {
         isActive: formValue.isActive,
         sectionId: formValue.sectionId,
         rollNumber: Number(formValue.rollNumber),
-        responsibleType: formValue.responsibleType,
+        guardianType: formValue.guardianType,
         studentType: formValue.studentType,
         studentTypeId: formValue.studentType
       };
 
-      if (formValue.responsibleType === 'new') {
-        payload.responsibleName = formValue.responsibleName;
-        payload.responsiblePhone = formValue.responsiblePhone;
+      if (formValue.guardianType === 'new') {
+        payload.guardianName = formValue.guardianName;
+        payload.guardianPhone = formValue.guardianPhone;
       } else {
-        const selectedResponsible = formValue.existingResponsible;
-        payload.responsibleId = selectedResponsible.responsibleid;
+        const selectedGuardian = formValue.existingGuardian;
+        payload.guardianId = selectedGuardian.guardianid;
       }
       this.studentsService.addStudent(payload).subscribe({
         next: (res => {

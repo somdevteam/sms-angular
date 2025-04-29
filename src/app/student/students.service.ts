@@ -215,8 +215,8 @@ export class StudentsService {
     );
   }
 
-  searchResponsibles(query: string): Observable<any[]> {
-    return this.apiService.sendHttpGetRequest(`/student/responsibles?search=${query}`).pipe(
+  searchGuardians(query: string): Observable<any[]> {
+    return this.apiService.sendHttpGetRequest(`/student/guardians?search=${query}`).pipe(
       map((resp) => {
         const { data } = resp;
         return data;
