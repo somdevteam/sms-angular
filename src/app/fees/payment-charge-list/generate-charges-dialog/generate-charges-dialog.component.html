@@ -20,7 +20,7 @@
         <mat-label>Month</mat-label>
         <mat-select formControlName="monthId">
           <mat-option [value]="null">All Months</mat-option>
-          <mat-option *ngFor="let month of months" [value]="month.monthId">
+          <mat-option *ngFor="let month of months" [value]="month.monthid">
             {{month.monthname}}
           </mat-option>
         </mat-select>

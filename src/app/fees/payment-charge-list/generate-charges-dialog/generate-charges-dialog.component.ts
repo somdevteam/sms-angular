@@ -3,20 +3,20 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FeesService } from '../../fees.service';
-import {PaymentChargeRequestService} from "../../payment-charge-request.service";
-import {SnackbarService} from "@shared/snackbar.service";
+import { PaymentChargeRequestService } from '../../payment-charge-request.service';
+import { SnackbarService } from '@shared/snackbar.service';
 
 @Component({
   selector: 'app-generate-charges-dialog',
   templateUrl: './generate-charges-dialog.component.html',
-  styleUrls: ['./generate-charges-dialog.component.scss']
+  styleUrls: ['./generate-charges-dialog.component.scss'],
 })
 export class GenerateChargesDialogComponent implements OnInit {
   generateForm: FormGroup;
   chargeTypes: any[] = [];
   branches: any[] = [];
   months: any[] = [];
-  isMonthlyChargeType =true;
+  isMonthlyChargeType = true;
 
   constructor(
     private fb: FormBuilder,
@@ -24,11 +24,11 @@ export class GenerateChargesDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: SnackbarService,
     private feesService: FeesService,
-    private paymentChargeRequestService:PaymentChargeRequestService
+    private paymentChargeRequestService: PaymentChargeRequestService
   ) {
     this.generateForm = this.fb.group({
       chargeTypeCode: ['', Validators.required],
-      monthId: ['']
+      monthId: [''],
     });
   }
 
@@ -45,7 +45,7 @@ export class GenerateChargesDialogComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.dangerNotification('Error loading branches');
-      }
+      },
     });
   }
 
@@ -56,32 +56,36 @@ export class GenerateChargesDialogComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.dangerNotification('Error loading months');
-      }
+      },
     });
   }
 
   onSubmit(): void {
     if (this.generateForm.valid) {
       const formValues = this.generateForm.value;
-      const storage =  localStorage.getItem('currentUser') ?? '{}';
+      const storage = localStorage.getItem('currentUser') ?? '{}';
       const userInfo = JSON.parse(storage);
 
-      const payload ={
-        createdBy : userInfo.id,
-        branchId : userInfo.branch,
+      const payload = {
+        createdBy: userInfo.id,
+        branchId: userInfo.branch,
         chargeTypeCode: formValues.chargeTypeCode,
-        monthId: formValues.monthId ? formValues.monthId :null
-      }
+        monthId: formValues.monthId ? formValues.monthId : null,
+      };
       this.paymentChargeRequestService.generateCharges(payload).subscribe({
         next: (response) => {
-          this.snackBar.successNotification('Payment charge created successfully');
-          this.months = response.data;
-          this.dialogRef.close(this.generateForm.value);
+          this.snackBar.successNotification(
+            'Payment charge created successfully'
+          );
+          this.dialogRef.close(true);
         },
         error: (error) => {
-          this.snackBar.dangerNotification('Error while creating payment charge request');
-
-        }
+          const errorMessage =
+            error?.error?.message ||
+            'Error while creating payment charge request';
+          this.snackBar.dangerNotification(errorMessage);
+          this.dialogRef.close(false);
+        },
       });
     } else {
       this.snackBar.dangerNotification('Please fill all required fields');
@@ -93,9 +97,6 @@ export class GenerateChargesDialogComponent implements OnInit {
   }
   onChargeTypeSelected(): void {
     const chargeTypeCode = this.generateForm.get('chargeTypeCode')?.value;
-    if(chargeTypeCode && chargeTypeCode !='monthly'){
-      this.isMonthlyChargeType =false;
-    }
-
+    this.isMonthlyChargeType = chargeTypeCode === 'monthly';
   }
 }

@@ -1,11 +1,8 @@
 .container {
-//   padding: 20px;
-//   width: 100%;
-//   overflow-x: auto;
-display: flex;
-flex-direction: column;
-gap: 16px;
-padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
 }
 
 .header {
@@ -17,45 +14,70 @@ padding: 16px 0;
   h2 {
     margin: 0;
     color: #333;
+    font-size: 24px;
+    font-weight: 500;
   }
 }
 
 .filter-card {
   margin-bottom: 20px;
   width: 100%;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  mat-card-content {
+    padding: 16px;
+  }
 }
 
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
   margin-bottom: 16px;
 
   mat-form-field {
-    flex: 1;
-    min-width: 200px;
+    width: 100%;
   }
 }
 
 .filter-actions {
   display: flex;
-  gap: 8px;
-  align-items: flex-end;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 8px;
+
+  button {
+    min-width: 120px;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
 }
 
 .table-card {
   width: 100%;
   overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
   .table-container {
     width: 100%;
     overflow-x: auto;
-    
+
     table {
       width: 100%;
-      min-width: 1000px; // Ensures table doesn't get too squeezed
+      min-width: 1000px;
     }
   }
+}
+
+.table-footer {
+  padding: 8px 16px;
+  background-color: #fafafa;
+  border-top: 1px solid #e0e0e0;
 }
 
 .mat-column-actions {
@@ -68,6 +90,7 @@ padding: 16px 0;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
+  text-transform: capitalize;
 
   &.pending {
     background-color: #fff3e0;
@@ -85,19 +108,42 @@ padding: 16px 0;
   }
 }
 
+// Loading state
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-container {
+  position: relative;
+  min-height: 200px;
+}
+
 // Responsive styles
 @media (max-width: 1200px) {
-  .filter-row {
-    flex-direction: column;
-
-    mat-form-field {
-      width: 100%;
-    }
-  }
-
-  .filter-actions {
-    width: 100%;
-    justify-content: flex-end;
+  .filter-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -108,7 +154,19 @@ padding: 16px 0;
 
   .header {
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
     align-items: flex-start;
   }
-} 
+
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}

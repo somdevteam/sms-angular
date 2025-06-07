@@ -165,7 +165,8 @@
   }
 
   .amount-section {
-    .amount-row, .total-amount {
+    .amount-row,
+    .total-amount {
       flex-direction: column;
       text-align: right;
     }
