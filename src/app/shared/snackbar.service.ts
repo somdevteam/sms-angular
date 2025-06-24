@@ -19,7 +19,7 @@ export class SnackbarService {
 
   successNotification(text: string,) {
     this.snackBar.open(text, '', {
-      duration: 2000,
+      duration: 4000,
       verticalPosition: 'top',
       horizontalPosition: 'right',
       panelClass: 'snackbar-success',
@@ -28,7 +28,7 @@ export class SnackbarService {
 
   dangerNotification(text: string,) {
     this.snackBar.open(text, 'Ok', {
-      duration: 2000,
+      duration: 4000,
       verticalPosition: 'top',
       horizontalPosition: 'right',
       panelClass: 'snackbar-danger',
@@ -37,7 +37,7 @@ export class SnackbarService {
 
   warningNotification(text: string,) {
     this.snackBar.open(text, '', {
-      duration: 2000,
+      duration: 4000,
       verticalPosition: 'top',
       horizontalPosition: 'right',
       panelClass: 'snackbar-warning',
@@ -80,7 +80,7 @@ export class SnackbarService {
       'error'
     );
   }
-  
+
   showConfirmationDialog(text: string, title: string = 'Are you sure?'): Promise<boolean> {
     return Swal.fire({
       title: title,

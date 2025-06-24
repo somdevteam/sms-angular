@@ -224,7 +224,12 @@ export class PaymentChargeListComponent implements OnInit {
     const dialogRef = this.dialog.open(CollectFeesDialogComponent, {
       width: '500px',
       data: {
-        charge: charge,
+        charge: {
+          ...charge,
+          studentClassId: charge.studentClassId,
+          responsibleId: charge.responsibleId,
+          monthId: charge.monthId,
+        },
       },
     });
 

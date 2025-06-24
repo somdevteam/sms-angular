@@ -4,30 +4,24 @@
     <div class="form-row">
       <mat-form-field>
         <mat-label>Amount</mat-label>
-        <input matInput type="number" formControlName="amount" [readonly]="true">
+        <input
+          matInput
+          type="number"
+          formControlName="amount"
+          [readonly]="true"
+        />
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Payment Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="paymentDate">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="form-row">
-      <mat-form-field>
-        <mat-label>Payment Method</mat-label>
-        <mat-select formControlName="paymentMethod">
-          <mat-option value="CASH">Cash</mat-option>
-          <mat-option value="CARD">Card</mat-option>
-          <mat-option value="BANK_TRANSFER">Bank Transfer</mat-option>
+        <mat-label>Payment Type</mat-label>
+        <mat-select formControlName="paymentTypeId">
+          <mat-option
+            *ngFor="let type of paymentTypes"
+            [value]="type.paymenttypeid"
+          >
+            {{ type.type }}
+          </mat-option>
         </mat-select>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Reference Number</mat-label>
-        <input matInput formControlName="referenceNumber">
       </mat-form-field>
     </div>
 
@@ -40,9 +34,12 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" 
-          (click)="onSubmit()" 
-          [disabled]="!paymentForm.valid || loading">
-    {{ loading ? 'Processing...' : 'Collect Payment' }}
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="!paymentForm.valid || loading"
+  >
+    {{ loading ? "Processing..." : "Collect Payment" }}
   </button>
-</mat-dialog-actions> 
+</mat-dialog-actions>
