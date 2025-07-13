@@ -22,36 +22,45 @@
   </div>
 
   <div class="row mt-4 mb-4">
-    <!-- Include necessary Angular Material modules -->
-    <ng-container *ngIf="classList">
-      <table mat-table [dataSource]="classList">  <!-- class="mat-elevation-z8" -->
-
-        <!-- Column definitions -->
-        <ng-container matColumnDef="classid">
-          <th mat-header-cell *matHeaderCellDef> Class ID </th>
-          <td mat-cell *matCellDef="let element"> {{ element.class.classid }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="classname">
-          <th mat-header-cell *matHeaderCellDef> Class Name </th>
-          <td mat-cell *matCellDef="let element"> {{ element.class.classname }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Actions </th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-icon-button (click)="removeClass(element)">
-              <mat-icon color="warn">delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <!-- Table rows -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </ng-container>
-
+    <div class="col-12">
+      <div class="card">
+        <div class="header">
+          <h2>Classes for Level: {{ data.levelname }}</h2>
+        </div>
+        <div class="body">
+          <p-table #dt [value]="classList" 
+                  [rows]="10" 
+                  [paginator]="true"
+                  [rowHover]="true"
+                  [globalFilterFields]="['class.classid', 'class.classname']"
+                  styleClass="p-datatable-sm p-datatable-gridlines">
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="class.classid">Class ID <p-sortIcon field="class.classid"></p-sortIcon></th>
+                <th pSortableColumn="class.classname">Class Name <p-sortIcon field="class.classname"></p-sortIcon></th>
+                <th style="width: 100px">Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-element>
+              <tr>
+                <td>{{ element.class.classid }}</td>
+                <td>{{ element.class.classname }}</td>
+                <td>
+                  <button mat-icon-button color="warn" (click)="removeClass(element)" matTooltip="Remove Class">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3" class="text-center">No classes found for this level.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div mat-dialog-actions>

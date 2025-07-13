@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { SnackbarService } from '@shared/snackbar.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { BranchService } from '../branch.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AssignedAcademicComponent } from './assigned-academic/assigned-academic.component';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-view-branch',
@@ -12,6 +12,7 @@ import { AssignedAcademicComponent } from './assigned-academic/assigned-academic
   styleUrls: ['./view-branch.component.scss']
 })
 export class ViewBranchComponent implements OnInit {
+  
 
   breadscrums = [
     {
@@ -21,6 +22,8 @@ export class ViewBranchComponent implements OnInit {
     },
   ];
 
+  branchesData: any[] = [];
+
   constructor(
     private snackBar: SnackbarService,
     private pageLoader: PageLoaderService,
@@ -28,11 +31,8 @@ export class ViewBranchComponent implements OnInit {
     private dialog: MatDialog,
   ) {}
 
-  displayedColumns: string[] = ['branchId', 'branchName', 'branchLocation', 'dateCreated', 'isActive','action'];
-  dataSource = new MatTableDataSource<any>; 
-
   ngOnInit(): void {
-    this.loadBranches()
+    // Remove auto-loading of data
   }
 
   loadBranches() {
@@ -40,10 +40,8 @@ export class ViewBranchComponent implements OnInit {
     this.branchService.getBranches().subscribe({
       next :(res => {
         console.log(res);
-        
-        this.dataSource = new MatTableDataSource(res);
+        this.branchesData = res;
         this.pageLoader.hideLoader()
-
       }),
       error: (error => {
         this.pageLoader.hideLoader()
@@ -52,9 +50,9 @@ export class ViewBranchComponent implements OnInit {
     })
   }
 
-  onSlideToggleChange(row: any) {
+  toggleBranchStatus(row: any) {
     const branchId = row.branchId;
-    const actionType = row.isActive ? 'Activate' : 'Deactivate';
+    const actionType = row.isActive ? 'Deactivate' : 'Activate';
     const branch = row.branchName;
     const text = `Do you want to ${actionType} this ${branch}?`
     this.snackBar.showConfirmationDialog(text).then((confirmed) => {
@@ -67,10 +65,12 @@ export class ViewBranchComponent implements OnInit {
             this.snackBar.dangerNotification(error)
           })
         })
-      } else {
-        row.isActive = !row.isActive;
       }
     })
+  }
+
+  onSlideToggleChange(row: any) {
+    this.toggleBranchStatus(row);
   }
 
   assignedAcademic(row: any) {
@@ -80,6 +80,10 @@ export class ViewBranchComponent implements OnInit {
       },
       width: '70%'
     })
+  }
+
+  onSearch() {
+    this.loadBranches();
   }
 
 }

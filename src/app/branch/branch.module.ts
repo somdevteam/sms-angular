@@ -9,6 +9,8 @@ import { SharedModule } from '@shared';
 import { ComponentsModule } from '@shared/components/components.module';
 import { ViewBranchComponent } from './view-branch/view-branch.component';
 import { AssignedAcademicComponent } from './view-branch/assigned-academic/assigned-academic.component';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { AssignedAcademicComponent } from './view-branch/assigned-academic/assig
     ReactiveFormsModule,
     ComponentsModule,
     SharedModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    TableModule,
+    TagModule
   ]
 })
 export class BranchModule { }

@@ -7,6 +7,7 @@ import { SnackbarService } from '@shared/snackbar.service';
 import { AcademicService } from 'app/academic/academic.service';
 import { PageLoaderService } from 'app/layout/page-loader/page-loader.service';
 import { AssingClassComponent } from '../assing-class/assing-class.component';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-view-class',
@@ -21,7 +22,6 @@ export class ViewClassComponent implements OnInit {
   isBranchLoading:boolean = false
 
   classList:any 
-  displayedColumns: string[] = ['classid', 'classname','actions'];
 
   constructor(
     public dialogRef: MatDialogRef<AssingClassComponent>,

@@ -6,54 +6,75 @@
       </app-breadcrumb>
     </div>
     <div class="row clearfix">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card">
+          <div class="header">
+            <h2>Search</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div class="col-12 text-end">
+                <button mat-raised-button color="primary" (click)="onSearch()" class="me-2">
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" mt-3>
           <div class="header">
             <h2>Branches List</h2>
           </div>
-          <div class="body table-responsive">
-            <!-- branch-table.component.html -->
-            <mat-table [dataSource]="dataSource">
-              <ng-container matColumnDef="branchId">
-                <mat-header-cell *matHeaderCellDef> Branch ID </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{ element.branchId }} </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="branchName">
-                <mat-header-cell *matHeaderCellDef> Branch Name </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{ element.branchName }} </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="branchLocation">
-                <mat-header-cell *matHeaderCellDef> Branch Location </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{ element.branchLocation }} </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="dateCreated">
-                <mat-header-cell *matHeaderCellDef> Date Created </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{ element.dateCreated | date: 'medium' }} </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="isActive">
-                <mat-header-cell *matHeaderCellDef> Is Active </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <mat-slide-toggle [(ngModel)]="element.isActive" (change)="onSlideToggleChange(element)" matTooltip="activate and deactivate branch">
-                    <!-- {{ element.isActive ? 'Yes' : 'No' }} -->
-                  </mat-slide-toggle> 
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="action">
-                <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  <button mat-raised-button color="primary" (click)="assignedAcademic(element)">Assigned Academics</button>
-                </mat-cell>
-              </ng-container>
-
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-            </mat-table>
-
+          <div class="body">
+            <p-table #dt [value]="branchesData" 
+                    [rows]="10" 
+                    [paginator]="true"
+                    [rowHover]="true"
+                    [globalFilterFields]="['branchId', 'branchName', 'branchLocation']"
+                    styleClass="p-datatable-sm p-datatable-gridlines">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th pSortableColumn="branchId">Branch ID <p-sortIcon field="branchId"></p-sortIcon></th>
+                  <th pSortableColumn="branchName">Branch Name <p-sortIcon field="branchName"></p-sortIcon></th>
+                  <th pSortableColumn="branchLocation">Branch Location <p-sortIcon field="branchLocation"></p-sortIcon></th>
+                  <th pSortableColumn="dateCreated">Date Created <p-sortIcon field="dateCreated"></p-sortIcon></th>
+                  <th pSortableColumn="isActive">Status <p-sortIcon field="isActive"></p-sortIcon></th>
+                  <th style="width: 150px">Actions</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-element>
+                <tr>
+                  <td>{{ element.branchId }}</td>
+                  <td>{{ element.branchName }}</td>
+                  <td>{{ element.branchLocation }}</td>
+                  <td>{{ element.dateCreated | date:'medium' }}</td>
+                  <td>
+                    <p-tag [value]="element.isActive ? 'Active' : 'Inactive'" 
+                          [severity]="element.isActive ? 'success' : 'danger'"></p-tag>
+                  </td>
+                  <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="toggleBranchStatus(element)">
+                        <mat-icon>{{ element.isActive ? 'block' : 'check_circle' }}</mat-icon>
+                        <span>{{ element.isActive ? 'Deactivate' : 'Activate' }}</span>
+                      </button>
+                      <button mat-menu-item (click)="assignedAcademic(element)">
+                        <mat-icon>school</mat-icon>
+                        <span>Assigned Academics</span>
+                      </button>
+                    </mat-menu>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6" class="text-center">No branches found.</td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
         </div>
       </div>

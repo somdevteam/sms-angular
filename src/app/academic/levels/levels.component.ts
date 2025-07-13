@@ -23,9 +23,6 @@ export class LevelsComponent implements OnInit {
   ];
 
   levelsData: any[] = [];
-  displayedColumns: string[] = ['levelid', 'levelname', 'datecreated', 'isactive','actions'];
-
-
   constructor(
     private academicService: AcademicService,
     private snackBar: SnackbarService,

@@ -40,8 +40,8 @@ export class EditStudentComponent {
       pob: [this.userData.pob, Validators.required],
       dateOfBirth: [this.userData.dateOfBirth, Validators.required],
       rollNumber: [this.userData.rollNumber, Validators.required],
-      responsibleName: [this.userData.responsibleName, Validators.required],
-      responsiblePhone: [this.userData.responsiblePhone],
+      // responsibleName: [this.userData.responsibleName, Validators.required],
+      guardianPhone: [this.userData.guardianPhone, Validators.required],
       branchId: [this.userData.branchId, Validators.required],
     });
 
