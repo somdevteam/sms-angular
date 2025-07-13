@@ -1,24 +1,32 @@
 <section class="content">
   <div class="content-block">
+    <!-- Header with breadcrumb -->
     <div class="block-header" *ngFor="let breadscrum of breadscrums">
-      <!-- breadcrumb -->
       <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
       </app-breadcrumb>
     </div>
-    <div class="row clearfix">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
+
+    <!-- Filter Form Card -->
+    <div class="row clearfix mb-4">
+      <div class="col-12">
+        <div class="card filter-card">
           <div class="header">
-            <h2>Exam Results</h2>
+            <h2><i class="fas fa-filter"></i> Filter Exam Results</h2>
+            <p class="text-muted mb-0">Select criteria to view and manage exam results</p>
           </div>
           <div class="body">
-            <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="examForm">
               <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Select Branch</mat-label>
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-3">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label><i class="fas fa-building"></i> Branch</mat-label>
                     <mat-select formControlName="branchId">
-                      <mat-option *ngIf="loading.branches">Loading...</mat-option>
+                      <mat-option *ngIf="loading.branches">
+                        <div class="d-flex align-items-center">
+                          <mat-spinner diameter="16" class="me-2"></mat-spinner>
+                          Loading branches...
+                        </div>
+                      </mat-option>
                       <mat-option *ngFor="let branch of branches" [value]="branch.branchId">
                         {{branch.branchName}}
                       </mat-option>
@@ -28,11 +36,17 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Select Exam</mat-label>
+                
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-3">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label><i class="fas fa-file-alt"></i> Exam</mat-label>
                     <mat-select formControlName="examId">
-                      <mat-option *ngIf="loading.exams">Loading...</mat-option>
+                      <mat-option *ngIf="loading.exams">
+                        <div class="d-flex align-items-center">
+                          <mat-spinner diameter="16" class="me-2"></mat-spinner>
+                          Loading exams...
+                        </div>
+                      </mat-option>
                       <mat-option *ngFor="let exam of exams" [value]="exam.examId">
                         {{exam.examName}}
                       </mat-option>
@@ -42,12 +56,20 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Select Class</mat-label>
+                
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-3">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label><i class="fas fa-graduation-cap"></i> Class</mat-label>
                     <mat-select formControlName="classId">
-                      <mat-option *ngIf="loading.classes">Loading...</mat-option>
-                      <mat-option *ngIf="!examForm.get('examId')?.value" disabled>Please select an exam first</mat-option>
+                      <mat-option *ngIf="loading.classes">
+                        <div class="d-flex align-items-center">
+                          <mat-spinner diameter="16" class="me-2"></mat-spinner>
+                          Loading classes...
+                        </div>
+                      </mat-option>
+                      <mat-option *ngIf="!examForm.get('examId')?.value" disabled>
+                        <i class="fas fa-info-circle me-2"></i>Please select an exam first
+                      </mat-option>
                       <mat-option *ngFor="let class of classes" [value]="class.classid">
                         {{class.classname}}
                       </mat-option>
@@ -57,14 +79,20 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Select Section</mat-label>
+                
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-3">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label><i class="fas fa-layer-group"></i> Section</mat-label>
                     <mat-select formControlName="sectionId">
-                      <mat-option *ngIf="loading.sections">Loading...</mat-option>
-                      <mat-option *ngIf="!examForm.get('classId')?.value" disabled>Please select a class first</mat-option>
+                      <mat-option *ngIf="loading.sections">
+                        <div class="d-flex align-items-center">
+                          <mat-spinner diameter="16" class="me-2"></mat-spinner>
+                          Loading sections...
+                        </div>
+                      </mat-option>
+                      <mat-option *ngIf="!examForm.get('classId')?.value" disabled>
+                        <i class="fas fa-info-circle me-2"></i>Please select a class first
+                      </mat-option>
                       <mat-option *ngFor="let section of sections" [value]="section.sectionid">
                         {{section.sectionname}}
                       </mat-option>
@@ -75,10 +103,12 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row mt-2">
+              
+              <div class="row">
                 <div class="col-12 d-flex justify-content-end">
-                  <button mat-raised-button color="primary" type="submit" [disabled]="loading.submit">
-                    {{loading.submit ? 'Submitting...' : 'Submit'}}
+                  <button mat-raised-button color="primary" (click)="loadExamResults()" [disabled]="!examForm.valid || loading.submit">
+                    <i class="fas fa-search me-2"></i>
+                    {{loading.submit ? 'Loading...' : 'Get Exam Results'}}
                   </button>
                 </div>
               </div>
@@ -88,39 +118,120 @@
       </div>
     </div>
 
-    <div class="row">
+    <!-- Results Table Card -->
+    <div class="row" *ngIf="results.length > 0">
       <div class="col-12">
-        <div class="card">
+        <div class="card results-card">
           <div class="header">
-            <h2>Exam Results</h2>
+            <h2><i class="fas fa-chart-bar"></i> Exam Results</h2>
+            <div class="header-actions">
+              <span class="badge bg-primary">{{results.length}} Students</span>
+              <span class="badge bg-success">{{subjects.length}} Subjects</span>
+            </div>
           </div>
           <div class="body">
-            <p-table [value]="results" [responsive]="true" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
-              [rowsPerPageOptions]="[5, 10, 20]">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Student Name</th>
-                  <th *ngFor="let subject of subjects">{{subject.subject_name}}</th>
-                  <th>Total</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-result>
-                <tr>
-                  <td>{{result.firstName + ' ' + result.middleName + ' ' + result.lastName}}</td>
-                  <td *ngFor="let subject of subjects">
-                    <p-inputNumber 
-                    [id]="'marks-' + result.studentId + '-' + subject.subject_id"
-                    [min]="0"
-                    [max]="100"
-                    inputId="withoutgrouping"
-                    (onInput)="updateMarks(result, subject.subject_id, $event)"
-                    [ngModel]="result[subject.subject_name]" 
-                    [useGrouping]="false"/>
-                  </td>
-                  <td>{{result.total || 0}}</td>
-                </tr>
-              </ng-template>
-            </p-table>
+            <div class="table-responsive">
+              <p-table 
+                [value]="results" 
+                [responsive]="true" 
+                [paginator]="true" 
+                [rows]="10" 
+                [tableStyle]="{ 'min-width': '100%' }"
+                [rowsPerPageOptions]="[5, 10, 20, 50]"
+                styleClass="p-datatable-sm p-datatable-striped p-datatable-hoverable"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} students">
+                
+                <ng-template pTemplate="header">
+                  <tr class="table-header">
+                    <th class="roll-number-col">
+                      <i class="fas fa-hashtag"></i> Roll No
+                    </th>
+                    <th class="student-name-col">
+                      <i class="fas fa-user"></i> Student Name
+                    </th>
+                    <th *ngFor="let subject of subjects" class="subject-col">
+                      <div class="subject-header">
+                        <i class="fas fa-book"></i>
+                        <span class="subject-name">{{subject.subject_name}}</span>
+                      </div>
+                    </th>
+                    <th class="total-col">
+                      <i class="fas fa-calculator"></i> Total
+                    </th>
+                  </tr>
+                </ng-template>
+                
+                <ng-template pTemplate="body" let-result let-ri="rowIndex">
+                  <tr [class.even-row]="ri % 2 === 0" [class.odd-row]="ri % 2 === 1">
+                    <td class="roll-number-cell">
+                      <div class="roll-number">{{result.rollNumber || 'N/A'}}</div>
+                    </td>
+                    <td class="student-name-cell">
+                      <div class="student-name">{{result.firstName + ' ' + result.middleName + ' ' + result.lastName}}</div>
+
+                    </td>
+                    <td *ngFor="let subject of subjects" class="marks-cell">
+                      <div class="marks-input-container">
+                        <p-inputNumber 
+                          [id]="'marks-' + result.studentId + '-' + subject.subject_id"
+                          [min]="0"
+                          [max]="100"
+                          [placeholder]="'Enter marks'"
+                          (onInput)="updateMarks(result, subject.subject_id, $event)"
+                          [ngModel]="result[subject.subject_name]" 
+                          [useGrouping]="false"
+                          [showButtons]="false"
+                          class="marks-input"/>
+                      </div>
+                    </td>
+                    <td class="total-cell">
+                      <div class="total-marks">
+                        <span class="total-value">{{result.total || 0}}</span>
+                        <span class="total-label">/ {{subjects.length * 100}}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+                
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td [attr.colspan]="subjects.length + 3" class="text-center py-4">
+                      <div class="empty-state">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5>No results found</h5>
+                        <p class="text-muted">Please select the required filters to view exam results</p>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+            
+            <!-- Save All Marks Button -->
+            <div class="row mt-3">
+              <div class="col-12 d-flex justify-content-end">
+                <button mat-raised-button color="primary" (click)="saveAllMarks()" [disabled]="loading.saving || !hasUnsavedChanges()">
+                  <i class="fas fa-save me-2"></i>
+                  {{loading.saving ? 'Saving...' : 'Save All Marks'}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="row" *ngIf="!loading.submit && results.length === 0 && examForm.get('sectionId')?.value">
+      <div class="col-12">
+        <div class="card">
+          <div class="body text-center py-5">
+            <div class="empty-state">
+              <i class="fas fa-clipboard-list fa-4x text-muted mb-4"></i>
+              <h4>No Exam Results Available</h4>
+              <p class="text-muted">No exam results found for the selected criteria. Please check your selection or contact the administrator.</p>
+            </div>
           </div>
         </div>
       </div>

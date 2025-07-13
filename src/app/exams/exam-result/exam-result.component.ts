@@ -6,7 +6,7 @@ import { BranchService } from 'app/branch/branch.service';
 import { SnackbarService } from '@shared/snackbar.service';
 import { ExamsService } from '../exams.service';
 import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-exam-result',
@@ -29,13 +29,14 @@ export class ExamResultComponent implements OnInit, OnDestroy {
     exams: false,
     classes: false,
     sections: false,
-    submit: false
+    submit: false,
+    saving: false
   };
   results: any[] = [];
   subjects: any[] = [];
   value1!: number;
+  unsavedChanges: Map<string, any> = new Map();
 
-  private marksUpdate = new Subject<{result: any, subjectId: number, marks: number}>();
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -52,8 +53,14 @@ export class ExamResultComponent implements OnInit, OnDestroy {
     });
 
     // Listen to branch changes
-    this.examForm.get('branchId')?.valueChanges.subscribe(branchId => {
+    this.examForm.get('branchId')?.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      distinctUntilChanged()
+    ).subscribe(branchId => {
       this.examForm.patchValue({ examId: '', classId: '', sectionId: '' });
+      this.results = [];
+      this.subjects = [];
+      this.unsavedChanges.clear();
       if (branchId) {
         this.loadExams();
       } else {
@@ -64,8 +71,14 @@ export class ExamResultComponent implements OnInit, OnDestroy {
     });
 
     // Listen to exam changes
-    this.examForm.get('examId')?.valueChanges.subscribe(examId => {
+    this.examForm.get('examId')?.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      distinctUntilChanged()
+    ).subscribe(examId => {
       this.examForm.patchValue({ classId: '', sectionId: '' });
+      this.results = [];
+      this.subjects = [];
+      this.unsavedChanges.clear();
       if (examId) {
         this.loadClasses(examId);
         this.examForm.get('classId')?.enable();
@@ -78,8 +91,14 @@ export class ExamResultComponent implements OnInit, OnDestroy {
     });
 
     // Listen to class changes
-    this.examForm.get('classId')?.valueChanges.subscribe(classId => {
+    this.examForm.get('classId')?.valueChanges.pipe(
+      takeUntil(this.destroy$),
+      distinctUntilChanged()
+    ).subscribe(classId => {
       this.examForm.patchValue({ sectionId: '' });
+      this.results = [];
+      this.subjects = [];
+      this.unsavedChanges.clear();
       if (classId) {
         this.loadSections(classId);
         this.examForm.get('sectionId')?.enable();
@@ -88,41 +107,12 @@ export class ExamResultComponent implements OnInit, OnDestroy {
         this.examForm.get('sectionId')?.disable();
       }
     });
+
+
   }
 
   ngOnInit() {
     this.loadInitialData();
-    
-    // Set up marks update subscription with debounce
-    this.marksUpdate.pipe(
-      debounceTime(1000),
-      takeUntil(this.destroy$)
-    ).subscribe(({result, subjectId, marks}) => {
-      // console.log(marks);
-      const subjectIds = result.studentExamMarksSubjectIds ? result.studentExamMarksSubjectIds.split(',') : [];
-
-      const subjectIndex = subjectIds.findIndex((id: any) => id == subjectId);
-
-      const studentExamMarksId = result.studentExamMarksIds ? result.studentExamMarksIds.split(',')[subjectIndex] : null;
-      console.log(studentExamMarksId);
-      if (studentExamMarksId == null) {
-        const payload = {
-          studentClassId: result.studentClassId,
-          examId: result.examId,
-          subjectId: subjectId,
-          marks: marks
-        }
-        this.addStudentExamResult(payload);
-      } else {
-        const payload = {
-          studentClassId: result.studentClassId,
-          examId: result.examId,
-          subjectId: subjectId,
-          marks: marks
-        }
-        this.updateStudentExamResult(payload, studentExamMarksId);
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -132,7 +122,6 @@ export class ExamResultComponent implements OnInit, OnDestroy {
 
   loadInitialData() {
     this.loadBranches();
-    this.loadExams();
   }
 
   loadBranches() {
@@ -183,6 +172,7 @@ export class ExamResultComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error loading classes:', error);
           this.snackBar.openSnackBar(error);
+          this.loading.classes = false;
         }
       });
   }
@@ -202,7 +192,30 @@ export class ExamResultComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error loading sections:', error);
           this.snackBar.openSnackBar(error);
-          // Handle error appropriately
+        }
+      });
+  }
+
+  loadExamResults() {
+    if (!this.examForm.valid) {
+      return;
+    }
+    
+    this.loading.submit = true;
+    this.examService.getExamResults(this.examForm.value)
+      .pipe(finalize(() => this.loading.submit = false))
+      .subscribe({
+        next: (res: any) => {
+          const {data} = res;
+          this.results = data.results;
+          this.subjects = data.subjects;
+          this.unsavedChanges.clear();
+        },
+        error: (error: any) => {
+          console.error('Error loading results:', error);
+          this.snackBar.openSnackBar(error);
+          this.results = [];
+          this.subjects = [];
         }
       });
   }
@@ -214,63 +227,105 @@ export class ExamResultComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  
-
-  onSubmit() {
-    if (!this.examForm.valid) {
-      return;
-    }
-    console.log(this.examForm.value);
-    this.loading.submit = true;
-    this.examService.getExamResults(this.examForm.value)
-      .pipe(finalize(() => this.loading.submit = false))
-      .subscribe({
-        next: (res: any) => {
-          const {data} = res;
-          this.results = data.results;
-          this.subjects = data.subjects;
-          console.log(this.results);
-          console.log(this.subjects);
-          
-        },
-        error: (error: any) => {
-          console.error('Error loading results:', error);
-          this.snackBar.openSnackBar(error);
-        }
-      });
-  }
-
   updateMarks(result: any, subjectId: number, event: any) {
     const marks = event.value;
-    this.marksUpdate.next({ result, subjectId, marks });
+    if (marks !== null && marks !== undefined) {
+      const key = `${result.studentId}-${subjectId}`;
+      const originalValue = result[this.getSubjectName(subjectId)];
+      
+      if (marks !== originalValue) {
+        this.unsavedChanges.set(key, {
+          result,
+          subjectId,
+          marks,
+          originalValue
+        });
+      } else {
+        this.unsavedChanges.delete(key);
+      }
+    }
   }
 
-  addStudentExamResult(payload: any) {
-    
-    this.examService.addStudentExamResult(payload)
-      .subscribe({
-        next: (res: any) => {
-          this.snackBar.openSnackBar(res.message);
-        },
-        error: (error: any) => {
-          console.error('Error adding student exam result:', error);
-          this.snackBar.openSnackBar(error);
-        }
+  getSubjectName(subjectId: number): string {
+    const subject = this.subjects.find(s => s.subject_id === subjectId);
+    return subject ? subject.subject_name : '';
+  }
+
+  hasUnsavedChanges(): boolean {
+    return this.unsavedChanges.size > 0;
+  }
+
+  saveAllMarks() {
+    if (this.unsavedChanges.size === 0) {
+      this.snackBar.openSnackBar('No changes to save');
+      return;
+    }
+
+    this.loading.saving = true;
+    const savePromises: Promise<any>[] = [];
+
+    this.unsavedChanges.forEach((change, key) => {
+      const { result, subjectId, marks } = change;
+      const subjectIds = result.studentExamMarksSubjectIds ? result.studentExamMarksSubjectIds.split(',') : [];
+      const subjectIndex = subjectIds.findIndex((id: any) => id == subjectId);
+      const studentExamMarksId = result.studentExamMarksIds ? result.studentExamMarksIds.split(',')[subjectIndex] : null;
+      
+      const payload = {
+        studentClassId: result.studentClassId,
+        examId: result.examId,
+        subjectId: subjectId,
+        marks: marks
+      };
+
+      if (studentExamMarksId == null) {
+        savePromises.push(this.addStudentExamResult(payload));
+      } else {
+        savePromises.push(this.updateStudentExamResult(payload, studentExamMarksId));
+      }
+    });
+
+    Promise.all(savePromises)
+      .then(() => {
+        this.snackBar.openSnackBar('All marks saved successfully');
+        this.unsavedChanges.clear();
+        this.loadExamResults(); // Refresh to get updated IDs
+      })
+      .catch((error) => {
+        console.error('Error saving marks:', error);
+        this.snackBar.openSnackBar('Error saving some marks');
+      })
+      .finally(() => {
+        this.loading.saving = false;
       });
   }
 
-  
-  updateStudentExamResult(payload: any,studentExamMarksId: number) {
-  
-    this.examService.updateStudentExamResult(payload, studentExamMarksId)
-      .subscribe({
-        next: (res: any) => {
-          this.snackBar.openSnackBar(res.message);
-        },
-        error: (error: any) => {
-          console.error('Error updating student exam result:', error);
-          this.snackBar.openSnackBar(error);
-        }
-      });
+  private addStudentExamResult(payload: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.examService.addStudentExamResult(payload)
+        .subscribe({
+          next: (res: any) => {
+            resolve(res);
+          },
+          error: (error: any) => {
+            console.error('Error adding student exam result:', error);
+            reject(error);
+          }
+        });
+    });
+  }
+
+  private updateStudentExamResult(payload: any, studentExamMarksId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.examService.updateStudentExamResult(payload, studentExamMarksId)
+        .subscribe({
+          next: (res: any) => {
+            resolve(res);
+          },
+          error: (error: any) => {
+            console.error('Error updating student exam result:', error);
+            reject(error);
+          }
+        });
+    });
   }
 }
