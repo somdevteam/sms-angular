@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
-import { AcademicYearComponent } from './academic/academic-year/academic-year.component';
 import {Permissions} from "@shared/enums/permissions.enums";
 const {
   userManagement: {users},
@@ -98,6 +97,9 @@ const routes: Routes = [
             (m) => m.MultilevelModule
           ),
       },
+      { path: 'attendance',loadChildren: () => import('./attendance/attendance.module').then(m => m.AttendanceModule) },
+      { path: 'exams', loadChildren: () => import('./exams/exams.module').then(m => m.ExamsModule) },
+
     ],
   },
   {
@@ -108,7 +110,6 @@ const routes: Routes = [
         (m) => m.AuthenticationModule
       ),
   },
-  { path: 'exams', loadChildren: () => import('./exams/exams.module').then(m => m.ExamsModule) },
   { path: '**', component: Page404Component },
 ];
 @NgModule({

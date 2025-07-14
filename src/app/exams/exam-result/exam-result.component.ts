@@ -36,6 +36,7 @@ export class ExamResultComponent implements OnInit, OnDestroy {
   subjects: any[] = [];
   value1!: number;
   unsavedChanges: Map<string, any> = new Map();
+  hasSearched: boolean = false;
 
   private destroy$ = new Subject<void>();
 
@@ -200,7 +201,7 @@ export class ExamResultComponent implements OnInit, OnDestroy {
     if (!this.examForm.valid) {
       return;
     }
-    
+    this.hasSearched = true;
     this.loading.submit = true;
     this.examService.getExamResults(this.examForm.value)
       .pipe(finalize(() => this.loading.submit = false))
@@ -228,22 +229,26 @@ export class ExamResultComponent implements OnInit, OnDestroy {
   }
 
   updateMarks(result: any, subjectId: number, event: any) {
-    const marks = event.value;
-    if (marks !== null && marks !== undefined) {
-      const key = `${result.studentId}-${subjectId}`;
-      const originalValue = result[this.getSubjectName(subjectId)];
-      
-      if (marks !== originalValue) {
-        this.unsavedChanges.set(key, {
-          result,
-          subjectId,
-          marks,
-          originalValue
-        });
-      } else {
-        this.unsavedChanges.delete(key);
-      }
+    let marks = event.value;
+    // Enforce min/max
+    if (marks > 100) marks = 100;
+    if (marks < 0) marks = 0;
+
+    const key = `${result.studentId}-${subjectId}`;
+    const originalValue = result[this.getSubjectName(subjectId)];
+
+    if (marks !== originalValue) {
+      this.unsavedChanges.set(key, {
+        result,
+        subjectId,
+        marks,
+        originalValue
+      });
+    } else {
+      this.unsavedChanges.delete(key);
     }
+    // Update the model for immediate UI feedback
+    result[this.getSubjectName(subjectId)] = marks;
   }
 
   getSubjectName(subjectId: number): string {
