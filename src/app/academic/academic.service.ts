@@ -196,4 +196,8 @@ export class AcademicService {
     const queryString = objectToQueryString(payload);
     return this.apiService.sendHttpGetRequest(`/class-subject/subjects${queryString}`);
   }
+
+  getClassesByBranchId(branchId: number) {
+    return this.apiService.sendHttpGetRequest(`/class-section/getclassesbybranchId?branchId=${branchId}`)
+  }
 }

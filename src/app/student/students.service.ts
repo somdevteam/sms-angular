@@ -182,7 +182,7 @@ export class StudentsService {
 
     }
 
-  findClassByBranchAndLevel(payload:any) {
+  getStudentsByClassAndSectionWithBranch(payload:any) {
     return this.apiService.sendHttpPostRequest('/student/getStudentByClassAndSection',payload)
         .pipe(
             map((resp) => {
@@ -231,5 +231,9 @@ export class StudentsService {
         return data;
       })
     );
+  }
+
+  saveAttendance(payload: any) {
+    return this.apiService.sendHttpPostRequest('/attendance/save', payload);
   }
 }

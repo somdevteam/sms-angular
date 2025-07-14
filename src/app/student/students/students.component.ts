@@ -110,7 +110,7 @@ export class StudentsComponent {
         console.log(payload);
         
         this.pageLoader.showLoader()
-        this.studentService.findClassByBranchAndLevel(payload).subscribe({
+        this.studentService.getStudentsByClassAndSectionWithBranch(payload).subscribe({
             next: (res) => {
                 console.log(res);
                 this.students = res;

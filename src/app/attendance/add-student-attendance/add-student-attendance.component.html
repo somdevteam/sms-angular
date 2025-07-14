@@ -78,6 +78,14 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 mb-3">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-label><i class="fas fa-calendar-alt"></i> Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="attendanceDate" placeholder="Choose a date" [max]="today">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
               </div>
               <div class="row">
                 <div class="col-12 d-flex justify-content-end">
@@ -93,4 +101,53 @@
       </div>
     </div>
   </div>
+
+  <!-- Attendance Table -->
+  <div class="row" *ngIf="attendanceRecords.length">
+    <div class="col-12">
+      <div class="card">
+        <div class="header">
+          <h2><i class="fas fa-list"></i> Mark Attendance</h2>
+        </div>
+        <div class="body table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Roll Number</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let record of attendanceRecords">
+                <td>{{ record.rollNumber }}</td>
+                <td>{{ record.name }}</td>
+                <td>
+                  <mat-radio-group [value]="record.status" (change)="onStatusChange(record.studentId, $event.value)" class="d-flex flex-row">
+                    <mat-radio-button value="present" class="me-3">Present</mat-radio-button>
+                    <mat-radio-button value="absent">Absent</mat-radio-button>
+                  </mat-radio-group>
+                </td>
+                <td>
+                  <mat-form-field appearance="fill" class="w-100 m-0">
+                    <input #descInput matInput placeholder="Description" [value]="record.desc" (input)="onDescChange(record.studentId, descInput.value)">
+                  </mat-form-field>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Save Attendance Button -->
+<div class="row" *ngIf="attendanceRecords.length">
+  <div class="col-12 d-flex justify-content-end mt-3">
+    <button mat-raised-button color="accent" (click)="onSaveAttendance()" [disabled]="loading.submit">
+      <i class="fas fa-save me-2"></i>
+      {{ loading.submit ? 'Saving...' : 'Save Attendance' }}
+    </button>
+  </div>
+</div>
 </section>

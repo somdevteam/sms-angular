@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BranchService } from 'app/branch/branch.service';
 import { AcademicService } from 'app/academic/academic.service';
+import { StudentsService } from 'app/student/students.service';
 
 @Component({
   selector: 'app-add-student-attendance',
@@ -27,16 +28,21 @@ export class AddStudentAttendanceComponent implements OnInit {
     sections: false,
     submit: false
   };
+  students: any[] = [];
+  attendanceRecords: any[] = [];
+  public today: Date = new Date();
 
   constructor(
     private fb: FormBuilder,
     private branchService: BranchService,
-    private academicService: AcademicService
+    private academicService: AcademicService,
+    private studentService: StudentsService
   ) {
     this.attendanceForm = this.fb.group({
       branchId: ['', Validators.required],
       classId: [{ value: '', disabled: true }, Validators.required],
-      sectionId: [{ value: '', disabled: true }, Validators.required]
+      sectionId: [{ value: '', disabled: true }, Validators.required],
+      attendanceDate: [new Date(), Validators.required]
     });
   }
 
@@ -82,7 +88,7 @@ export class AddStudentAttendanceComponent implements OnInit {
 
   loadClasses(branchId: number) {
     this.loading.classes = true;
-    this.academicService.findClassNotInLevelWithBranch(branchId).subscribe({
+    this.academicService.getClassesByBranchId(branchId).subscribe({
       next: (data) => {
         this.classes = data;
         this.loading.classes = false;
@@ -108,7 +114,69 @@ export class AddStudentAttendanceComponent implements OnInit {
   }
 
   onSearch() {
-    // Implement search logic or emit event here
-    // You can access form values with this.attendanceForm.value
+    const payload = {
+      branchId: this.attendanceForm.get('branchId')?.value,
+      classId: this.attendanceForm.get('classId')?.value,
+      sectionId: this.attendanceForm.get('sectionId')?.value,
+    };
+    this.studentService.getStudentsByClassAndSectionWithBranch(payload).subscribe({
+      next: (res => {
+        // Assuming res.data is the array of students
+        this.students = res || [];
+        this.attendanceRecords = this.students.map(student => ({
+          studentId: student.studentId,
+          rollNumber: student.rollNumber,
+          name: `${student.firstName} ${student.middleName || ''} ${student.lastName}`.replace(/  +/g, ' ').trim(),
+          status: 'present',
+          desc: ''
+        }));
+      }),
+      error: (err => {
+        console.log(err);
+      })
+    })
+  }
+
+  onStatusChange(studentId: number, status: string) {
+    const record = this.attendanceRecords.find(r => r.studentId === studentId);
+    if (record) {
+      record.status = status;
+    }
+  }
+
+  onDescChange(studentId: number, desc: string) {
+    const record = this.attendanceRecords.find(r => r.studentId === studentId);
+    if (record) {
+      record.desc = desc;
+    }
+  }
+
+  onSaveAttendance() {
+    this.loading.submit = true;
+    const payload = {
+      branchId: this.attendanceForm.get('branchId')?.value,
+      classId: this.attendanceForm.get('classId')?.value,
+      sectionId: this.attendanceForm.get('sectionId')?.value,
+      attendanceDate: this.attendanceForm.get('attendanceDate')?.value,
+      attendance: this.attendanceRecords.map(record => ({
+        studentId: record.studentId,
+        status: record.status,
+        desc: record.desc
+      }))
+    };
+    console.log(payload);
+    
+
+    // Call your service to save attendance (implement saveAttendance in your service)
+    // this.studentService.saveAttendance(payload).subscribe({
+    //   next: (res) => {
+    //     this.loading.submit = false;
+    //     // Show a success message or reset form as needed
+    //   },
+    //   error: (err) => {
+    //     this.loading.submit = false;
+    //     // Show an error message
+    //   }
+    // });
   }
 }
