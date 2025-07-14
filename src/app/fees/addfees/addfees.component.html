@@ -90,8 +90,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Month</mat-label>
-            <mat-select formControlName="monthId">
-              <mat-option *ngFor="let month of months" [value]="month.monthid">
+            <mat-select formControlName="selectedMonth">
+              <mat-option *ngFor="let month of months" [value]="month">
                 {{month.monthname}}
               </mat-option>
             </mat-select>

@@ -41,12 +41,12 @@ export class AddfeesComponent implements OnInit {
 
     this.paymentForm = this.fb.group({
       studentId: ['', Validators.required],
-      studentClassId: ['', Validators.required],
+      studentClassId: [''],
       amount: ['', [Validators.required, Validators.min(0)]],
-      monthId: ['', Validators.required],
+      selectedMonth: ['', Validators.required],
       paymentTypeId: ['', Validators.required],
       paymentStateId: ['', Validators.required],
-      responsibleId: ['', Validators.required],
+      responsibleId: [''],
       rollNo: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       details: ['']
     });
@@ -188,10 +188,12 @@ export class AddfeesComponent implements OnInit {
       amount: Number(this.paymentForm.value.amount),
       studentId: Number(this.paymentForm.value.studentId),
       studentClassId: Number(this.paymentForm.value.studentClassId),
-      monthId: Number(this.paymentForm.value.monthId),
+      monthId: Number(this.paymentForm.value.selectedMonth.monthid),
+      monthName: this.paymentForm.value.selectedMonth.monthname,
       paymentTypeId: Number(this.paymentForm.value.paymentTypeId),
       paymentStateId: Number(this.paymentForm.value.paymentStateId),
-      responsibleId: Number(this.paymentForm.value.responsibleId)
+      responsibleId: Number(this.paymentForm.value.responsibleId),
+      isAutomatedPayment:false
     };
 
     this.pageLoader.showLoader();
@@ -218,7 +220,7 @@ export class AddfeesComponent implements OnInit {
   private resetForms() {
     this.searchForm.reset();
     this.paymentForm.reset();
-    this.showPaymentForm = false;
+    this.showPaymentForm = true;
     this.studentData = null;
     this.students = [];
   }

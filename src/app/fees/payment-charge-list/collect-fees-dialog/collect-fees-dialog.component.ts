@@ -86,6 +86,7 @@ export class CollectFeesDialogComponent implements OnInit {
       details: `Payment for ${this.data.charge.chargeType} - ${
         this.data.charge.chargedMonth
       }. Notes: ${formData.notes || 'N/A'}`,
+      isAutomatedPayment: true
     };
 
     this.feesService.createPayment(paymentData).subscribe({
@@ -102,7 +103,7 @@ export class CollectFeesDialogComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.dangerNotification(
-          error?.error?.message || 'Error collecting payment'
+          error || 'Error collecting payment'
         );
         this.loading = false;
       },
