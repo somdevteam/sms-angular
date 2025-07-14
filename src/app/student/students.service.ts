@@ -234,6 +234,6 @@ export class StudentsService {
   }
 
   saveAttendance(payload: any) {
-    return this.apiService.sendHttpPostRequest('/attendance/save', payload);
+    return this.apiService.sendHttpPostRequest('/student/createStudentAttendance', payload);
   }
 }

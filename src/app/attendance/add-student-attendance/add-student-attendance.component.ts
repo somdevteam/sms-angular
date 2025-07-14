@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BranchService } from 'app/branch/branch.service';
 import { AcademicService } from 'app/academic/academic.service';
 import { StudentsService } from 'app/student/students.service';
+import { SnackbarService } from '@shared/snackbar.service';
 
 @Component({
   selector: 'app-add-student-attendance',
@@ -36,7 +37,8 @@ export class AddStudentAttendanceComponent implements OnInit {
     private fb: FormBuilder,
     private branchService: BranchService,
     private academicService: AcademicService,
-    private studentService: StudentsService
+    private studentService: StudentsService,
+    private snackbarService: SnackbarService
   ) {
     this.attendanceForm = this.fb.group({
       branchId: ['', Validators.required],
@@ -80,8 +82,10 @@ export class AddStudentAttendanceComponent implements OnInit {
         this.branches = data;
         this.loading.branches = false;
       },
-      error: () => {
+      error: (err) => {
         this.loading.branches = false;
+        this.snackbarService.openSnackBar(err);
+
       }
     });
   }
@@ -93,8 +97,10 @@ export class AddStudentAttendanceComponent implements OnInit {
         this.classes = data;
         this.loading.classes = false;
       },
-      error: () => {
+      error: (err) => {
         this.loading.classes = false;
+        this.snackbarService.openSnackBar(err);
+        
       }
     });
   }
@@ -107,8 +113,10 @@ export class AddStudentAttendanceComponent implements OnInit {
         this.sections = data;
         this.loading.sections = false;
       },
-      error: () => {
+      error: (err) => {
         this.loading.sections = false;
+        this.snackbarService.openSnackBar(err);
+
       }
     });
   }
@@ -125,6 +133,7 @@ export class AddStudentAttendanceComponent implements OnInit {
         this.students = res || [];
         this.attendanceRecords = this.students.map(student => ({
           studentId: student.studentId,
+          studentClassId: student.studentClassId,
           rollNumber: student.rollNumber,
           name: `${student.firstName} ${student.middleName || ''} ${student.lastName}`.replace(/  +/g, ' ').trim(),
           status: 'present',
@@ -132,6 +141,7 @@ export class AddStudentAttendanceComponent implements OnInit {
         }));
       }),
       error: (err => {
+        this.snackbarService.openSnackBar(err);
         console.log(err);
       })
     })
@@ -160,23 +170,23 @@ export class AddStudentAttendanceComponent implements OnInit {
       attendanceDate: this.attendanceForm.get('attendanceDate')?.value,
       attendance: this.attendanceRecords.map(record => ({
         studentId: record.studentId,
+        studentClassId: record.studentClassId,
         status: record.status,
         desc: record.desc
       }))
     };
-    console.log(payload);
-    
-
     // Call your service to save attendance (implement saveAttendance in your service)
-    // this.studentService.saveAttendance(payload).subscribe({
-    //   next: (res) => {
-    //     this.loading.submit = false;
-    //     // Show a success message or reset form as needed
-    //   },
-    //   error: (err) => {
-    //     this.loading.submit = false;
-    //     // Show an error message
-    //   }
-    // });
+    this.studentService.saveAttendance(payload).subscribe({
+      next: (res) => {
+        this.loading.submit = false;
+        this.snackbarService.openSnackBar('Attendance saved successfully!');
+        // Show a success message or reset form as needed
+      },
+      error: (err) => {
+        this.loading.submit = false;
+        this.snackbarService.openSnackBar(err);
+        // Show an error message
+      }
+    });
   }
 }
