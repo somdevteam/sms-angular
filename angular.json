@@ -99,10 +99,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "smart:build:production"
+              "buildTarget": "smart:build:production"
             },
             "development": {
-              "browserTarget": "smart:build:development"
+              "buildTarget": "smart:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -110,7 +110,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "smart:build"
+            "buildTarget": "smart:build"
           }
         },
         "test": {
