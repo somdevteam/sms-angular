@@ -1,225 +1,163 @@
 <section class="content">
   <div class="content-block">
-    <div class="block-header" *ngFor="let breadscrum of breadscrums">
-      <!-- breadcrumb -->
-      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
-      </app-breadcrumb>
+    <div class="block-header">
+      <h2>Add Payment</h2>
     </div>
-    <div class="row clearfix">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-        <div class="card">
-          <div class="header">
-            <h2>Add Fees Details</h2>
+
+    <!-- Search Form -->
+    <div class="search-section">
+      <form [formGroup]="searchForm" (ngSubmit)="searchStudent()">
+        <div class="search-container">
+          <div class="search-fields">
+            <mat-form-field appearance="outline">
+              <mat-label>Search By</mat-label>
+              <mat-select formControlName="searchType" (selectionChange)="onSearchTypeChange()">
+                <mat-option value="rollNumber">Roll Number</mat-option>
+                <mat-option value="mobile">Mobile Number</mat-option>
+              </mat-select>
+              <mat-error *ngIf="searchForm.get('searchType')?.hasError('required')">
+                Please select a search type
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{ getSearchPlaceholder() }}</mat-label>
+              <input matInput
+                     formControlName="searchValue"
+                     [type]="'number'"
+                     [placeholder]="getSearchPlaceholder()">
+              <mat-error *ngIf="searchForm.get('searchValue')?.hasError('required')">
+                This field is required
+              </mat-error>
+            </mat-form-field>
           </div>
-          <div class="body">
-            <form class="register-form m-4" [formGroup]="feesForm" (ngSubmit)="onSubmit()">
-              <div class="row">
-                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Roll No</mat-label>
-                    <input matInput formControlName="rollNo" required (change)="onChangeRollNumber($event)" >
-                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>label</mat-icon>
-                    <mat-error *ngIf="feesForm.get('rollNo')?.hasError('required')">
-                      First name is required
-                    </mat-error>
 
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Student Name</mat-label>
-                    <input matInput formControlName="sName" required>
-                    <input formControlName="studentClassId" type="hidden">
-                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>account_circle</mat-icon>
-                    <mat-error *ngIf="feesForm.get('sName')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <!--                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">-->
-<!--                  <mat-form-field class="example-full-width mb-3" appearance="outline">-->
-<!--                    <mat-label>Student Name</mat-label>-->
-<!--                    <input matInput formControlName="sName" required>-->
-<!--                    <input matInput formControlName="studentId" required type="hidden">-->
-<!--                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>account_circle</mat-icon>-->
-<!--                    <mat-error *ngIf="feesForm.get('sName')?.hasError('required')">-->
-<!--                      First name is required-->
-<!--                    </mat-error>-->
-<!--                  </mat-form-field>-->
-<!--                </div>-->
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Select Department</mat-label>
-                    <mat-select formControlName="department" [required]="true">
-                      <mat-option [value]="'mechanical'">
-                        Mechanical
-                      </mat-option>
-                      <mat-option [value]="'science'">
-                        Science
-                      </mat-option>
-                      <mat-option [value]="'mathematics'">
-                        Mathematics
-                      </mat-option>
-                      <mat-option [value]="'computer'">
-                        Computer
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="feesForm.get('department')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width " appearance="outline">
-                    <mat-label>Fees Type</mat-label>
-                    <mat-select formControlName="fType" [required]="true">
-                      <mat-option [value]="'annual'">
-                        Annual
-                      </mat-option>
-                      <mat-option [value]="'tution'">
-                        Tution
-                      </mat-option>
-                      <mat-option [value]="'transport'">
-                        Transport
-                      </mat-option>
-                      <mat-option [value]="'exam'">
-                        Exam
-                      </mat-option>
-                      <mat-option [value]="'library'">
-                        Library
-                      </mat-option>
-                      <mat-option [value]="'other'">
-                        Other
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="feesForm.get('fType')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                  <div class="m-b-20">
-                    <mat-label class="msr-3">Duration:</mat-label>
-                    <mat-radio-group aria-label="Select duration" formControlName="duration" [required]="true">
-                      <mat-radio-button value="monthly">Monthly</mat-radio-button>
-                      <mat-radio-button value="yearly">Yearly</mat-radio-button>
-                      <mat-radio-button value="session">Session</mat-radio-button>
-                      <mat-error *ngIf="feesForm.get('duration')?.hasError('required')">
-                        First name is required
-                      </mat-error>
-                    </mat-radio-group>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Collection Date</mat-label>
-                    <input matInput [matDatepicker]="picker1" formControlName="date" required>
-                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                    <mat-datepicker #picker1></mat-datepicker>
-                    <mat-error *ngIf="feesForm.get('date')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Payment Type</mat-label>
-                    <mat-select formControlName="pType"  [required]="true" >
-                      <mat-option *ngFor="let payment of paymentTypes" [value]="payment.paymenttypeid">
-                        {{payment.type}}
-                      </mat-option>
-                    </mat-select>
-
-
-                    <mat-error *ngIf="feesForm.get('pType')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Invoice Number</mat-label>
-                    <input matInput formControlName="invoiceNo" required>
-                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>receipt</mat-icon>
-
-
-                    <mat-error *ngIf="feesForm.get('pType')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Status</mat-label>
-                    <mat-select formControlName="status" [required]="true">
-                      <mat-option  *ngFor="let paymentStates of paymentStates" [value]="paymentStates.paymentstateid" >
-                      {{paymentStates.description }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="feesForm.get('status')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Amount</mat-label>
-                    <input matInput formControlName="amount" required>
-                    <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>monetization_on</mat-icon>
-                    <mat-error *ngIf="feesForm.get('amount')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Months</mat-label>
-                    <mat-select formControlName="monthName" [required]="true">
-                      <mat-option  *ngFor="let month of months" [value]="month.monthname" >
-                        {{month.monthname }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="feesForm.get('monthId')?.hasError('required')">
-                      First name is required
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-              </div>
-              <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Details</mat-label>
-                    <textarea matInput formControlName="details"></textarea>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                  <div class="example-button-row">
-                    <button class="btn-space" [disabled]="!feesForm.valid " mat-flat-button
-                            color="accent">Submit</button>
-                    <button mat-flat-button color="warn" tabindex="-1">Cancel</button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="searchForm.invalid">
+            Search
+          </button>
         </div>
-      </div>
+
+        <!-- Student Selection Dropdown -->
+        <div class="student-selection" *ngIf="students.length > 0">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Select Student</mat-label>
+            <mat-select (selectionChange)="onStudentSelect($event.value)">
+              <mat-option *ngFor="let student of students" [value]="student">
+                {{ getStudentDisplayText(student) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+
+    <!-- Student Information -->
+    <div class="student-info" *ngIf="studentData">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Student Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <p><strong>Name:</strong> {{studentData.fullName}}</p>
+            <p><strong>Roll Number:</strong> {{studentData.rollNumber}}</p>
+            <p><strong>Class:</strong> {{studentData.studentClass?.[0]?.className}}</p>
+            <p><strong>Section:</strong> {{studentData.studentClass?.[0]?.sectionName}}</p>
+            <p><strong>Guardian:</strong> {{studentData.responsible?.responsiblename}}</p>
+            <p><strong>Contact:</strong> {{studentData.responsible?.phone}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Payment Form -->
+    <div class="payment-form" *ngIf="showPaymentForm">
+      <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input matInput type="number" formControlName="amount">
+            <mat-error *ngIf="paymentForm.get('amount')?.hasError('required')">
+              Amount is required
+            </mat-error>
+            <mat-error *ngIf="paymentForm.get('amount')?.hasError('min')">
+              Amount must be greater than 0
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Months</mat-label>
+            <mat-select formControlName="selectedMonth">
+              <mat-option *ngFor="let month of months" [value]="month">
+                {{month.monthname}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Payment Types</mat-label>
+            <mat-select formControlName="paymentTypeId">
+              <mat-option *ngFor="let type of paymentTypes" [value]="type.paymenttypeid">
+                {{type.type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Fee Types</mat-label>
+            <mat-select formControlName="feeTypeId">
+              <mat-option *ngFor="let feetype of feeTypes" [value]="feetype.feetypeid">
+                {{feetype.description}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Branches</mat-label>
+            <mat-select formControlName="branchId">
+              <mat-option *ngFor="let branch of branches" [value]="branch.branchId">
+                {{branch.branchName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline">
+            <mat-label>Payment Status</mat-label>
+            <mat-select formControlName="paymentStateId">
+              <mat-option *ngFor="let state of paymentStates" [value]="state.paymentstateid">
+                {{state.description}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Details</mat-label>
+            <textarea matInput formControlName="details"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" [hidden]="true">
+            <mat-label>Roll Number</mat-label>
+            <input matInput
+                   type="text"
+                   formControlName="rollNo"
+                   readonly>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="paymentForm.invalid">
+            Submit Payment
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </section>
+

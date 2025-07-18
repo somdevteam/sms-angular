@@ -27,6 +27,8 @@ export const Permissions = Object.freeze({
     fees: {
       ADD_FEES: 'addFees',
       VIEW_FEES: 'viewFees',
+      VIEWPAYMENTCHARGE:'userCanViewPaymentCharge'
+
     },
   },
 });

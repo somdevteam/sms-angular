@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Generate Payment Charges</h2>
+
+<form [formGroup]="generateForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-container">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Charge Type</mat-label>
+        <mat-select formControlName="chargeTypeCode" (selectionChange)="onChargeTypeSelected()">
+          <mat-option *ngFor="let type of chargeTypes" [value]="type.chargeTypeCode">
+            {{type.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="generateForm.get('chargeTypeId')?.hasError('required')">
+          Charge Type is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="isMonthlyChargeType" appearance="outline" >
+        <mat-label>Month</mat-label>
+        <mat-select formControlName="monthId">
+          <mat-option [value]="null">All Months</mat-option>
+          <mat-option *ngFor="let month of months" [value]="month.monthid">
+            {{month.monthname}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!generateForm.valid">
+      Generate Charges
+    </button>
+  </mat-dialog-actions>
+</form>

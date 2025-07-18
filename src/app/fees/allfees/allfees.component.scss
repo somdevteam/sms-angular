@@ -1,44 +1,69 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  justify-content: start;
+}
+
+.form-grid-drop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  justify-content: start;
+}
+
+.radio-group, .status-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.radio-group, .type-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.button-container {
+  margin-top: 10px;
+  text-align: left;
+}
+
 .table-container {
-  height: 400px;
-  overflow: auto;
-}
-
-//.mat-column-actions {
-//  display: flex;
-//  justify-content: flex-start;
-//}
-
-//.action-buttons {
-//  display: flex;
-//  flex-direction: row;
-//  gap: 8px;
-//}
-//
-//.action-button {
-//  white-space: nowrap;
-//}
-
-.mat-header-cell, .mat-cell {
-  padding: 8px 16px;
-}
-
-.mat-header-cell {
-  font-weight: bold;
-}
-
-.mat-table {
   width: 100%;
-}
-
-.container {
-  padding: 16px;
+  margin-top: 10px;
+  text-align: left;
 }
 
 .mat-form-field {
-  width: 200px;
-  margin-right: 16px;
+  width: 100%;
+  max-width: 300px; /* Ensures a controlled width */
 }
 
-button {
-  min-width: 100px;
+.type-status-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.type-group,
+.status-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+mat-radio-group {
+  display: flex;
+  gap: 10px;
 }

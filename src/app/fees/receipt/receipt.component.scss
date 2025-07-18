@@ -1,0 +1,202 @@
+.receipt-page {
+  background: white;
+  padding: 15px;
+}
+
+.receipt-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  position: relative;
+}
+
+.print-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.receipt-content {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.school-header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #333;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .contact-info {
+    font-size: 13px;
+    color: #666;
+    margin: 5px 0;
+
+    span {
+      padding: 0 10px;
+    }
+  }
+
+  .receipt-title {
+    margin-top: 15px;
+
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0;
+      color: #333;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.school-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+  .logo-icon {
+    font-size: 40px;
+    color: #1976d2;
+  }
+}
+
+.main-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+  @media (max-width: 700px) {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+.details-left,
+.details-right {
+  flex: 1;
+}
+.detail-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 15px;
+  label {
+    font-weight: 500;
+    color: #555;
+    min-width: 110px;
+    margin-right: 4px;
+  }
+  span {
+    color: #222;
+    font-weight: 400;
+  }
+  .info-icon {
+    font-size: 18px;
+    color: #1976d2;
+    margin-right: 6px;
+  }
+}
+.divider {
+  margin: 0 8px;
+  color: #bbb;
+}
+
+.paid-status {
+  color: #388e3c;
+  font-weight: bold;
+}
+.pending-status {
+  color: #fbc02d;
+  font-weight: bold;
+}
+
+.amount-section {
+  margin: 24px 0 12px 0;
+  padding: 18px;
+  background-color: #f1f8e9;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(60, 60, 60, 0.04);
+  .amount-row,
+  .total-amount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .highlight-amount {
+    color: #1976d2;
+    font-size: 22px;
+    font-weight: bold;
+  }
+}
+
+.receipt-footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  .computer-note {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 4px;
+  }
+}
+
+// Print styles
+@media print {
+  .print-actions {
+    display: none;
+  }
+
+  .receipt-container {
+    padding: 0;
+  }
+
+  .receipt-content {
+    border: none;
+  }
+
+  @page {
+    margin: 0.5cm;
+  }
+}
+
+// Responsive styles
+@media (max-width: 600px) {
+  .receipt-details {
+    .detail-row {
+      flex-direction: column;
+
+      .detail-item {
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+  .amount-section {
+    .amount-row,
+    .total-amount {
+      flex-direction: column;
+      text-align: right;
+    }
+  }
+}

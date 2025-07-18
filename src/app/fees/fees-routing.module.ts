@@ -6,6 +6,7 @@ import {ListUsersComponent} from "../users/list-users/list-users.component";
 import {Permissions} from "@shared/enums/permissions.enums";
 import {AddfeesComponent} from "./addfees/addfees.component";
 import {AllfeesComponent} from "./allfees/allfees.component";
+import {PaymentChargeListComponent} from "./payment-charge-list/payment-charge-list.component";
 
 const {
   feesManagement: {fees},
@@ -26,6 +27,14 @@ const routes: Routes = [
     component: AllfeesComponent,
     data: {
       permissions: [fees.VIEW_FEES],
+    },
+  },
+  {
+    path: 'paymentchargerequest',
+    canActivate: [AuthGuard],
+    component: PaymentChargeListComponent,
+    data: {
+      permissions: [fees.VIEWPAYMENTCHARGE],
     },
   }
 

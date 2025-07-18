@@ -1,0 +1,85 @@
+.content {
+  padding: 20px;
+
+  .search-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+
+    .search-fields {
+      display: flex;
+      flex: 1;
+      gap: 16px;
+
+      mat-form-field {
+        flex: 1;
+      }
+    }
+
+    button {
+      margin-top: 4px;
+      height: 56px;
+    }
+  }
+
+  .student-info {
+    margin: 20px 0;
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      padding: 16px;
+
+      p {
+        margin: 0;
+        
+        strong {
+          color: #666;
+        }
+      }
+    }
+  }
+
+  .payment-form {
+    margin-top: 20px;
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .form-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.student-selection {
+  margin-top: -8px;
+  margin-bottom: 20px;
+
+  .full-width {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    flex-direction: column;
+
+    .search-fields {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+}

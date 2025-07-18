@@ -1,0 +1,114 @@
+<div class="receipt-container">
+  <div class="print-actions">
+    <button mat-icon-button (click)="printReceipt()" matTooltip="Print Receipt">
+      <mat-icon>print</mat-icon>
+    </button>
+    <button mat-icon-button (click)="closeDialog()" matTooltip="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="receipt-content" *ngFor="let receipt of receipts">
+    <!-- School Header -->
+    <div class="school-header">
+      <div class="school-logo">
+        <!-- Placeholder for logo -->
+        <mat-icon class="logo-icon">school</mat-icon>
+      </div>
+      <h1>{{ receipt.header.schoolName }}</h1>
+      <p>{{ receipt.header.schoolAddress }}</p>
+      <div class="contact-info">
+        <mat-icon class="info-icon">call</mat-icon>
+        <span>{{ receipt.header.schoolContact }}</span>
+        <span class="divider">|</span>
+        <mat-icon class="info-icon">email</mat-icon>
+        <span>{{ receipt.header.schoolEmail }}</span>
+      </div>
+      <div class="receipt-title">
+        <h2>Payment Receipt</h2>
+      </div>
+    </div>
+
+    <!-- Main Details Section -->
+    <div class="main-details">
+      <div class="details-left">
+        <div class="detail-row">
+          <mat-icon class="info-icon">person</mat-icon>
+          <label>Student Name:</label>
+          <span>{{ receipt.paymentDetails.fullname }}</span>
+        </div>
+        <div class="detail-row">
+          <mat-icon class="info-icon">badge</mat-icon>
+          <label>Roll No:</label>
+          <span>{{ receipt.paymentDetails.rollNo }}</span>
+        </div>
+        <div class="detail-row">
+          <mat-icon class="info-icon">class</mat-icon>
+          <label>Class:</label>
+          <span
+            >{{ receipt.paymentDetails.className }} -
+            {{ receipt.paymentDetails.sectionName }}</span
+          >
+        </div>
+      </div>
+      <div class="details-right">
+        <div class="detail-row">
+          <mat-icon class="info-icon">confirmation_number</mat-icon>
+          <label>Receipt No:</label>
+          <span>{{ receipt.paymentDetails.receiptId }}</span>
+        </div>
+        <div class="detail-row">
+          <mat-icon class="info-icon">event</mat-icon>
+          <label>Date:</label>
+          <span>{{ formatDate(receipt.paymentDetails.dateCreated) }}</span>
+        </div>
+        <div class="detail-row">
+          <mat-icon class="info-icon">calendar_month</mat-icon>
+          <label>Month:</label>
+          <span>{{ receipt.paymentDetails.monthName }}</span>
+        </div>
+        <div class="detail-row">
+          <mat-icon class="info-icon">payment</mat-icon>
+          <label>Payment Type:</label>
+          <span>{{ receipt.paymentDetails.paymentType }}</span>
+        </div>
+        <div class="detail-row">
+          <mat-icon class="info-icon">verified</mat-icon>
+          <label>Status:</label>
+          <span
+            [ngClass]="{
+              'paid-status': receipt.paymentDetails.paymentState === 'Paid',
+              'pending-status': receipt.paymentDetails.paymentState !== 'Paid'
+            }"
+          >
+            {{ receipt.paymentDetails.paymentState }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Amount -->
+    <div class="amount-section">
+      <div class="amount-row">
+        <label>Amount Paid:</label>
+        <span class="amount highlight-amount">
+          {{ formatAmount(receipt.paymentDetails.amount) }}
+        </span>
+      </div>
+      <div class="total-amount">
+        <label>Total Amount:</label>
+        <span class="amount highlight-amount">
+          {{ formatAmount(receipt.paymentDetails.totalAmount) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="receipt-footer">
+      <p>Thank you for your payment!</p>
+      <p class="computer-note">
+        This is a computer generated receipt. No signature required.
+      </p>
+    </div>
+  </div>
+</div>

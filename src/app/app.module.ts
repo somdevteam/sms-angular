@@ -30,6 +30,15 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { PageLoaderModule } from './layout/page-loader/page-loader.module';
 
+import {TableModule} from "primeng/table";
+import {ButtonModule} from "primeng/button";
+import {InputNumberModule} from "primeng/inputnumber";
+import {DropdownModule} from "primeng/dropdown";
+import {ToastModule} from "primeng/toast";
+import {PaginatorModule} from "primeng/paginator";
+import {CalendarModule} from "primeng/calendar";
+
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -42,7 +51,7 @@ export function createTranslateLoader(http: HttpClient) {
     RightSidebarComponent,
     AuthLayoutComponent,
     MainLayoutComponent,
-    
+
   ],
   imports: [
     BrowserModule,
@@ -51,6 +60,13 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     NgScrollbarModule,
     PageLoaderModule,
+    TableModule,
+    ButtonModule,
+    InputNumberModule,
+    DropdownModule,
+    ToastModule,
+    PaginatorModule,
+    CalendarModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
