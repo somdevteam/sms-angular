@@ -26,6 +26,25 @@
         </mat-select>
       </mat-form-field>
 
+      <mat-form-field appearance="outline">
+        <mat-label>Fee Types</mat-label>
+        <mat-select formControlName="feeTypeId">
+          <mat-option *ngFor="let feetype of feeTypes" [value]="feetype.feetypeid">
+            {{feetype.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Branches</mat-label>
+        <mat-select formControlName="branchId">
+          <mat-option *ngFor="let branch of branches" [value]="branch.branchId">
+            {{branch.branchName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
     </div>
   </mat-dialog-content>
 

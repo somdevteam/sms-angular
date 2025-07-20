@@ -1,10 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { FeesService } from '../../fees.service';
-import { PaymentChargeRequestService } from '../../payment-charge-request.service';
-import { SnackbarService } from '@shared/snackbar.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {FeesService} from '../../fees.service';
+import {PaymentChargeRequestService} from '../../payment-charge-request.service';
+import {SnackbarService} from '@shared/snackbar.service';
+import {BranchService} from "../../../branch/branch.service";
+import {PageLoaderService} from "../../../layout/page-loader/page-loader.service";
 
 @Component({
   selector: 'app-generate-charges-dialog',
@@ -15,6 +17,7 @@ export class GenerateChargesDialogComponent implements OnInit {
   generateForm: FormGroup;
   chargeTypes: any[] = [];
   branches: any[] = [];
+  feeTypes: any[] = [];
   months: any[] = [];
   isMonthlyChargeType = true;
 
@@ -22,34 +25,48 @@ export class GenerateChargesDialogComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<GenerateChargesDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private branchService: BranchService,
     private snackBar: SnackbarService,
     private feesService: FeesService,
+    private pageLoader: PageLoaderService,
     private paymentChargeRequestService: PaymentChargeRequestService
   ) {
     this.generateForm = this.fb.group({
       chargeTypeCode: ['', Validators.required],
       monthId: [''],
+      feeTypeId: ['', Validators.required],
+      branchId: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
     this.chargeTypes = this.data.chargeTypes;
-    this.loadBranches();
-    this.loadMonths();
+    // this.loadBranches();
+    // this.loadMonths();
+    this.loadDropdownData();
   }
 
-  loadBranches(): void {
-    this.feesService.getBranches().subscribe({
+  private loadDropdownData() {
+    this.pageLoader.showLoader();
+
+    this.feesService.getFeeTypes().subscribe({
       next: (response) => {
-        this.branches = response.data;
+        this.feeTypes = response || [];
       },
       error: (error) => {
-        this.snackBar.dangerNotification('Error loading branches');
-      },
+        this.snackBar.dangerNotification('Error loading payment types');
+      }
     });
-  }
 
-  loadMonths(): void {
+    this.branchService.getBranches().subscribe({
+      next: (response) => {
+        this.branches = response || [];
+      },
+      error: (error) => {
+        this.snackBar.dangerNotification('Error loading payment types');
+      }
+    });
+
     this.feesService.getMonths().subscribe({
       next: (response) => {
         this.months = response.data;
@@ -57,8 +74,24 @@ export class GenerateChargesDialogComponent implements OnInit {
       error: (error) => {
         this.snackBar.dangerNotification('Error loading months');
       },
+      complete: () => {
+        this.pageLoader.hideLoader();
+      }
+    });
+
+    this.feesService.getAllMonths().subscribe({
+      next: (response) => {
+        this.months = response.data || [];
+      },
+      error: (error) => {
+        this.snackBar.dangerNotification('Error loading months');
+      },
+      complete: () => {
+        this.pageLoader.hideLoader();
+      }
     });
   }
+
 
   onSubmit(): void {
     if (this.generateForm.valid) {
@@ -68,9 +101,10 @@ export class GenerateChargesDialogComponent implements OnInit {
 
       const payload = {
         createdBy: userInfo.id,
-        branchId: userInfo.branch,
         chargeTypeCode: formValues.chargeTypeCode,
         monthId: formValues.monthId ? formValues.monthId : null,
+        feeTypeId: Number(formValues.value.feeTypeId),
+        branchId: Number(formValues.value.branchId),
       };
       this.paymentChargeRequestService.generateCharges(payload).subscribe({
         next: (response) => {
@@ -95,6 +129,7 @@ export class GenerateChargesDialogComponent implements OnInit {
   onCancel(): void {
     this.dialogRef.close();
   }
+
   onChargeTypeSelected(): void {
     const chargeTypeCode = this.generateForm.get('chargeTypeCode')?.value;
     this.isMonthlyChargeType = chargeTypeCode === 'monthly';
