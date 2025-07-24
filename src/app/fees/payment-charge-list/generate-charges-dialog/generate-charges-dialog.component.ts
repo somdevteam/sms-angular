@@ -51,6 +51,7 @@ export class GenerateChargesDialogComponent implements OnInit {
 
     this.feesService.getFeeTypes().subscribe({
       next: (response) => {
+        console.log(response);
         this.feeTypes = response || [];
       },
       error: (error) => {
@@ -98,13 +99,14 @@ export class GenerateChargesDialogComponent implements OnInit {
       const formValues = this.generateForm.value;
       const storage = localStorage.getItem('currentUser') ?? '{}';
       const userInfo = JSON.parse(storage);
+    console.log(formValues);
 
       const payload = {
         createdBy: userInfo.id,
         chargeTypeCode: formValues.chargeTypeCode,
         monthId: formValues.monthId ? formValues.monthId : null,
-        feeTypeId: Number(formValues.value.feeTypeId),
-        branchId: Number(formValues.value.branchId),
+        feeTypeId: Number(formValues.feeTypeId),
+        branchId: Number(formValues.branchId),
       };
       this.paymentChargeRequestService.generateCharges(payload).subscribe({
         next: (response) => {
