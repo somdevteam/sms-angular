@@ -22,14 +22,12 @@ import { FeesRoutingModule } from './fees-routing.module';
 import { AllfeesComponent } from './allfees/allfees.component';
 import { AddfeesComponent } from './addfees/addfees.component';
 import { EditfeesComponent } from './editfees/editfees.component';
-import {UsersRoutingModule} from "../users/users-routing.module";
 import {ComponentsModule} from "@shared/components/components.module";
 import {SharedModule} from "@shared";
 import { PaymentConfirmationDialogComponent } from './payment-confirmation-dialog/payment-confirmation-dialog.component';
 import { ReceiptComponent } from './receipt/receipt.component';
 import {Calendar, CalendarModule} from "primeng/calendar";
 import {TableModule} from "primeng/table";
-import { StudentSelectionDialogComponent } from './student-selection-dialog/student-selection-dialog.component';
 import { MaterialModule } from '../shared/material.module';
 import { PaymentChargeListComponent } from './payment-charge-list/payment-charge-list.component';
 import { GenerateChargesDialogComponent } from './payment-charge-list/generate-charges-dialog/generate-charges-dialog.component';
@@ -42,7 +40,6 @@ import {CollectFeesDialogComponent} from "./payment-charge-list/collect-fees-dia
     EditfeesComponent,
     PaymentConfirmationDialogComponent,
     ReceiptComponent,
-    StudentSelectionDialogComponent,
     PaymentChargeListComponent,
     GenerateChargesDialogComponent,
     CollectFeesDialogComponent

@@ -30,7 +30,7 @@ export class CollectFeesDialogComponent implements OnInit {
   ) {
     this.paymentForm = this.fb.group({
       amount: [
-        this.data.charge.levelFee,
+        this.data.charge.amount,
         [Validators.required, Validators.min(0)],
       ],
       paymentTypeId: ['', Validators.required],
@@ -86,7 +86,9 @@ export class CollectFeesDialogComponent implements OnInit {
       details: `Payment for ${this.data.charge.chargeType} - ${
         this.data.charge.chargedMonth
       }. Notes: ${formData.notes || 'N/A'}`,
-      isAutomatedPayment: true
+      isAutomatedPayment: true,
+      branchId:Number(this.data.charge.branchId),
+      feeTypeId:Number(this.data.charge.feeTypeId)
     };
 
     this.feesService.createPayment(paymentData).subscribe({

@@ -113,14 +113,23 @@ export class GenerateChargesDialogComponent implements OnInit {
           this.snackBar.successNotification(
             'Payment charge created successfully'
           );
+
+          const result = {
+            error : null,
+            isValid: true
+          }
           this.dialogRef.close(true);
         },
         error: (error) => {
-          const errorMessage =
-            error?.error?.message ||
-            'Error while creating payment charge request';
+          const errorMessage = error || 'Error while creating payment charge request';
+
           this.snackBar.dangerNotification(errorMessage);
-          this.dialogRef.close(false);
+          const result = {
+            error : errorMessage,
+            isValid: false
+          }
+
+          this.dialogRef.close(result);
         },
       });
     } else {

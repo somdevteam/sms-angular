@@ -78,8 +78,8 @@ export class AllfeesComponent implements OnInit {
   ) {
     this.paymentForm = this.fb.group({
       searchFilter: [''],
-      startDate: [null, Validators.required],
-      endDate: [null, Validators.required],
+      startDate: [],
+      endDate: [],
       class: [''],
       section: [''],
       type: [''],
@@ -224,7 +224,7 @@ export class AllfeesComponent implements OnInit {
       error: (error) => {
         this.payments.data = [];
         this.pageLoader.hideLoader();
-        this.snackBar.dangerNotification(error?.error?.message || 'Error fetching payments');
+        this.snackBar.dangerNotification(error || 'Error fetching payments');
       }
     });
   }

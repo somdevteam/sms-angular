@@ -9,6 +9,7 @@ import { CollectFeesDialogComponent } from './collect-fees-dialog/collect-fees-d
 import { formatDate } from '@shared/utilities';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import {SnackbarService} from "@shared/snackbar.service";
 
 interface PaymentCharge {
   chargeRequestId: number;
@@ -67,7 +68,7 @@ export class PaymentChargeListComponent implements OnInit {
     private paymentChargeService: PaymentChargeRequestService,
     private feesService: FeesService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: SnackbarService,
   ) {
     this.filterForm = this.fb.group({
       classId: [''],
@@ -99,9 +100,7 @@ export class PaymentChargeListComponent implements OnInit {
         this.classes = response.data;
       },
       error: (error) => {
-        this.snackBar.open('Error loading classes', 'Close', {
-          duration: 3000,
-        });
+        this.snackBar.dangerNotification(error? error: 'Error loading classes');
       },
     });
   }
@@ -112,9 +111,7 @@ export class PaymentChargeListComponent implements OnInit {
         this.chargeTypes = response.data;
       },
       error: (error) => {
-        this.snackBar.open('Error loading charge types', 'Close', {
-          duration: 3000,
-        });
+        this.snackBar.dangerNotification( error? error: 'Error loading charge types');
       },
     });
   }
@@ -128,9 +125,7 @@ export class PaymentChargeListComponent implements OnInit {
           this.filterForm.patchValue({ sectionId: '' });
         },
         error: (error) => {
-          this.snackBar.open('Error loading sections', 'Close', {
-            duration: 3000,
-          });
+          this.snackBar.dangerNotification(error);
         },
       });
     } else {
@@ -182,9 +177,7 @@ export class PaymentChargeListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error:', error);
-        this.snackBar.open('Error loading payment charges', 'Close', {
-          duration: 3000,
-        });
+        this.snackBar.dangerNotification( error ? error :'Error loading payment charges');
         this.dataSource = new MatTableDataSource<PaymentCharge>([]);
         this.totalItems = 0;
         this.loading = false;
@@ -207,15 +200,11 @@ export class PaymentChargeListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === true) {
-        this.snackBar.open('Charges generated successfully', 'Close', {
-          duration: 3000,
-        });
+      if (result.isValid === true) {
+        this.snackBar.dangerNotification('Charges generated successfully');
         //this.loadPaymentCharges();
-      } else if (result === false) {
-        this.snackBar.open('Failed to generate charges', 'Close', {
-          duration: 3000,
-        });
+      } else if (result.isValid === false) {
+        this.snackBar.dangerNotification(result.error);
       }
     });
   }
